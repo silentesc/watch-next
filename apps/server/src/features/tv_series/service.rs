@@ -88,5 +88,8 @@ pub async fn get_tv_series_aggregate_credits(
     series_id: i32,
     params: TvSeriesAggregateCreditsParams,
 ) -> Result<TvSeriesAggregateCreditsResponse, AppError> {
-    tmdb.tv_series().aggregate_credits(series_id, params).await.map_err(Into::into)
+    tmdb.tv_series()
+        .aggregate_credits(series_id, params)
+        .await
+        .map_err(Into::into)
 }

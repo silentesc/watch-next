@@ -8,7 +8,10 @@ pub fn router() -> Router<AppState> {
         .route("/trending/tv/{time_window}", get(handlers::get_trending_tv_series))
         .route("/search/tv", get(handlers::search_tv_series))
         .route("/tv/{series_id}", get(handlers::get_series_details))
-        .route("/tv/{series_id}/aggregate_credits", get(handlers::get_tv_series_aggregate_credits))
+        .route(
+            "/tv/{series_id}/aggregate_credits",
+            get(handlers::get_tv_series_aggregate_credits),
+        )
         .route("/tv/{series_id}/videos", get(handlers::get_tv_series_videos))
         .route(
             "/tv/{series_id}/recommendations",

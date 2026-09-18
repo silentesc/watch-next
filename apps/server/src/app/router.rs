@@ -39,11 +39,12 @@ pub fn setup_router(app_state: AppState) -> Router {
             middleware::auth::validate_session,
         ));
 
-    features::root::routes::router()
+    let api_routes = Router::new()
+        .merge(features::root::routes::router())
         .merge(features::auth::routes::router())
-        .merge(protected_routes)
-        .with_state(app_state)
-        .layer(cors)
+        .merge(protected_routes);
+
+    Router::new().nest("/api", api_routes).with_state(app_state).layer(cors)
 }
 
 pub async fn setup_tcp_listener(addr: &str) -> TcpListener {
