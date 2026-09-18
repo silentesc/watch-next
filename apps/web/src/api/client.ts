@@ -2,7 +2,7 @@ import axios from "axios";
 import { logout } from "./auth";
 
 export const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: "/api",
 });
 api.defaults.withCredentials = true;
 api.interceptors.response.use(
