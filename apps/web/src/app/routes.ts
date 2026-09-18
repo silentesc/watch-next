@@ -1,0 +1,71 @@
+import { createBrowserRouter } from "react-router";
+import { App } from "./App";
+import { LoginPage } from "../pages/auth/LoginPage";
+import { RegisterPage } from "../pages/auth/RegisterPage";
+import { DiscoverMoviePage } from "../pages/discover/DiscoverMoviePage";
+import { SearchPage } from "../pages/search/SearchPage";
+import { DiscoverPage } from "../pages/discover/DiscoverPage";
+import { MovieDetailsPage } from "../pages/movie/MovieDetailsPage";
+import { HomePage } from "../pages/home/HomePage";
+import { CrewPage } from "../pages/movie/CrewPage";
+import { CastPage } from "../pages/movie/CastPage";
+import { RecommendationsPage } from "../pages/movie/RecommendationsPage";
+import { SimilarPage } from "../pages/movie/SimilarPage";
+import { CollectionDetailsPage } from "../pages/collection/CollectionDetailsPage";
+import { TrendingMoviePage } from "../pages/discover/TrendingMoviePage";
+import { DiscoverTvSeriesPage } from "../pages/discover/DiscoverTvSeriesPage";
+import { TrendingTvSeriesPage } from "../pages/discover/TrendingTvSeriesPage";
+import { TvSeriesDetailsPage } from "../pages/tv/TvSeriesDetailsPage";
+import { TvSeriesRecommendationsPage } from "../pages/tv/TvSeriesRecommendationsPage";
+import { TvSeriesSimilarPage } from "../pages/tv/TvSeriesSimilarPage";
+import { AggregateCastPage } from "../pages/tv/AggregateCastPage";
+import { AggregateCrewPage } from "../pages/tv/AggregateCrewPage";
+
+export const router = createBrowserRouter([
+    {
+        path: "/",
+        Component: App,
+        children: [
+            { index: true, Component: HomePage },
+            { path: "login", Component: LoginPage },
+            { path: "register", Component: RegisterPage },
+            {
+                path: "discover",
+                children: [
+                    { index: true, Component: DiscoverPage },
+                    { path: "movie", Component: DiscoverMoviePage },
+                    { path: "tv", Component: DiscoverTvSeriesPage },
+                    {
+                        path: "trending",
+                        children: [
+                            { path: "movie/:timeWindow", Component: TrendingMoviePage },
+                            { path: "tv/:timeWindow", Component: TrendingTvSeriesPage },
+                        ]
+                    },
+                ]
+            },
+            {
+                path: "/movie/:id",
+                children: [
+                    { index: true, Component: MovieDetailsPage },
+                    { path: "crew", Component: CrewPage },
+                    { path: "cast", Component: CastPage },
+                    { path: "recommendations", Component: RecommendationsPage },
+                    { path: "similar", Component: SimilarPage },
+                ]
+            },
+            {
+                path: "/tv/:id",
+                children: [
+                    { index: true, Component: TvSeriesDetailsPage },
+                    { path: "aggregate_crew", Component: AggregateCrewPage },
+                    { path: "aggregate_cast", Component: AggregateCastPage },
+                    { path: "recommendations", Component: TvSeriesRecommendationsPage },
+                    { path: "similar", Component: TvSeriesSimilarPage },
+                ]
+            },
+            { path: "search", Component: SearchPage },
+            { path: "collection/:id", Component: CollectionDetailsPage },
+        ],
+    },
+]);
