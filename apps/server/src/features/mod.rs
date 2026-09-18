@@ -1,0 +1,9 @@
+pub mod auth;
+pub mod collections;
+pub mod configuration;
+pub mod genres;
+pub mod me;
+pub mod movies;
+pub mod root;
+pub mod tv_seasons;
+pub mod tv_series;
