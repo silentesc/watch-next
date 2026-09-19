@@ -1,12 +1,11 @@
 use sqlx::PgPool;
-use uuid::Uuid;
 
 use crate::{app::errors::AppError, error, logger::enums::category::Category, persistence::models::User};
 
 /**
  * Get user by id
  */
-pub async fn get_user_by_id(pool: &PgPool, id: Uuid) -> Result<Option<User>, AppError> {
+pub async fn get_user_by_id(pool: &PgPool, id: i64) -> Result<Option<User>, AppError> {
     let user: Option<User> = match sqlx::query_as("SELECT * FROM users WHERE id = $1")
         .bind(id)
         .fetch_optional(pool)

@@ -1,13 +1,12 @@
 use axum::http::StatusCode;
 use sqlx::PgPool;
-use uuid::Uuid;
 
 use crate::{
     app::errors::AppError, features::me::dto::MeResponse, logger::enums::category::Category,
     persistence::table_utils::users, warn,
 };
 
-pub async fn me(pool: &PgPool, user_id: Uuid) -> Result<MeResponse, AppError> {
+pub async fn me(pool: &PgPool, user_id: i64) -> Result<MeResponse, AppError> {
     let user = match users::get_user_by_id(pool, user_id).await {
         Ok(user) => user,
         Err(app_error) => return Err(app_error),

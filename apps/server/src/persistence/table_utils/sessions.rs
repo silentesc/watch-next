@@ -33,7 +33,7 @@ pub async fn get_session_by_id(pool: &PgPool, id: Uuid) -> Result<Option<Session
 /**
  * Create session and get session id
  */
-pub async fn create_session(pool: &PgPool, user_id: Uuid, expires_at: OffsetDateTime) -> Result<Uuid, AppError> {
+pub async fn create_session(pool: &PgPool, user_id: i64, expires_at: OffsetDateTime) -> Result<Uuid, AppError> {
     let session_id: (Uuid,) = match sqlx::query_as(
         r#"
         INSERT INTO sessions (user_id, expires_at)
