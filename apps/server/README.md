@@ -1,4 +1,4 @@
-# Watch Next
+# Watch Next Server
 
 ## Endpoints
 
@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
 ```
 
-### Watch Next Backend
+### Watch Next Server
 
 #### .env file
 ```dotenv
