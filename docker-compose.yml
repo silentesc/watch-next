@@ -1,0 +1,28 @@
+services:
+  watch-next-postgres:
+    image: postgres:18-alpine
+    ports:
+      - 5432:5432
+    environment:
+      TZ: Etc/UTC
+      POSTGRES_USER: <username>
+      POSTGRES_PASSWORD: <password>
+      POSTGRES_DB: <db_name>
+    volumes:
+      - ./data/postgres:/var/lib/postgresql
+    restart: unless-stopped
+
+  watch-next:
+    image: watch-next
+    ports:
+      - 5657:5657
+    environment:
+      TZ: Etc/UTC
+      LOG_LEVEL: INFO
+      DATABASE_URL: postgres://<username>:<password>@watch-next-postgres:5432/<db_name>
+      TMDB_API_KEY: tmdb-key
+      COOKIE_KEY: long-secret-key-larger-than-64-characters
+      ALLOW_REGISTRATION: true
+    restart: unless-stopped
+    depends_on:
+      - watch-next-postgres
