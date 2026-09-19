@@ -75,27 +75,27 @@ export function setMovieParamsFromFilters(filters: MovieFilters, sortBy: string,
             newParams.set("releaseDateTo", formatDate(filters.releaseDateTo.getFullYear(), filters.releaseDateTo.getMonth(), filters.releaseDateTo.getDate()));
         }
 
-        if (filters.runtimeFrom) {
+        if (filters.runtimeFrom !== undefined) {
             newParams.set("runtimeFrom", filters.runtimeFrom.toString());
         }
 
-        if (filters.runtimeTo) {
+        if (filters.runtimeTo !== undefined) {
             newParams.set("runtimeTo", filters.runtimeTo.toString());
         }
 
-        if (filters.tmdbRatingFrom) {
+        if (filters.tmdbRatingFrom !== undefined) {
             newParams.set("tmdbRatingFrom", filters.tmdbRatingFrom.toString());
         }
 
-        if (filters.tmdbRatingTo) {
+        if (filters.tmdbRatingTo !== undefined) {
             newParams.set("tmdbRatingTo", filters.tmdbRatingTo.toString());
         }
 
-        if (filters.tmdbVoteCountFrom) {
+        if (filters.tmdbVoteCountFrom !== undefined) {
             newParams.set("tmdbVoteCountFrom", filters.tmdbVoteCountFrom.toString());
         }
 
-        if (filters.tmdbVoteCountTo) {
+        if (filters.tmdbVoteCountTo !== undefined) {
             newParams.set("tmdbVoteCountTo", filters.tmdbVoteCountTo.toString());
         }
 
@@ -122,34 +122,34 @@ export function setTvSeriesParamsFromFilters(filters: TvSeriesFilters, sortBy: s
         newParams.set("sortBy", sortBy);
 
         if (filters.firstAirDateFrom) {
-            newParams.set("releaseDateFrom", formatDate(filters.firstAirDateFrom.getFullYear(), filters.firstAirDateFrom.getMonth(), filters.firstAirDateFrom.getDate()));
+            newParams.set("firstAirDateFrom", formatDate(filters.firstAirDateFrom.getFullYear(), filters.firstAirDateFrom.getMonth(), filters.firstAirDateFrom.getDate()));
         }
 
         if (filters.firstAirDateTo) {
-            newParams.set("releaseDateTo", formatDate(filters.firstAirDateTo.getFullYear(), filters.firstAirDateTo.getMonth(), filters.firstAirDateTo.getDate()));
+            newParams.set("firstAirDateTo", formatDate(filters.firstAirDateTo.getFullYear(), filters.firstAirDateTo.getMonth(), filters.firstAirDateTo.getDate()));
         }
 
-        if (filters.runtimeFrom) {
+        if (filters.runtimeFrom !== undefined) {
             newParams.set("runtimeFrom", filters.runtimeFrom.toString());
         }
 
-        if (filters.runtimeTo) {
+        if (filters.runtimeTo !== undefined) {
             newParams.set("runtimeTo", filters.runtimeTo.toString());
         }
 
-        if (filters.tmdbRatingFrom) {
+        if (filters.tmdbRatingFrom !== undefined) {
             newParams.set("tmdbRatingFrom", filters.tmdbRatingFrom.toString());
         }
 
-        if (filters.tmdbRatingTo) {
+        if (filters.tmdbRatingTo !== undefined) {
             newParams.set("tmdbRatingTo", filters.tmdbRatingTo.toString());
         }
 
-        if (filters.tmdbVoteCountFrom) {
+        if (filters.tmdbVoteCountFrom !== undefined) {
             newParams.set("tmdbVoteCountFrom", filters.tmdbVoteCountFrom.toString());
         }
 
-        if (filters.tmdbVoteCountTo) {
+        if (filters.tmdbVoteCountTo !== undefined) {
             newParams.set("tmdbVoteCountTo", filters.tmdbVoteCountTo.toString());
         }
 
