@@ -6,7 +6,10 @@ use axum::{
     middleware::from_fn_with_state,
 };
 use tokio::net::TcpListener;
-use tower_http::cors::CorsLayer;
+use tower_http::{
+    cors::CorsLayer,
+    services::{ServeDir, ServeFile},
+};
 
 use crate::{app::state::AppState, features, http::middleware};
 
@@ -44,7 +47,11 @@ pub fn setup_router(app_state: AppState) -> Router {
         .merge(features::auth::routes::router())
         .merge(protected_routes);
 
-    Router::new().nest("/api", api_routes).with_state(app_state).layer(cors)
+    let api = Router::new().nest("/api", api_routes).with_state(app_state).layer(cors);
+
+    let frontend = ServeDir::new("/app/web").fallback(ServeFile::new("/app/web/index.html"));
+
+    Router::new().merge(api).fallback_service(frontend)
 }
 
 pub async fn setup_tcp_listener(addr: &str) -> TcpListener {
