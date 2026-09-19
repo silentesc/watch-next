@@ -99,3 +99,19 @@ impl TimeWindow {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::TimeWindow;
+
+    #[test]
+    fn serializes_supported_time_windows() {
+        assert_eq!(TimeWindow::from_str("day").as_str(), "day");
+        assert_eq!(TimeWindow::from_str("week").as_str(), "week");
+    }
+
+    #[test]
+    fn defaults_unknown_time_windows_to_day() {
+        assert_eq!(TimeWindow::from_str("month").as_str(), "day");
+    }
+}

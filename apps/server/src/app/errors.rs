@@ -54,3 +54,31 @@ impl From<TmdbError> for AppError {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::AppError;
+    use crate::integrations::tmdb::errors::TmdbError;
+    use axum::http::StatusCode;
+
+    #[test]
+    fn maps_tmdb_api_errors_to_the_upstream_status_and_body() {
+        let error = AppError::from(TmdbError::Api {
+            status: StatusCode::NOT_FOUND,
+            body: String::from("Movie not found"),
+        });
+
+        assert_eq!(error.status_code, StatusCode::NOT_FOUND);
+        assert_eq!(error.message, "Movie not found");
+    }
+
+    #[test]
+    fn hides_internal_tmdb_errors_from_clients() {
+        let error = AppError::from(TmdbError::Json {
+            error: String::from("invalid response"),
+        });
+
+        assert_eq!(error.status_code, StatusCode::INTERNAL_SERVER_ERROR);
+        assert_eq!(error.message, "An unexpected error occured");
+    }
+}

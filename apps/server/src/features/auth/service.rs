@@ -13,28 +13,7 @@ use crate::{
 };
 
 pub async fn register(pool: &PgPool, username: String, password: String) -> Result<(), AppError> {
-    // Check username length
-    if username.len() < 4 || username.len() > 30 {
-        return Err(AppError::new(
-            StatusCode::BAD_REQUEST,
-            String::from("Username length must be between 4 and 30"),
-        ));
-    }
-
-    // Check username alphanumeric characters
-    let re = match Regex::new(r"^\w+$") {
-        Ok(re) => re,
-        Err(err) => {
-            error!(Category::Register, "Regex failed with error: {:#?}", err);
-            return Err(AppError::generic_500());
-        }
-    };
-    if !re.is_match(&username) {
-        return Err(AppError::new(
-            StatusCode::BAD_REQUEST,
-            String::from("Username must only contain alphanumeric characters"),
-        ));
-    }
+    validate_username(&username)?;
 
     // Check if username is already used
     match users::get_user_by_username(pool, &username).await {
@@ -66,6 +45,29 @@ pub async fn register(pool: &PgPool, username: String, password: String) -> Resu
         }
         Err(app_error) => Err(app_error),
     }
+}
+
+fn validate_username(username: &str) -> Result<(), AppError> {
+    if username.len() < 4 || username.len() > 30 {
+        return Err(AppError::new(
+            StatusCode::BAD_REQUEST,
+            String::from("Username length must be between 4 and 30"),
+        ));
+    }
+
+    let re = Regex::new(r"^\w+$").map_err(|err| {
+        error!(Category::Register, "Regex failed with error: {:#?}", err);
+        AppError::generic_500()
+    })?;
+
+    if !re.is_match(username) {
+        return Err(AppError::new(
+            StatusCode::BAD_REQUEST,
+            String::from("Username must only contain alphanumeric characters"),
+        ));
+    }
+
+    Ok(())
 }
 
 pub async fn login(
@@ -144,4 +146,35 @@ pub async fn logout(pool: &PgPool, jar: SignedCookieJar) -> Result<SignedCookieJ
     )));
 
     Ok(signed_cookie_jar)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::validate_username;
+    use axum::http::StatusCode;
+
+    #[test]
+    fn accepts_usernames_in_the_supported_format() {
+        assert!(validate_username("watch_next").is_ok());
+        assert!(validate_username("a".repeat(30).as_str()).is_ok());
+    }
+
+    #[test]
+    fn rejects_usernames_outside_the_supported_length() {
+        let too_short = validate_username("abc").unwrap_err();
+        let too_long = validate_username("a".repeat(31).as_str()).unwrap_err();
+
+        assert_eq!(too_short.status_code, StatusCode::BAD_REQUEST);
+        assert_eq!(too_short.message, "Username length must be between 4 and 30");
+        assert_eq!(too_long.status_code, StatusCode::BAD_REQUEST);
+        assert_eq!(too_long.message, "Username length must be between 4 and 30");
+    }
+
+    #[test]
+    fn rejects_usernames_with_non_word_characters() {
+        let error = validate_username("watch-next").unwrap_err();
+
+        assert_eq!(error.status_code, StatusCode::BAD_REQUEST);
+        assert_eq!(error.message, "Username must only contain alphanumeric characters");
+    }
 }
