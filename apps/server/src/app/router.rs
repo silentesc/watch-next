@@ -1,5 +1,7 @@
 use axum::{Router, middleware::from_fn_with_state};
 use tokio::net::TcpListener;
+#[cfg(unix)]
+use tokio::signal::unix::{SignalKind, signal};
 use tower_http::services::{ServeDir, ServeFile};
 
 use crate::{app::state::AppState, features, http::middleware};
@@ -38,6 +40,29 @@ pub async fn setup_tcp_listener(addr: &str) -> TcpListener {
 
 pub async fn serve(listener: TcpListener, router: Router) {
     axum::serve(listener, router)
+        .with_graceful_shutdown(shutdown_signal())
         .await
         .unwrap_or_else(|err| panic!("App should be served: {:#?}", err));
+}
+
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        tokio::signal::ctrl_c().await.expect("failed to install Ctrl+C handler");
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        signal(SignalKind::terminate())
+            .expect("failed to install SIGTERM handler")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        _ = ctrl_c => {},
+        _ = terminate => {},
+    }
 }
