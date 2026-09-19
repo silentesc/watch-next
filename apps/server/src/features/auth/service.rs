@@ -1,9 +1,3 @@
-use axum::http::StatusCode;
-use axum_extra::extract::SignedCookieJar;
-use regex::Regex;
-use sqlx::PgPool;
-use uuid::Uuid;
-
 use crate::{
     app::{constants, errors::AppError},
     error, info,
@@ -11,6 +5,10 @@ use crate::{
     persistence::table_utils::{sessions, users},
     utils::cookie_utils,
 };
+use axum::http::StatusCode;
+use axum_extra::extract::SignedCookieJar;
+use regex::Regex;
+use sqlx::PgPool;
 
 pub async fn register(pool: &PgPool, username: String, password: String) -> Result<(), AppError> {
     validate_username(&username)?;
@@ -111,7 +109,7 @@ pub async fn login(
     };
 
     // Create cookie
-    let cookie = cookie_utils::default_cookie(session_id.to_string(), session_expiration);
+    let cookie = cookie_utils::default_cookie(session_id, session_expiration);
     let signed_cookie_jar = jar.add(cookie);
 
     // Set last login
@@ -127,16 +125,6 @@ pub async fn logout(pool: &PgPool, jar: SignedCookieJar) -> Result<SignedCookieJ
     // Get session id from cookie and delete session in db
     if let Some(cookie) = jar.get(constants::SESSION_ID_COOKIE_NAME) {
         let session_id = cookie.value();
-        let session_id = match Uuid::parse_str(session_id) {
-            Ok(session_id) => session_id,
-            Err(err) => {
-                error!(
-                    Category::Middleware,
-                    "Parsing session_id to uuid from string '{}' failed with error: {:#?}", session_id, err
-                );
-                return Err(AppError::generic_500());
-            }
-        };
         sessions::delete_session(pool, session_id).await?;
     }
 

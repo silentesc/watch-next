@@ -1,13 +1,14 @@
 use sqlx::PgPool;
 use time::OffsetDateTime;
-use uuid::Uuid;
 
-use crate::{app::errors::AppError, error, logger::enums::category::Category, persistence::models::Session};
+use crate::{
+    app::errors::AppError, error, logger::enums::category::Category, persistence::models::Session, utils::security,
+};
 
 /**
  * Get session by session id
  */
-pub async fn get_session_by_id(pool: &PgPool, id: Uuid) -> Result<Option<Session>, AppError> {
+pub async fn get_session_by_id(pool: &PgPool, id: &str) -> Result<Option<Session>, AppError> {
     let session: Option<Session> = match sqlx::query_as(
         r#"
         SELECT *
@@ -33,14 +34,26 @@ pub async fn get_session_by_id(pool: &PgPool, id: Uuid) -> Result<Option<Session
 /**
  * Create session and get session id
  */
-pub async fn create_session(pool: &PgPool, user_id: i64, expires_at: OffsetDateTime) -> Result<Uuid, AppError> {
-    let session_id: (Uuid,) = match sqlx::query_as(
+pub async fn create_session(pool: &PgPool, user_id: i64, expires_at: OffsetDateTime) -> Result<String, AppError> {
+    let session_id = match security::generate_secure_256() {
+        Ok(session_id) => session_id,
+        Err(err) => {
+            error!(
+                Category::Middleware,
+                "Generating session id failed with error: {:#?}", err
+            );
+            return Err(AppError::generic_500());
+        }
+    };
+
+    let session_id: (String,) = match sqlx::query_as(
         r#"
-        INSERT INTO sessions (user_id, expires_at)
-        VALUES ($1, $2)
+        INSERT INTO sessions (id, user_id, expires_at)
+        VALUES ($1, $2, $3)
         RETURNING id
         "#,
     )
+    .bind(&session_id)
     .bind(user_id)
     .bind(expires_at)
     .fetch_one(pool)
@@ -61,7 +74,7 @@ pub async fn create_session(pool: &PgPool, user_id: i64, expires_at: OffsetDateT
 /**
  * Delete a session
  */
-pub async fn delete_session(pool: &PgPool, session_id: Uuid) -> Result<(), AppError> {
+pub async fn delete_session(pool: &PgPool, session_id: &str) -> Result<(), AppError> {
     match sqlx::query(
         r#"
         DELETE FROM sessions

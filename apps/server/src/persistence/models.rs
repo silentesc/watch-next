@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 use time::OffsetDateTime;
-use uuid::Uuid;
 
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct User {
@@ -14,7 +13,7 @@ pub struct User {
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Session {
-    pub id: Uuid,
+    pub id: String,
     pub user_id: i64,
     pub created_at: OffsetDateTime,
     pub expires_at: OffsetDateTime,
