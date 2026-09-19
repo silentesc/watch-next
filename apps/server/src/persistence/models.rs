@@ -16,5 +16,6 @@ pub struct User {
 pub struct Session {
     pub id: Uuid,
     pub user_id: i64,
+    pub created_at: OffsetDateTime,
     pub expires_at: OffsetDateTime,
 }
