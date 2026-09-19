@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { MovieDetails } from "../../../api/models";
+import { getRatingColor, getRatingString } from "../../../shared/ratingUtils";
 
 interface QuickInfo {
     movieDetails: MovieDetails;
@@ -15,12 +16,6 @@ export function QuickInfo({ movieDetails }: QuickInfo) {
         const hours = Math.floor(minutes / 60);
         const mins = minutes % 60;
         return `${hours}h ${mins}m`;
-    };
-
-    const getRatingColor = (rating: number) => {
-        if (rating >= 7.5) return "text-green-500";
-        if (rating >= 5) return "text-yellow-500";
-        return "text-red-500";
     };
 
     return (
@@ -40,7 +35,7 @@ export function QuickInfo({ movieDetails }: QuickInfo) {
                 {movieDetails.vote_average !== undefined && (
                     <div className="flex items-center gap-2">
                         <div className={`text-4xl font-bold ${getRatingColor(movieDetails.vote_average)}`}>
-                            {movieDetails.vote_average.toFixed(1)}
+                            {getRatingString(movieDetails.vote_average)}
                         </div>
                         <div className="flex flex-col text-left">
                             <span className="text-sm text-foreground-secondary">/ 10</span>

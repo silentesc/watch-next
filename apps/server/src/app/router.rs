@@ -66,3 +66,79 @@ async fn shutdown_signal() {
         _ = terminate => {},
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use axum::{body::Body, http::Request};
+    use axum_extra::extract::cookie::Key;
+    use sqlx::postgres::PgPoolOptions;
+    use tower::ServiceExt;
+
+    use super::setup_router;
+    use crate::{
+        app::state::AppState,
+        integrations::tmdb::{TmdbApi, client::TmdbClient},
+    };
+
+    fn test_state() -> AppState {
+        let pool = PgPoolOptions::new()
+            .connect_lazy("postgres://test:test@localhost/test")
+            .expect("test pool should be constructible");
+        let tmdb_client = TmdbClient::new(pool.clone(), String::from("http://127.0.0.1"), String::from("test"), 5)
+            .expect("test TMDB client should be constructible");
+
+        AppState {
+            pool,
+            tmdb: TmdbApi::new(tmdb_client),
+            key: Key::generate(),
+            allow_registration: true,
+        }
+    }
+
+    #[tokio::test]
+    async fn protected_api_routes_reject_requests_without_authentication() {
+        let protected_paths = [
+            "/api/me",
+            "/api/configuration/languages",
+            "/api/genre/movie/list",
+            "/api/discover/movie",
+            "/api/discover/tv",
+            "/api/tv/1/season/1",
+            "/api/search/collection",
+        ];
+
+        for path in protected_paths {
+            let response = setup_router(test_state())
+                .oneshot(Request::get(path).body(Body::empty()).unwrap())
+                .await
+                .unwrap();
+
+            assert_eq!(response.status(), axum::http::StatusCode::UNAUTHORIZED, "{path}");
+        }
+    }
+
+    #[tokio::test]
+    async fn public_root_route_does_not_require_authentication() {
+        let response = setup_router(test_state())
+            .oneshot(Request::get("/api").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), axum::http::StatusCode::OK);
+    }
+
+    #[tokio::test]
+    async fn protected_api_routes_reject_unsigned_session_cookies() {
+        let response = setup_router(test_state())
+            .oneshot(
+                Request::get("/api/me")
+                    .header("cookie", "session_id=not-a-signed-cookie")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), axum::http::StatusCode::UNAUTHORIZED);
+    }
+}
