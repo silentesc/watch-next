@@ -13,7 +13,7 @@ pub struct User {
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Session {
-    pub id: String,
+    pub id: i64,
     pub user_id: i64,
     pub created_at: OffsetDateTime,
     pub expires_at: OffsetDateTime,

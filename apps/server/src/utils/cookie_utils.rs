@@ -13,8 +13,8 @@ pub fn removal_cookie<'a>(cookie_name: String) -> Cookie<'a> {
         .build()
 }
 
-pub fn default_cookie<'a>(session_id: String, expires: OffsetDateTime) -> Cookie<'a> {
-    Cookie::build((constants::SESSION_ID_COOKIE_NAME, session_id))
+pub fn default_cookie<'a>(session_token: String, expires: OffsetDateTime) -> Cookie<'a> {
+    Cookie::build((constants::SESSION_ID_COOKIE_NAME, session_token))
         .http_only(true)
         .path("/")
         .same_site(SameSite::Strict)

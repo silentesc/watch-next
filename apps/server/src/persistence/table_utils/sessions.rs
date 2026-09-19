@@ -6,24 +6,25 @@ use crate::{
 };
 
 /**
- * Get session by session id
+ * Get session by session token
  */
-pub async fn get_session_by_id(pool: &PgPool, id: &str) -> Result<Option<Session>, AppError> {
+pub async fn get_session_by_token(pool: &PgPool, token: &str) -> Result<Option<Session>, AppError> {
+    let token_hash = security::hash_session_token(token);
     let session: Option<Session> = match sqlx::query_as(
         r#"
-        SELECT *
+        SELECT id, user_id, created_at, expires_at
         FROM sessions
-        WHERE id = $1
+        WHERE token_hash = $1
             AND expires_at > NOW()
         "#,
     )
-    .bind(id)
+    .bind(token_hash)
     .fetch_optional(pool)
     .await
     {
         Ok(session) => session,
         Err(err) => {
-            error!(Category::Db, "Getting session by id failed with error: {:#?}", err);
+            error!(Category::Db, "Getting session by token failed with error: {:#?}", err);
             return Err(AppError::generic_500());
         }
     };
@@ -32,11 +33,11 @@ pub async fn get_session_by_id(pool: &PgPool, id: &str) -> Result<Option<Session
 }
 
 /**
- * Create session and get session id
+ * Create session and get session token
  */
 pub async fn create_session(pool: &PgPool, user_id: i64, expires_at: OffsetDateTime) -> Result<String, AppError> {
-    let session_id = match security::generate_secure_256() {
-        Ok(session_id) => session_id,
+    let session_token = match security::generate_secure_256() {
+        Ok(session_token) => session_token,
         Err(err) => {
             error!(
                 Category::Middleware,
@@ -46,42 +47,39 @@ pub async fn create_session(pool: &PgPool, user_id: i64, expires_at: OffsetDateT
         }
     };
 
-    let session_id: (String,) = match sqlx::query_as(
+    let token_hash = security::hash_session_token(&session_token);
+
+    sqlx::query(
         r#"
-        INSERT INTO sessions (id, user_id, expires_at)
+        INSERT INTO sessions (token_hash, user_id, expires_at)
         VALUES ($1, $2, $3)
-        RETURNING id
         "#,
     )
-    .bind(&session_id)
+    .bind(token_hash)
     .bind(user_id)
     .bind(expires_at)
-    .fetch_one(pool)
+    .execute(pool)
     .await
-    {
-        Ok(session_id) => session_id,
-        Err(err) => {
-            error!(Category::Db, "Creating session failed with error: {:#?}", err);
-            return Err(AppError::generic_500());
-        }
-    };
+    .map_err(|err| {
+        error!(Category::Db, "Creating session failed with error: {:#?}", err);
+        AppError::generic_500()
+    })?;
 
-    let session_id = session_id.0;
-
-    Ok(session_id)
+    Ok(session_token)
 }
 
 /**
  * Delete a session
  */
-pub async fn delete_session(pool: &PgPool, session_id: &str) -> Result<(), AppError> {
+pub async fn delete_session(pool: &PgPool, token: &str) -> Result<(), AppError> {
+    let token_hash = security::hash_session_token(token);
     match sqlx::query(
         r#"
         DELETE FROM sessions
-        WHERE id = $1
+        WHERE token_hash = $1
         "#,
     )
-    .bind(session_id)
+    .bind(token_hash)
     .execute(pool)
     .await
     {

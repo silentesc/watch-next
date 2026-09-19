@@ -15,14 +15,14 @@ pub async fn validate_session(
     mut request: Request,
     next: Next,
 ) -> Response {
-    // Get session id
-    let session_id = match jar.get(constants::SESSION_ID_COOKIE_NAME) {
+    // Get session token
+    let session_token = match jar.get(constants::SESSION_ID_COOKIE_NAME) {
         Some(cookie) => cookie.value().to_string(),
         None => return AppError::invalid_credentials().into_response(),
     };
 
     // Get session
-    let session = match sessions::get_session_by_id(&app_state.pool, &session_id).await {
+    let session = match sessions::get_session_by_token(&app_state.pool, &session_token).await {
         Ok(session) => session,
         Err(app_error) => return app_error.into_response(),
     };
