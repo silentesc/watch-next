@@ -1,34 +1,10 @@
-use std::env;
-
-use axum::{
-    Router,
-    http::{HeaderValue, Method, header},
-    middleware::from_fn_with_state,
-};
+use axum::{Router, middleware::from_fn_with_state};
 use tokio::net::TcpListener;
-use tower_http::{
-    cors::CorsLayer,
-    services::{ServeDir, ServeFile},
-};
+use tower_http::services::{ServeDir, ServeFile};
 
 use crate::{app::state::AppState, features, http::middleware};
 
 pub fn setup_router(app_state: AppState) -> Router {
-    let origins = env::var("CORS_ALLOWED_ORIGINS").expect("CORS_ALLOWED_ORIGINS env variable should be set by dotenv");
-    let origins: Vec<HeaderValue> = origins
-        .split(",")
-        .map(|s| s.trim())
-        .filter(|s| !s.is_empty())
-        .map(|s| s.parse().map_err(|_| format!("Invalid origin: {}", s)))
-        .collect::<Result<Vec<_>, _>>()
-        .expect("One or more origins were invalid");
-
-    let cors = CorsLayer::new()
-        .allow_origin(origins)
-        .allow_methods([Method::GET, Method::POST])
-        .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION])
-        .allow_credentials(true);
-
     let protected_routes = Router::new()
         .merge(features::me::routes::router())
         .merge(features::genres::routes::router())
@@ -47,7 +23,7 @@ pub fn setup_router(app_state: AppState) -> Router {
         .merge(features::auth::routes::router())
         .merge(protected_routes);
 
-    let api = Router::new().nest("/api", api_routes).with_state(app_state).layer(cors);
+    let api = Router::new().nest("/api", api_routes).with_state(app_state);
 
     let frontend = ServeDir::new("/app/web").fallback(ServeFile::new("/app/web/index.html"));
 
