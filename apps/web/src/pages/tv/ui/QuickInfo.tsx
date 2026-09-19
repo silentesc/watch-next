@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { TvSeriesDetails } from "../../../api/models";
+import { getRatingColor, getRatingString } from "../../../shared/ratingUtils";
 
 interface QuickInfo {
     tvSeriesDetails: TvSeriesDetails;
@@ -9,12 +10,6 @@ export function QuickInfo({ tvSeriesDetails }: QuickInfo) {
     const firstAirDate = useMemo(() => {
         return tvSeriesDetails.first_air_date ? new Date(tvSeriesDetails.first_air_date).getFullYear() : null;
     }, [tvSeriesDetails.first_air_date]);
-
-    const getRatingColor = (rating: number) => {
-        if (rating >= 7.5) return "text-green-500";
-        if (rating >= 5) return "text-yellow-500";
-        return "text-red-500";
-    };
 
     return (
         <>
@@ -33,7 +28,7 @@ export function QuickInfo({ tvSeriesDetails }: QuickInfo) {
                 {tvSeriesDetails.vote_average !== undefined && (
                     <div className="flex items-center gap-2">
                         <div className={`text-4xl font-bold ${getRatingColor(tvSeriesDetails.vote_average)}`}>
-                            {tvSeriesDetails.vote_average.toFixed(1)}
+                            {getRatingString(tvSeriesDetails.vote_average)}
                         </div>
                         <div className="flex flex-col text-left">
                             <span className="text-sm text-foreground-secondary">/ 10</span>
