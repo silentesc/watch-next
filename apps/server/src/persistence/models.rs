@@ -18,3 +18,20 @@ pub struct Session {
     pub created_at: OffsetDateTime,
     pub expires_at: OffsetDateTime,
 }
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct CustomList {
+    pub id: i64,
+    pub name: String,
+    pub user_id: i64,
+    pub created_at: OffsetDateTime,
+    pub updated_at: OffsetDateTime,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct MediaItem {
+    pub id: i64,
+    pub kind: String,
+    pub external_source: String,
+    pub external_id: i64,
+}
