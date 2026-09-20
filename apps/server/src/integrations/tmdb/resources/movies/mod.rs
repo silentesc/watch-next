@@ -25,7 +25,7 @@ impl<'a> MoviesApi<'a> {
         self.tmdb_client.get("/search/movie", &params).await
     }
 
-    pub async fn details(&self, movie_id: i32, params: MovieDetailsParams) -> Result<MovieDetails, TmdbError> {
+    pub async fn details(&self, movie_id: i64, params: MovieDetailsParams) -> Result<MovieDetails, TmdbError> {
         self.tmdb_client
             .get(format!("/movie/{movie_id}").as_str(), &params)
             .await

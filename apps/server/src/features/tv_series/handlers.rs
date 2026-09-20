@@ -23,7 +23,7 @@ use axum::{
 pub async fn get_series_details(
     Extension(app_state): Extension<AppState>,
     Extension(_): Extension<Session>,
-    Path(series_id): Path<i32>,
+    Path(series_id): Path<i64>,
     Query(params): Query<TvSeriesDetailsParams>,
 ) -> Result<(StatusCode, Json<TvSeriesDetails>), AppError> {
     Ok((

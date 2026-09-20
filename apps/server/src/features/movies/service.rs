@@ -13,7 +13,7 @@ use crate::{
     },
 };
 
-pub async fn get_details(tmdb: TmdbApi, movie_id: i32, params: MovieDetailsParams) -> Result<MovieDetails, AppError> {
+pub async fn get_details(tmdb: TmdbApi, movie_id: i64, params: MovieDetailsParams) -> Result<MovieDetails, AppError> {
     tmdb.movies().details(movie_id, params).await.map_err(Into::into)
 }
 
