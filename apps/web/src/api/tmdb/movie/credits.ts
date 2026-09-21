@@ -1,6 +1,6 @@
 import { api } from "../../client";
 import { error2userMessage } from "../../errors";
-import type { Cast, Crew } from "../../tmdbModels";
+import type { Cast, Crew } from "../models";
 
 export interface CreditsResponse {
     id: number;

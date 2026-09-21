@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { MovieOverview } from "../../api/tmdbModels";
+import type { MovieOverview } from "../../api/tmdb/models";
 import { useNavigate } from "react-router";
 
 interface MovieProps {

@@ -1,4 +1,4 @@
-import type { TvEpisodeDetails } from "../../api/tmdbModels";
+import type { TvEpisodeDetails } from "../../api/tmdb/models";
 import { formatDate } from "../../shared/dateFormatter";
 import { getRatingColor, getRatingString } from "../../shared/ratingUtils";
 

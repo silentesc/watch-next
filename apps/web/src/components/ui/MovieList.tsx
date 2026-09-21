@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { Error } from "./Error";
 import { Movie } from "./Movie";
 import { Loading } from "./Loading";
-import type { MovieOverview } from "../../api/tmdbModels";
+import type { MovieOverview } from "../../api/tmdb/models";
 
 export interface InfiniteDataTemplate {
     page: number;

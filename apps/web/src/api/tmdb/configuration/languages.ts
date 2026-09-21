@@ -1,6 +1,6 @@
 import { api } from "../../client";
 import { error2userMessage } from "../../errors";
-import type { Language } from "../../tmdbModels";
+import type { Language } from "../models";
 
 
 export async function getLanguages(): Promise<Array<Language>> {

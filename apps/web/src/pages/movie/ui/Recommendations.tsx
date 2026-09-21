@@ -1,6 +1,6 @@
 import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
-import type { MovieOverview } from "../../../api/tmdbModels";
+import type { MovieOverview } from "../../../api/tmdb/models";
 import { useNavigate } from "react-router";
 import { useMovieRecommendations } from "../../../hooks/tmdb/use_movie_recommendations";
 import { MovieListVertical } from "../../../components/ui/MovieListVertical";

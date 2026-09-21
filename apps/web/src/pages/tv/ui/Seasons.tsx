@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { TvSeriesDetails } from "../../../api/tmdbModels";
+import type { TvSeriesDetails } from "../../../api/tmdb/models";
 import { Button } from "../../../components/ui/Button";
 import { TvSeason } from "../../../components/ui/TvSeason";
 

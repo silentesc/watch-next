@@ -1,4 +1,4 @@
-import type { MovieOverview } from "../../api/tmdbModels";
+import type { MovieOverview } from "../../api/tmdb/models";
 import { Movie } from "./Movie";
 
 interface MovieListVerticalProps {

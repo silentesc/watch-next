@@ -1,4 +1,4 @@
-import type { MovieDetails } from "../../../api/tmdbModels";
+import type { MovieDetails } from "../../../api/tmdb/models";
 
 interface OverviewProps {
     movieDetails: MovieDetails;

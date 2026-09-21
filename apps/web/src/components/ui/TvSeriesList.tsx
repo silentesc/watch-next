@@ -2,7 +2,7 @@ import { type InfiniteData, type UseInfiniteQueryResult } from "@tanstack/react-
 import { useEffect, useRef } from "react";
 import { Error } from "./Error";
 import { Loading } from "./Loading";
-import type { TvSeriesOverview } from "../../api/tmdbModels";
+import type { TvSeriesOverview } from "../../api/tmdb/models";
 import { TvSeries } from "./TvSeries";
 
 export interface InfiniteDataTemplate {

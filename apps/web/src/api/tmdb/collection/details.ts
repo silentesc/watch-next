@@ -1,6 +1,6 @@
 import { api } from "../../client";
 import { error2userMessage } from "../../errors";
-import type { CollectionDetails } from "../../tmdbModels";
+import type { CollectionDetails } from "../models";
 
 export async function getCollectionDetails(collection_id: number): Promise<CollectionDetails> {
     try {

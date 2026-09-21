@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { TvSeasonOverview } from "../../api/tmdbModels";
+import type { TvSeasonOverview } from "../../api/tmdb/models";
 import { useTvSeasonDetails } from "../../hooks/tmdb/use_tv_season_details";
 import { Error } from "./Error";
 import { Loading } from "./Loading";

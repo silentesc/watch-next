@@ -1,6 +1,6 @@
 import { api } from "../../client";
 import { error2userMessage } from "../../errors";
-import type { CollectionOverview } from "../../tmdbModels";
+import type { CollectionOverview } from "../models";
 
 export interface SearchCollectionResponse {
     page: number;

@@ -1,6 +1,6 @@
 import { api } from "../../client";
 import { error2userMessage } from "../../errors";
-import type { Genre } from "../../tmdbModels";
+import type { Genre } from "../models";
 
 
 export interface TvSeriesGenresResponse {

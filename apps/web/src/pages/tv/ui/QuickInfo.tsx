@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { TvSeriesDetails } from "../../../api/tmdbModels";
+import type { TvSeriesDetails } from "../../../api/tmdb/models";
 import { getRatingColor, getRatingString } from "../../../shared/ratingUtils";
 
 interface QuickInfo {
