@@ -3,7 +3,7 @@ import { Error } from "../../../components/ui/Error";
 import { Loading } from "../../../components/ui/Loading";
 import { Person } from "../../../components/ui/Person";
 import { useTvSeriesAggregateCredits } from "../../../hooks/use_tv_series_aggregatecredits";
-import type { AggregateCrew } from "../../../api/models";
+import type { AggregateCrew } from "../../../api/tmdbModels";
 
 interface AggregateCrewProps {
     tvSeriesId: number;

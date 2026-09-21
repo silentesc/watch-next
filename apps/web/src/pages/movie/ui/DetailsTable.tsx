@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { MovieDetails, ReleaseDate } from "../../../api/models";
+import type { MovieDetails, ReleaseDate } from "../../../api/tmdbModels";
 import { getMovieReleaseDates } from "../../../api/movie/release_dates";
 import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";

@@ -1,6 +1,6 @@
 import { api } from "../client";
 import { error2userMessage } from "../errors";
-import type { AggregateCast, AggregateCrew } from "../models";
+import type { AggregateCast, AggregateCrew } from "../tmdbModels";
 
 export interface CreditsResponse {
     id: number;

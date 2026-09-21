@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import type { MovieDetails } from "../../../api/models";
+import type { MovieDetails } from "../../../api/tmdbModels";
 import { Button } from "../../../components/ui/Button";
 
 interface CollectionProps {

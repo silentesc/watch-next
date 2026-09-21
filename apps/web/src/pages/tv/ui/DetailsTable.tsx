@@ -1,4 +1,4 @@
-import type { TvSeriesDetails } from "../../../api/models";
+import type { TvSeriesDetails } from "../../../api/tmdbModels";
 import { useLanguages } from "../../../hooks/use_languages";
 import { formatDate } from "../../../shared/dateFormatter";
 

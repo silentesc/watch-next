@@ -1,4 +1,4 @@
-import type { TvSeriesDetails } from "../../../api/models";
+import type { TvSeriesDetails } from "../../../api/tmdbModels";
 
 interface OverviewProps {
     tvSeriesDetails: TvSeriesDetails;

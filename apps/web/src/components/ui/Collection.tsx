@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { CollectionOverview } from "../../api/models";
+import type { CollectionOverview } from "../../api/tmdbModels";
 import { useNavigate } from "react-router";
 
 interface CollectionProps {

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { TvSeriesOverview } from "../../api/models";
+import type { TvSeriesOverview } from "../../api/tmdbModels";
 import { useNavigate } from "react-router";
 
 interface TvSeriesProps {

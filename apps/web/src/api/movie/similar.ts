@@ -1,6 +1,6 @@
 import { api } from "../client";
 import { error2userMessage } from "../errors";
-import type { MovieOverview } from "../models";
+import type { MovieOverview } from "../tmdbModels";
 
 export interface SimilarMoviesResponse {
     page: number;

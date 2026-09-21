@@ -1,6 +1,6 @@
 import { api } from "../client";
 import { error2userMessage } from "../errors";
-import type { ReleaseDate } from "../models";
+import type { ReleaseDate } from "../tmdbModels";
 
 export interface ReleaseDateResult {
     iso_3166_1: string;

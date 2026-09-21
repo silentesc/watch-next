@@ -1,6 +1,6 @@
 import { api } from "../client";
 import { error2userMessage } from "../errors";
-import type { TvSeasonDetails } from "../models";
+import type { TvSeasonDetails } from "../tmdbModels";
 
 export async function getTvSeasonDetails(tvSeriesId: number, seasonNumber: number): Promise<TvSeasonDetails> {
     try {
