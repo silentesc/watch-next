@@ -2,6 +2,10 @@
 
 ## Endpoints
 
+### App Endpoints
+
+- [Custom Lists](./docs/api/custom_lists.md)
+
 ### TMDB Endpoints
 
 Necessary TMDB endpoints are implemented and can be used exactly like the original endpoints.
