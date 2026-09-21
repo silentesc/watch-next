@@ -119,7 +119,7 @@ pub async fn ensure_custom_list_name_not_exists(
 
     match result {
         Some(_) => Err(AppError::new(
-            StatusCode::NOT_FOUND,
+            StatusCode::BAD_REQUEST,
             String::from("Custom list with this name already exists."),
         )),
         None => Ok(()),
