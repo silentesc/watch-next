@@ -3,7 +3,7 @@ import { Button } from "../../components/ui/Button";
 import { SortBy } from "../../components/ui/SortBy";
 import { useSearchParams } from "react-router";
 import { getTvSeriesFiltersFromParams, setTvSeriesParamsFromFilters } from "./utils";
-import { useDiscoverTvSeries } from "../../hooks/use_discover_tv_series";
+import { useDiscoverTvSeries } from "../../hooks/tmdb/use_discover_tv_series";
 import { TvSeriesFilters } from "./ui/TvSeriesFilters";
 import { TvSeriesList } from "../../components/ui/TvSeriesList";
 

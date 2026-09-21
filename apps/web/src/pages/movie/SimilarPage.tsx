@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
-import { useMovieDetails } from "../../hooks/use_movie_details";
+import { useMovieDetails } from "../../hooks/tmdb/use_movie_details";
 import { MovieList } from "../../components/ui/MovieList";
-import { useSimilarMovies } from "../../hooks/use_similar_movies";
+import { useSimilarMovies } from "../../hooks/tmdb/use_similar_movies";
 
 export function SimilarPage() {
     const navigate = useNavigate();

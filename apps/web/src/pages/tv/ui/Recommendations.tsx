@@ -2,7 +2,7 @@ import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
 import type { TvSeriesOverview } from "../../../api/tmdbModels";
 import { useNavigate } from "react-router";
-import { useTvSeriesRecommendations } from "../../../hooks/use_tv_series_recommendations";
+import { useTvSeriesRecommendations } from "../../../hooks/tmdb/use_tv_series_recommendations";
 import { TvSeriesListVertical } from "../../../components/ui/TvSeriesListVertical";
 
 interface RecommendationsProps {

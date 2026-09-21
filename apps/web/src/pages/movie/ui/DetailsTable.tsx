@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import type { MovieDetails, ReleaseDate } from "../../../api/tmdbModels";
-import { getMovieReleaseDates } from "../../../api/movie/release_dates";
+import { getMovieReleaseDates } from "../../../api/tmdb/movie/release_dates";
 import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
-import { useLanguages } from "../../../hooks/use_languages";
+import { useLanguages } from "../../../hooks/tmdb/use_languages";
 import { formatDate } from "../../../shared/dateFormatter";
 import { formatCurrency } from "../../../shared/currencyFormatter";
 

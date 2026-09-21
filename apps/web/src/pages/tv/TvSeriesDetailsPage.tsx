@@ -7,7 +7,7 @@ import { QuickInfo } from "./ui/QuickInfo";
 import { Poster } from "./ui/Poster";
 import { Recommendations } from "./ui/Recommendations";
 import { Similar } from "./ui/Similar";
-import { useTvSeriesDetails } from "../../hooks/use_tv_series_details";
+import { useTvSeriesDetails } from "../../hooks/tmdb/use_tv_series_details";
 import { Seasons } from "./ui/Seasons";
 import { AggregateCast } from "./ui/AggregateCast";
 import { AggregateCrew } from "./ui/AggregateCrew";

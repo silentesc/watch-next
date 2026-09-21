@@ -2,11 +2,11 @@ import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { MovieListVertical } from "../../components/ui/MovieListVertical";
 import { useNavigate } from "react-router";
-import { useDiscoverMovies } from "../../hooks/use_discover_movies";
-import { useTrendingMovies } from "../../hooks/use_trending_movies";
-import { useDiscoverTvSeries } from "../../hooks/use_discover_tv_series";
+import { useDiscoverMovies } from "../../hooks/tmdb/use_discover_movies";
+import { useTrendingMovies } from "../../hooks/tmdb/use_trending_movies";
+import { useDiscoverTvSeries } from "../../hooks/tmdb/use_discover_tv_series";
 import { TvSeriesListVertical } from "../../components/ui/TvSeriesListVertical";
-import { useTrendingTvSeries } from "../../hooks/use_trending_tv_series";
+import { useTrendingTvSeries } from "../../hooks/tmdb/use_trending_tv_series";
 
 export function DiscoverPage() {
     const navigate = useNavigate();

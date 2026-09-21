@@ -10,7 +10,7 @@ import { Crew } from "./ui/Crew";
 import { Cast } from "./ui/Cast";
 import { Recommendations } from "./ui/Recommendations";
 import { Similar } from "./ui/Similar";
-import { useMovieDetails } from "../../hooks/use_movie_details";
+import { useMovieDetails } from "../../hooks/tmdb/use_movie_details";
 
 export function MovieDetailsPage() {
     const { id } = useParams();

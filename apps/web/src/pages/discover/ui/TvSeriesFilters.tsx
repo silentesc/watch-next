@@ -2,10 +2,10 @@ import { useState, useEffect, useMemo } from "react";
 import { Input } from "../../../components/ui/Input";
 import { Button } from "../../../components/ui/Button";
 import { DatePicker } from "../../../components/ui/DatePicker";
-import { useLanguages } from "../../../hooks/use_languages";
+import { useLanguages } from "../../../hooks/tmdb/use_languages";
 import { MultiSelectDropdown } from "../../../components/ui/MultiSelectDropdown";
 import { Dropdown } from "../../../components/ui/Dropdown";
-import { useGenreTvSeries } from "../../../hooks/use_genre_tv_series";
+import { useGenreTvSeries } from "../../../hooks/tmdb/use_genre_tv_series";
 
 export interface TvSeriesFilters {
     firstAirDateFrom: Date | undefined,
