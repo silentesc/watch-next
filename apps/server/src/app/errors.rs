@@ -5,7 +5,7 @@ use axum::{
 };
 use serde_json::json;
 
-use crate::{error, integrations::tmdb::errors::TmdbError, logger::enums::category::Category};
+use crate::integrations::tmdb::errors::TmdbError;
 
 pub struct AppError {
     pub status_code: StatusCode,
@@ -40,17 +40,11 @@ impl IntoResponse for AppError {
 impl From<TmdbError> for AppError {
     fn from(err: TmdbError) -> Self {
         match err {
-            TmdbError::InvalidConfiguration { error }
-            | TmdbError::Db { error }
-            | TmdbError::Http { error }
-            | TmdbError::Json { error } => {
-                error!(Category::Tmdb, "{:#?}", error);
-                AppError::generic_500()
-            }
-            TmdbError::Api { status, body } => {
-                error!(Category::Tmdb, "{:#?}", body);
-                AppError::new(status, body)
-            }
+            TmdbError::InvalidConfiguration { error: _ }
+            | TmdbError::Db { error: _ }
+            | TmdbError::Http { error: _ }
+            | TmdbError::Json { error: _ } => AppError::generic_500(),
+            TmdbError::Api { status, body } => AppError::new(status, body),
         }
     }
 }
