@@ -3,6 +3,7 @@ import type { Me } from "../../api/me"
 import { logout } from "../../api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { meQueryKey } from "../../hooks/use_me";
 
 interface MeDropdownProps {
     me: Me;
@@ -23,7 +24,7 @@ export function MeDropdown({ me, isMobile = false }: MeDropdownProps) {
     const mutation = useMutation({
         mutationFn: logout,
         onSuccess: () => {
-            queryClient.removeQueries({ queryKey: ["me"] });
+            queryClient.removeQueries({ queryKey: meQueryKey });
             navigate("/");
         }
     });
