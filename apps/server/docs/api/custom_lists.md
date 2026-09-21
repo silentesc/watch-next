@@ -64,7 +64,7 @@ Returns the current user's lists.
 `GET /custom-lists/:list_id/items`
 
 - **Success:** `200 OK`
-- **Response:** `MediaItemResponse[]`
+- **Response:** `MediaItem[]`
 - **Errors:** `404 Not Found` if the list does not belong to the user
 
 ### Add an item to a custom list
@@ -105,10 +105,13 @@ parameters:
 | `created_at` | `String` | Creation timestamp in RFC3339 format |
 | `updated_at` | `String` | Last update timestamp in RFC3339 format |
 
-### MediaItemResponse
+### MediaItem
 
 | Field | Type | Description |
 | --- | --- | --- |
 | `kind` | `String` | Media type, such as `movie` or `tv_series` |
+| `title` | `Option<String>` | Title of the item if any |
+| `poster_path` | `Option<String>` | Poster path of the item in the known format of the external source if any |
+| `release_date` | `Option<String>` | Release date formatted in the known format of the external source if any |
 | `external_source` | `String` | External provider, such as `tmdb` |
 | `external_id` | `i64` | Provider's media identifier |

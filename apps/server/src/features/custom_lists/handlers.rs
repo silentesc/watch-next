@@ -9,11 +9,11 @@ use crate::{
     features::custom_lists::{
         dto::{
             AddMediaItemToListRequest, CreateCustomListRequest, CreateCustomListResponse, CustomListResponse,
-            DeleteMediaItemFromListRequest, MediaItemResponse, UpdateCustomListRequest,
+            DeleteMediaItemFromListRequest, UpdateCustomListRequest,
         },
         service,
     },
-    persistence::models::Session,
+    persistence::models::{MediaItem, Session},
 };
 
 #[axum::debug_handler]
@@ -72,12 +72,9 @@ pub async fn get_media_items_in_list(
     Extension(app_state): Extension<AppState>,
     Extension(session): Extension<Session>,
     Path(list_id): Path<i64>,
-) -> Result<(StatusCode, Json<Vec<MediaItemResponse>>), AppError> {
+) -> Result<(StatusCode, Json<Vec<MediaItem>>), AppError> {
     match service::get_media_items_in_list(&app_state.pool, session.user_id, list_id).await {
-        Ok(items) => Ok((
-            StatusCode::OK,
-            Json(items.into_iter().map(MediaItemResponse::from).collect()),
-        )),
+        Ok(items) => Ok((StatusCode::OK, Json(items))),
         Err(err) => Err(err),
     }
 }

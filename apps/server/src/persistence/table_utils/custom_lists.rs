@@ -26,7 +26,7 @@ const ENSURE_CUSTOM_LIST_NAME_NOT_EXISTS_QUERY: &str = r#"
     "#;
 
 const GET_CUSTOM_LISTS_QUERY: &str = r#"
-    SELECT *
+    SELECT id, name, user_id, created_at, updated_at
     FROM custom_lists
     WHERE user_id = $1
     ORDER BY created_at
@@ -41,7 +41,7 @@ const UPDATE_CUSTOM_LIST_QUERY: &str = r#"
 const DELETE_CUSTOM_LIST_QUERY: &str = "DELETE FROM custom_lists WHERE id = $1 AND user_id = $2";
 
 const GET_MEDIA_ITEMS_IN_LIST_QUERY: &str = r#"
-    SELECT *
+    SELECT kind, title, poster_path, release_date, external_source, external_id
     FROM media_items
     INNER JOIN custom_list_items
         ON custom_list_items.media_item_id = media_items.id
@@ -274,11 +274,9 @@ pub async fn add_media_item_to_list(
     pool: &PgPool,
     user_id: i64,
     list_id: i64,
-    kind: &str,
-    external_source: &str,
-    external_id: i64,
+    media_item: MediaItem,
 ) -> Result<(), AppError> {
-    let media_item_id = media_items::upsert_media_item(pool, kind, external_source, external_id).await?;
+    let media_item_id = media_items::upsert_media_item(pool, media_item).await?;
 
     let result = sqlx::query(ADD_MEDIA_ITEM_TO_LIST_QUERY)
         .bind(list_id)

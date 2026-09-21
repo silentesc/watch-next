@@ -1,3 +1,4 @@
+use reqwest::StatusCode;
 use sqlx::PgPool;
 
 use crate::{
@@ -43,9 +44,10 @@ pub async fn add_media_item_to_list(
 ) -> Result<(), AppError> {
     custom_lists::ensure_custom_list_id_exists(pool, list_id, user_id).await?;
 
-    match (kind, external_source) {
+    let (title, poster_path, release_date) = match (kind, external_source) {
         ("movie", "tmdb") => {
-            tmdb.movies()
+            let details = tmdb
+                .movies()
                 .details(
                     external_id,
                     MovieDetailsParams {
@@ -55,9 +57,12 @@ pub async fn add_media_item_to_list(
                 )
                 .await
                 .map_err(AppError::from)?;
+
+            (details.title, details.poster_path, details.release_date)
         }
         ("tv_series", "tmdb") => {
-            tmdb.tv_series()
+            let details = tmdb
+                .tv_series()
                 .details(
                     external_id,
                     TvSeriesDetailsParams {
@@ -67,11 +72,27 @@ pub async fn add_media_item_to_list(
                 )
                 .await
                 .map_err(AppError::from)?;
-        }
-        _ => {}
-    }
 
-    custom_lists::add_media_item_to_list(pool, user_id, list_id, kind, external_source, external_id).await
+            (details.name, details.poster_path, details.first_air_date)
+        }
+        _ => {
+            return Err(AppError::new(
+                StatusCode::BAD_REQUEST,
+                String::from("Invalid media item kind or external source."),
+            ));
+        }
+    };
+
+    let media_item = MediaItem {
+        kind: kind.to_string(),
+        title,
+        poster_path,
+        release_date,
+        external_source: external_source.to_string(),
+        external_id,
+    };
+
+    custom_lists::add_media_item_to_list(pool, user_id, list_id, media_item).await
 }
 
 pub async fn delete_media_item_from_list(

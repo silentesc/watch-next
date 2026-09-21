@@ -30,8 +30,10 @@ pub struct CustomList {
 
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct MediaItem {
-    pub id: i64,
     pub kind: String,
+    pub title: Option<String>,
+    pub poster_path: Option<String>,
+    pub release_date: Option<String>,
     pub external_source: String,
     pub external_id: i64,
 }
