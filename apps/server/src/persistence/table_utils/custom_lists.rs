@@ -26,10 +26,37 @@ const ENSURE_CUSTOM_LIST_NAME_NOT_EXISTS_QUERY: &str = r#"
     "#;
 
 const GET_CUSTOM_LISTS_QUERY: &str = r#"
-    SELECT id, name, user_id, created_at, updated_at
-    FROM custom_lists
-    WHERE user_id = $1
-    ORDER BY created_at
+    SELECT
+        cl.id,
+        cl.name,
+        cl.user_id,
+        cl.created_at,
+        cl.updated_at,
+        COALESCE(
+            (
+                SELECT array_agg(
+                    x.poster_path
+                    ORDER BY x.added_at, x.media_item_id
+                )
+                FROM (
+                    SELECT
+                        cli.media_item_id,
+                        cli.added_at,
+                        mi.poster_path
+                    FROM custom_list_items AS cli
+                    JOIN media_items AS mi
+                        ON mi.id = cli.media_item_id
+                    WHERE cli.list_id = cl.id
+                    AND mi.poster_path IS NOT NULL
+                    ORDER BY cli.added_at, cli.media_item_id
+                    LIMIT 4
+                ) AS x
+            ),
+            '{}'::text[]
+        ) AS preview_posters
+    FROM custom_lists AS cl
+    WHERE cl.user_id = $1
+    ORDER BY cl.created_at, cl.id;
     "#;
 
 const UPDATE_CUSTOM_LIST_QUERY: &str = r#"
@@ -48,7 +75,7 @@ const GET_MEDIA_ITEMS_IN_LIST_QUERY: &str = r#"
     INNER JOIN custom_lists
         ON custom_lists.id = custom_list_items.list_id
     WHERE custom_list_items.list_id = $1 AND custom_lists.user_id = $2
-    ORDER BY custom_list_items.added_at
+    ORDER BY custom_list_items.added_at, custom_list_items.media_item_id
     "#;
 
 const ADD_MEDIA_ITEM_TO_LIST_QUERY: &str = r#"

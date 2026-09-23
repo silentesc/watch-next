@@ -26,6 +26,7 @@ pub struct CustomList {
     pub user_id: i64,
     pub created_at: OffsetDateTime,
     pub updated_at: OffsetDateTime,
+    pub preview_posters: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, FromRow)]

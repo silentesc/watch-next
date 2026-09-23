@@ -11,6 +11,7 @@ pub struct CustomListResponse {
     pub created_at: OffsetDateTime,
     #[serde(with = "time::serde::rfc3339")]
     pub updated_at: OffsetDateTime,
+    pub preview_posters: Vec<String>,
 }
 
 impl From<CustomList> for CustomListResponse {
@@ -20,6 +21,7 @@ impl From<CustomList> for CustomListResponse {
             name: list.name,
             created_at: list.created_at,
             updated_at: list.updated_at,
+            preview_posters: list.preview_posters,
         }
     }
 }

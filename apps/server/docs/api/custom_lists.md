@@ -20,7 +20,11 @@ Returns the current user's lists.
 		"id": 1,
 		"name": "Watch later",
 		"created_at": "2026-01-01T12:00:00Z",
-		"updated_at": "2026-01-01T12:00:00Z"
+		"updated_at": "2026-01-01T12:00:00Z",
+		"preview_posters": [
+			"/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
+			"/8xEVAe84zlL9rkfYT6dZXero4KK.jpg"
+		]
 	}
 ]
 ```
@@ -104,6 +108,7 @@ parameters:
 | `name` | `String` | List name |
 | `created_at` | `String` | Creation timestamp in RFC3339 format |
 | `updated_at` | `String` | Last update timestamp in RFC3339 format |
+| `preview_posters` | `Vec<String>` | List of the first 4 media items poster paths |
 
 ### MediaItem
 
