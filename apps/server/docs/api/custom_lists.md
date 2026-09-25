@@ -114,7 +114,7 @@ parameters:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `kind` | `String` | Media type, such as `movie` or `tv_series` |
+| `kind` | `String` | Media type, such as `collection`, `movie` or `tv_series` |
 | `title` | `Option<String>` | Title of the item if any |
 | `poster_path` | `Option<String>` | Poster path of the item in the known format of the external source if any |
 | `release_date` | `Option<String>` | Release date formatted in the known format of the external source if any |

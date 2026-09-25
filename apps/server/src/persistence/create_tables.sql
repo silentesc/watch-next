@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS cache (
 
 CREATE TABLE IF NOT EXISTS media_items (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    kind TEXT NOT NULL CHECK (kind IN ('movie', 'tv_series')),
+    kind TEXT NOT NULL CHECK (kind IN ('collection', 'movie', 'tv_series')),
     title TEXT,
     poster_path TEXT,
     release_date TEXT,

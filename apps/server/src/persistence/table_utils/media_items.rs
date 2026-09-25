@@ -7,7 +7,7 @@ use crate::{app::errors::AppError, error, logger::enums::category::Category, per
  * Create or update a media item and get its id
  */
 pub async fn upsert_media_item(pool: &PgPool, media_item: MediaItem) -> Result<i64, AppError> {
-    if !matches!(media_item.kind.as_str(), "movie" | "tv_series") {
+    if !matches!(media_item.kind.as_str(), "collection" | "movie" | "tv_series") {
         return Err(AppError::new(
             StatusCode::BAD_REQUEST,
             String::from("Invalid media item kind."),

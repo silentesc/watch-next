@@ -5,7 +5,10 @@ use crate::{
     app::errors::AppError,
     integrations::tmdb::{
         TmdbApi,
-        resources::{movies::dto::MovieDetailsParams, tv_series::dto::TvSeriesDetailsParams},
+        resources::{
+            collections::dto::CollectionDetailsParams, movies::dto::MovieDetailsParams,
+            tv_series::dto::TvSeriesDetailsParams,
+        },
     },
     persistence::{
         models::{CustomList, MediaItem},
@@ -45,6 +48,20 @@ pub async fn add_media_item_to_list(
     custom_lists::ensure_custom_list_id_exists(pool, list_id, user_id).await?;
 
     let (title, poster_path, release_date) = match (kind, external_source) {
+        ("collection", "tmdb") => {
+            let details = tmdb
+                .collections()
+                .details(external_id, CollectionDetailsParams { language: None })
+                .await
+                .map_err(AppError::from)?;
+
+            let release_date = details
+                .parts
+                .and_then(|parts| parts.into_iter().next())
+                .and_then(|collection_detail| collection_detail.release_date);
+
+            (details.name, details.poster_path, release_date)
+        }
         ("movie", "tmdb") => {
             let details = tmdb
                 .movies()
