@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS media_items (
     poster_path TEXT,
     release_date TEXT,
     external_source TEXT NOT NULL CHECK (external_source IN ('tmdb')),
-    external_id BIGINT NOT NULL,
+    external_id INTEGER NOT NULL,
     UNIQUE (kind, external_source, external_id)
 );
 
