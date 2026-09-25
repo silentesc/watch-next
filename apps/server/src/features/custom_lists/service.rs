@@ -40,7 +40,7 @@ pub async fn add_media_item_to_list(
     list_id: i64,
     kind: &str,
     external_source: &str,
-    external_id: i64,
+    external_id: i32,
 ) -> Result<(), AppError> {
     custom_lists::ensure_custom_list_id_exists(pool, list_id, user_id).await?;
 
@@ -101,7 +101,7 @@ pub async fn delete_media_item_from_list(
     list_id: i64,
     kind: &str,
     external_source: &str,
-    external_id: i64,
+    external_id: i32,
 ) -> Result<(), AppError> {
     custom_lists::delete_media_item_from_list(pool, user_id, list_id, kind, external_source, external_id).await
 }

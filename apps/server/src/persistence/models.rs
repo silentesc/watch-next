@@ -36,5 +36,5 @@ pub struct MediaItem {
     pub poster_path: Option<String>,
     pub release_date: Option<String>,
     pub external_source: String,
-    pub external_id: i64,
+    pub external_id: i32,
 }

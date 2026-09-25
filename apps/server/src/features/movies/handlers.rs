@@ -23,7 +23,7 @@ use crate::{
 pub async fn get_movie_details(
     Extension(app_state): Extension<AppState>,
     Extension(_): Extension<Session>,
-    Path(movie_id): Path<i64>,
+    Path(movie_id): Path<i32>,
     Query(params): Query<MovieDetailsParams>,
 ) -> Result<(StatusCode, Json<MovieDetails>), AppError> {
     Ok((

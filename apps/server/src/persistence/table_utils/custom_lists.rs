@@ -347,7 +347,7 @@ pub async fn delete_media_item_from_list(
     list_id: i64,
     kind: &str,
     external_source: &str,
-    external_id: i64,
+    external_id: i32,
 ) -> Result<(), AppError> {
     let result = sqlx::query(DELETE_MEDIA_ITEM_FROM_LIST_QUERY)
         .bind(list_id)

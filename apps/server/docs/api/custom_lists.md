@@ -119,4 +119,4 @@ parameters:
 | `poster_path` | `Option<String>` | Poster path of the item in the known format of the external source if any |
 | `release_date` | `Option<String>` | Release date formatted in the known format of the external source if any |
 | `external_source` | `String` | External provider, such as `tmdb` |
-| `external_id` | `i64` | Provider's media identifier |
+| `external_id` | `i32` | Provider's media identifier |

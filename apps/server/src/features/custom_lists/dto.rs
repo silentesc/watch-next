@@ -45,12 +45,12 @@ pub struct UpdateCustomListRequest {
 pub struct AddMediaItemToListRequest {
     pub kind: String,
     pub external_source: String,
-    pub external_id: i64,
+    pub external_id: i32,
 }
 
 #[derive(Deserialize)]
 pub struct DeleteMediaItemFromListRequest {
     pub kind: String,
     pub external_source: String,
-    pub external_id: i64,
+    pub external_id: i32,
 }

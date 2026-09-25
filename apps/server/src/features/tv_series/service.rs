@@ -16,7 +16,7 @@ use crate::{
 
 pub async fn get_series_details(
     tmdb: TmdbApi,
-    series_id: i64,
+    series_id: i32,
     params: TvSeriesDetailsParams,
 ) -> Result<TvSeriesDetails, AppError> {
     tmdb.tv_series().details(series_id, params).await.map_err(Into::into)
