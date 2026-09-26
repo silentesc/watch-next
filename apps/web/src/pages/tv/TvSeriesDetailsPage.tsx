@@ -11,6 +11,7 @@ import { useTvSeriesDetails } from "../../hooks/tmdb/use_tv_series_details";
 import { Seasons } from "./ui/Seasons";
 import { AggregateCast } from "./ui/AggregateCast";
 import { AggregateCrew } from "./ui/AggregateCrew";
+import { CustomListPicker } from "../../components/ui/CustomListPicker";
 
 export function TvSeriesDetailsPage() {
     const { id } = useParams();
@@ -62,6 +63,10 @@ export function TvSeriesDetailsPage() {
                             <div className="w-full">
                                 <QuickInfo tvSeriesDetails={tvSeriesDetailsQuery.data} />
                             </div>
+                        </div>
+
+                        <div className="sm:my-5">
+                            <CustomListPicker item={{ kind: "tv_series", external_source: "tmdb", external_id: tvSeriesId }} />
                         </div>
 
                         <div className="my-5">
