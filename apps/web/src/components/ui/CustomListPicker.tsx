@@ -1,12 +1,11 @@
-import { useQueries } from "@tanstack/react-query";
 import type { AddCustomListItemRequest } from "../../api/customLists/addCustomListItem";
-import { getCustomListItems } from "../../api/customLists/getCustomListItems";
 import { useAddCustomListItem } from "../../hooks/customLists/use_add_custom_list_item";
-import { customListItemsQueryKey } from "../../hooks/customLists/use_custom_list_items";
 import { useCustomLists } from "../../hooks/customLists/use_custom_lists";
 import { useDeleteCustomListItem } from "../../hooks/customLists/use_delete_custom_list_item";
+import { useMediaItemCustomLists } from "../../hooks/mediaItems/use_media_item_custom_lists";
 import { Dropdown } from "./Dropdown";
 import { Error } from "./Error";
+import { Loading } from "./Loading";
 
 interface CustomListPickerProps {
     item: AddCustomListItemRequest;
@@ -14,44 +13,32 @@ interface CustomListPickerProps {
 
 export function CustomListPicker({ item }: CustomListPickerProps) {
     const customListsQuery = useCustomLists();
+    const mediaItemCustomListsQuery = useMediaItemCustomLists(item.kind, item.external_source, item.external_id);
     const addCustomListItem = useAddCustomListItem();
     const deleteCustomListItem = useDeleteCustomListItem();
+    const queryError = customListsQuery.error || mediaItemCustomListsQuery.error;
 
-    const customListItemsQueries = useQueries({
-        queries: (customListsQuery.data ?? []).map((customList) => ({
-            queryKey: customListItemsQueryKey(customList.id),
-            queryFn: () => getCustomListItems(customList.id),
-            staleTime: 60 * 1000,
-            retry: false,
-        })),
-    });
-
-    if (customListsQuery.error) {
-        return <Error message={customListsQuery.error.message} />;
+    if (queryError) {
+        return <Error message={queryError.message} />;
     }
 
-    if (customListsQuery.isLoading || !customListsQuery.data?.length) {
+    if (customListsQuery.isLoading || mediaItemCustomListsQuery.isLoading) {
+        return <Loading />;
+    }
+    if (!customListsQuery.data?.length) {
         return null;
     }
 
-    const values = new Map(customListsQuery.data.map((customList, index) => {
-        const isInList = customListItemsQueries[index]?.data?.some((listItem) =>
-            listItem.kind === item.kind &&
-            listItem.external_source === item.external_source &&
-            listItem.external_id === item.external_id
-        ) ?? false;
+    const mediaItemCustomListIds = new Set((mediaItemCustomListsQuery.data ?? []).map((customList) => customList.id));
+    const values = new Map(customListsQuery.data.map((customList) => {
+        const isInList = mediaItemCustomListIds.has(customList.id);
 
         return [String(customList.id), `${isInList ? "✓ " : ""}${customList.name}`];
     }));
 
     const toggleList = (listIdString: string) => {
         const listId = Number(listIdString);
-        const listIndex = customListsQuery.data.findIndex((customList) => customList.id === listId);
-        const isInList = customListItemsQueries[listIndex]?.data?.some((listItem) =>
-            listItem.kind === item.kind &&
-            listItem.external_source === item.external_source &&
-            listItem.external_id === item.external_id
-        ) ?? false;
+        const isInList = mediaItemCustomListIds.has(listId);
 
         if (isInList) {
             deleteCustomListItem.mutate({ listId, item });
