@@ -5,6 +5,7 @@
 ### App Endpoints
 
 - [Custom Lists](./docs/api/custom_lists.md)
+- [Media Items](./docs/api/media_items.md)
 
 ### TMDB Endpoints
 
