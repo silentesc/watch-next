@@ -16,6 +16,7 @@ pub fn setup_router(app_state: AppState) -> Router {
         .merge(features::tv_seasons::routes::router())
         .merge(features::collections::routes::router())
         .merge(features::custom_lists::routes::router())
+        .merge(features::media_items::routes::router())
         .layer(from_fn_with_state(
             app_state.clone(),
             middleware::auth::validate_session,
