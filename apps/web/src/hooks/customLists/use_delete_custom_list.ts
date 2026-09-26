@@ -9,7 +9,7 @@ export function useDeleteCustomList() {
     return useMutation({
         mutationFn: deleteCustomList,
         onSuccess: (_data, listId) => {
-            queryClient.removeQueries({ queryKey: customListItemsQueryKey(listId) });
+            queryClient.invalidateQueries({ queryKey: customListItemsQueryKey(listId), refetchType: "none" });
             return queryClient.invalidateQueries({ queryKey: customListsQueryKey });
         },
     });
