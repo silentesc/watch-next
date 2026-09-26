@@ -6,9 +6,10 @@ interface DropdownProps {
     values: Map<string, string>;
     onSelect: (key: string) => void;
     alignedRight?: boolean;
+    closeOnSelect?: boolean;
 }
 
-export function Dropdown({ title, values, onSelect, alignedRight = false }: DropdownProps) {
+export function Dropdown({ title, values, onSelect, alignedRight = false, closeOnSelect = true }: DropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -18,7 +19,9 @@ export function Dropdown({ title, values, onSelect, alignedRight = false }: Drop
 
     const onValueElementClick = (key: string) => {
         onSelect(key);
-        setIsOpen(false);
+        if (closeOnSelect) {
+            setIsOpen(false);
+        }
     }
 
     const valueElements = useMemo(() =>
