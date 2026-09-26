@@ -32,7 +32,10 @@ export function CustomListsOverviewPage() {
         if (!trimmedName) return;
 
         createCustomList.mutate(trimmedName, {
-            onSuccess: ({ }) => setIsCreating(false),
+            onSuccess: ({ }) => {
+                setIsCreating(false);
+                setName("");
+            },
         });
     };
 
