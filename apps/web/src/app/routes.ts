@@ -20,6 +20,8 @@ import { TvSeriesRecommendationsPage } from "../pages/tv/TvSeriesRecommendations
 import { TvSeriesSimilarPage } from "../pages/tv/TvSeriesSimilarPage";
 import { AggregateCastPage } from "../pages/tv/AggregateCastPage";
 import { AggregateCrewPage } from "../pages/tv/AggregateCrewPage";
+import { CustomListsOverviewPage } from "../pages/custom-lists/CustomListsOverviewPage";
+import { CustomListPage } from "../pages/custom-lists/CustomListPage";
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +31,13 @@ export const router = createBrowserRouter([
             { index: true, Component: HomePage },
             { path: "login", Component: LoginPage },
             { path: "register", Component: RegisterPage },
+            {
+                path: "custom-lists",
+                children: [
+                    { index: true, Component: CustomListsOverviewPage },
+                    { path: ":id", Component: CustomListPage },
+                ]
+            },
             {
                 path: "discover",
                 children: [
