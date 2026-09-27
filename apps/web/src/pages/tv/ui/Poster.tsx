@@ -15,7 +15,7 @@ export function Poster({ tvSeriesDetails }: PosterProps) {
                 />
             ) : (
                 <div className="w-full h-full flex items-center justify-center bg-background-primary">
-                    <img className="object-cover grayscale opacity-30" src="/sad_logo.png" alt={tvSeriesDetails.name} />
+                    <img className="object-cover grayscale opacity-30" src="/logo_sad.png" alt={tvSeriesDetails.name} />
                 </div>
             )}
         </div>

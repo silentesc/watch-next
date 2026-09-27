@@ -15,7 +15,7 @@ export function Poster({ movieDetails }: PosterProps) {
                 />
             ) : (
                 <div className="w-full h-full flex items-center justify-center bg-background-primary">
-                    <img className="object-cover grayscale opacity-30" src="/sad_logo.png" alt={movieDetails.title} />
+                    <img className="object-cover grayscale opacity-30" src="/logo_sad.png" alt={movieDetails.title} />
                 </div>
             )}
         </div>

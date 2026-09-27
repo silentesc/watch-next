@@ -33,7 +33,7 @@ export function Collection({ collection }: CollectionProps) {
                             <img className="rounded-t-md w-full h-full object-cover" src={`https://image.tmdb.org/t/p/w300${collection.poster_path}`} alt={collection.name} />
                         ) : (
                             <div className="h-full flex items-center justify-center">
-                                <img className="rounded-t-md object-cover grayscale opacity-30" src="/sad_logo.png" alt={collection.name} />
+                                <img className="rounded-t-md object-cover grayscale opacity-30" src="/logo_sad.png" alt={collection.name} />
                             </div>
                         )
                     }

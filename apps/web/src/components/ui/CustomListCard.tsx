@@ -25,7 +25,7 @@ export function CustomListCard({ customList }: CustomListCardProps) {
                 <a className="block h-full w-full" href={`/custom-lists/${customList.id}`} onClick={onPosterClick}>
                     {customList.preview_posters.length === 0 ? (
                         <div className="flex h-full items-center justify-center">
-                            <img className="h-20 object-cover grayscale opacity-30" src="/sad_logo.png" alt={customList.name} />
+                            <img className="h-20 object-cover grayscale opacity-30" src="/logo_sad.png" alt={customList.name} />
                         </div>
                     ) : (
                         <div className="flex h-full w-full gap-0.5">
