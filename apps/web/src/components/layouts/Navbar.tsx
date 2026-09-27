@@ -19,12 +19,14 @@ export function Navbar() {
         <>
             <NavLink className="mx-2 text-2xl" to="/discover">Discover</NavLink>
             <NavLink className="mx-2 text-2xl" to="/search">Search</NavLink>
+            <NavLink className="mx-2 text-2xl" to="/custom-lists">Lists</NavLink>
         </>
     );
     const mobileLinksWhenLoggedIn = (
         <>
             <NavLink className="mx-2 mb-1 text-2xl" to="/discover">Discover</NavLink>
             <NavLink className="mx-2 mb-1 text-2xl" to="/search">Search</NavLink>
+            <NavLink className="mx-2 mb-1 text-2xl" to="/custom-lists">Lists</NavLink>
         </>
     );
 
