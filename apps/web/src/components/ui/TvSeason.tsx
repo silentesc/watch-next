@@ -54,6 +54,7 @@ export function TvSeason({ tvSeriesId, tvSeason, canExpandEpisodes }: TvSeasonPr
 
                 <div className="flex flex-1 flex-col p-4">
                     <span className="text-xl">
+                        <span className="opacity-75">{tvSeason.season_number + ". "}</span>
                         {name + " "}
                         <span className="opacity-75 text-lg">({airDate.split("-")[0]})</span>
                     </span>
