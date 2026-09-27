@@ -18,7 +18,9 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
         staleTime: 5 * 60 * 1000,
         retry: false,
     });
-    const releaseDates: Array<ReleaseDate> = movieReleaseDatesQuery.data?.results.find(releaseDateResult => releaseDateResult.iso_3166_1 === "US")?.release_dates || [];
+    const releaseDates: Array<ReleaseDate> = (movieReleaseDatesQuery.data?.results
+        .find(releaseDateResult => releaseDateResult.iso_3166_1 === "US")?.release_dates || [])
+        .filter((releaseDate, index, releaseDates) => releaseDates.findIndex(date => date.type === releaseDate.type) === index);
 
     const languagesQuery = useLanguages();
     const languagesValues: Map<string, string> = new Map([...(languagesQuery.data?.map(language => [language.iso_639_1, language.english_name] as const) ?? [])]);
@@ -128,11 +130,11 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
             </div>
             <div className="flex gap-4 justify-between px-4 py-2">
                 <span className="font-semibold">Budget</span>
-                <span>{movieDetails.budget ? formatCurrency(movieDetails.budget, {currency: "USD", maximumFractionDigits: 0}) : "-"}</span>
+                <span>{movieDetails.budget ? formatCurrency(movieDetails.budget, { currency: "USD", maximumFractionDigits: 0 }) : "-"}</span>
             </div>
             <div className="flex gap-4 justify-between px-4 py-2">
                 <span className="font-semibold">Revenue</span>
-                <span>{movieDetails.revenue ? formatCurrency(movieDetails.revenue, {currency: "USD", maximumFractionDigits: 0}) : "-"}</span>
+                <span>{movieDetails.revenue ? formatCurrency(movieDetails.revenue, { currency: "USD", maximumFractionDigits: 0 }) : "-"}</span>
             </div>
             <div className="flex gap-4 justify-between px-4 py-2">
                 <span className="font-semibold">Original Language</span>
