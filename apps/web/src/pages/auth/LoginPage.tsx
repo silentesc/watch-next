@@ -29,9 +29,9 @@ export function LoginPage() {
 
     return (
         <>
-            {mutation.isPending && <Loading />}
-            {mutation.isSuccess && <Info message="Logged in successfully" />}
-            {mutation.isError && <Error message={mutation.error.message} />}
+            {mutation.isPending ? <Loading /> : null}
+            {mutation.isSuccess ? <Info message="Logged in successfully" /> : null}
+            {mutation.isError ? <Error message={mutation.error.message} /> : null}
 
             <form onSubmit={onSubmit} className="flex justify-center m-10">
                 <div className="w-120 p-7 bg-background-primary shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)]">

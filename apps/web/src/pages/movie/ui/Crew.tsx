@@ -33,7 +33,7 @@ export function Crew({ movieId }: CrewProps) {
     const hintCrew = crew.length >= 5 ? crew[5] : undefined;
 
     if (crew.length === 0) {
-        return <></>;
+        return null;
     }
 
     return (
@@ -44,7 +44,7 @@ export function Crew({ movieId }: CrewProps) {
                     {topCrew.map((c) => (
                         <Person key={`${c.name}-${c.job || ""}`} name={c.name || "Unknown"} imgPath={c.profile_path} description={c.job} />
                     ))}
-                    {hintCrew && (
+                    {hintCrew ? (
                         <div className="relative">
                             <div className="blur-sm select-none pointer-events-none">
                                 <Person key={`${hintCrew.name}-${hintCrew.job || ""}`} name={hintCrew.name || "Unknown"} imgPath={hintCrew.profile_path} description={hintCrew.job} />
@@ -59,7 +59,7 @@ export function Crew({ movieId }: CrewProps) {
                                 </div>
                             </a>
                         </div>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </div>

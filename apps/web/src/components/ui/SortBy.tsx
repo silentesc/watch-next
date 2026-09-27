@@ -19,7 +19,7 @@ export function SortBy({ sortByKey, isAsc, sortByValues, onSortByChange, onAscCh
 
             <Button onClick={() => onAscChange(!isAsc)} value={
                 <svg
-                    className={`w-5 h-5 transition-colors duration-200 ${!isAsc && "rotate-180"}`}
+                    className={`w-5 h-5 transition-colors duration-200 ${!isAsc ? "rotate-180" : null}`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

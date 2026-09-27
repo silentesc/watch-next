@@ -31,33 +31,33 @@ export function TvEpisode({ episode }: TvEpisodeProps) {
                         {episode.episode_number + ". "}
                         {episode.name}
                     </span>
-                    {episode.air_date && (
+                    {episode.air_date ? (
                         <span className="opacity-75">
                             {`(${formatDate(episode.air_date, "medium")})`}
                         </span>
-                    )}
+                    ) : null}
                 </div>
 
-                {(episode.runtime || episode.vote_average) && (
+                {(episode.runtime || episode.vote_average) ? (
                     <div className="mt-2 flex flex-wrap items-center gap-x-2 opacity-75">
-                        {episode.runtime && (
+                        {episode.runtime ? (
                             <span>{episode.runtime} min</span>
-                        )}
-                        {episode.runtime && episode.vote_average && <span aria-hidden="true">•</span>}
-                        {episode.vote_average && (
+                        ) : null}
+                        {episode.runtime && episode.vote_average ? <span aria-hidden="true">•</span> : null}
+                        {episode.vote_average ? (
                             <span>
                                 <span className={getRatingColor(episode.vote_average)}>
                                     {getRatingString(episode.vote_average)}
                                 </span>
                                 <span> / 10</span>
                             </span>
-                        )}
+                        ) : null}
                     </div>
-                )}
+                ) : null}
 
-                {episode.overview && (
+                {episode.overview ? (
                     <p className="mt-3 opacity-75">{episode.overview}</p>
-                )}
+                ) : null}
             </div>
         </li>
     );

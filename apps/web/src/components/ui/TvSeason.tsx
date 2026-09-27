@@ -54,13 +54,14 @@ export function TvSeason({ tvSeriesId, tvSeason, canExpandEpisodes }: TvSeasonPr
 
                 <div className="flex flex-1 flex-col p-4">
                     <span className="text-xl">
+                        <span className="opacity-75">{tvSeason.season_number + ". "}</span>
                         {name + " "}
                         <span className="opacity-75 text-lg">({airDate.split("-")[0]})</span>
                     </span>
                     {
                         tvSeason.episode_count ? (
                             <span className="opacity-75">{tvSeason.episode_count} episodes</span>
-                        ) : (<></>)
+                        ) : null
                     }
                     {
                         tvSeason.vote_average ? (
@@ -68,21 +69,21 @@ export function TvSeason({ tvSeriesId, tvSeason, canExpandEpisodes }: TvSeasonPr
                                 <span className={`opacity-75 ${getRatingColor(tvSeason.vote_average || 0)}`}>{getRatingString(tvSeason.vote_average)}</span>
                                 <span className="opacity-75">/ 10</span>
                             </div>
-                        ) : (<></>)
+                        ) : null
                     }
                 </div>
 
-                {canExpandEpisodes && (
+                {canExpandEpisodes ? (
                     <div className="flex items-center gap-2 px-4 text-sm opacity-75">
                         <span
                             aria-hidden="true"
                             className={`mb-1 h-2 w-2 rotate-45 border-b border-r border-current transition-transform ${isExpanded ? "rotate-225" : ""}`}
                         />
                     </div>
-                )}
+                ) : null}
             </div>
 
-            {isExpanded && (
+            {isExpanded ? (
                 <div id={`season-${tvSeason.id}-episodes`} className="border-t border-background-tertiary px-4">
                     {tvSeasonDetailsQuery.error ? (
                         <Error message={tvSeasonDetailsQuery.error.message} />
@@ -98,7 +99,7 @@ export function TvSeason({ tvSeriesId, tvSeason, canExpandEpisodes }: TvSeasonPr
                         <Error message="No episodes returned" />
                     )}
                 </div>
-            )}
+            ) : null}
         </div>
     );
 }

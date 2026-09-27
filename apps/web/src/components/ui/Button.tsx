@@ -28,9 +28,9 @@ export function Button({ value, type = "button", alignment = "center", fullWidth
                 className={
                     `${fullWidth ? "w-full" : "w-auto shrink-0"} border-2 p-2 outline-none hover:cursor-pointer
                     ${variantClassName}
-                    ${alignment === "left" && "text-left"}
-                    ${alignment === "center" && "text-center"}
-                    ${alignment === "right" && "text-right"}`
+                    ${alignment === "left" ? "text-left" : ""}
+                    ${alignment === "center" ? "text-center" : ""}
+                    ${alignment === "right" ? "text-right" : ""}`
                 }
                 {...props}
             >

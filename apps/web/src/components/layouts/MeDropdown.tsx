@@ -65,7 +65,7 @@ export function MeDropdown({ me, isMobile = false }: MeDropdownProps) {
             </button>
 
             {/* Dropdown Menu */}
-            {isOpen && (
+            {isOpen ? (
                 <div className={`z-1000 absolute w-56 mt-2 origin-top-right bg-background-secondary border border-background-tertiary divide-y divide-background-tertiary rounded-md shadow-lg outline-none ${isMobile ? "-right-1/2 bottom-10" : "right-0"}`}>
                     <div>
                         <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary cursor-pointer">(Dummy) Account</button>
@@ -74,7 +74,7 @@ export function MeDropdown({ me, isMobile = false }: MeDropdownProps) {
                         <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary cursor-pointer" onClick={onLogout}>Sign out</button>
                     </div>
                 </div>
-            )}
+            ) : null}
         </div>
     );
 }

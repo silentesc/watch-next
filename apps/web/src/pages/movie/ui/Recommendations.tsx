@@ -27,7 +27,7 @@ export function Recommendations({ movieId }: RecommendationsProps) {
     const allMovies: Array<MovieOverview> = movieRecommendationsQuery.data.pages[0].results;
 
     if (allMovies.length === 0) {
-        return <></>;
+        return null;
     }
 
     const seeMore = () => {

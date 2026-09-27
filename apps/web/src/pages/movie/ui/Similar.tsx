@@ -27,7 +27,7 @@ export function Similar({ movieId }: SimilarProps) {
     const allMovies: Array<MovieOverview> = similarMoviesQuery.data.pages[0].results;
 
     if (allMovies.length === 0) {
-        return <></>;
+        return null;
     }
 
     const seeMore = () => {

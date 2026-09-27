@@ -18,7 +18,9 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
         staleTime: 5 * 60 * 1000,
         retry: false,
     });
-    const releaseDates: Array<ReleaseDate> = movieReleaseDatesQuery.data?.results.find(releaseDateResult => releaseDateResult.iso_3166_1 === "US")?.release_dates || [];
+    const releaseDates: Array<ReleaseDate> = (movieReleaseDatesQuery.data?.results
+        .find(releaseDateResult => releaseDateResult.iso_3166_1 === "US")?.release_dates || [])
+        .filter((releaseDate, index, releaseDates) => releaseDates.findIndex(date => date.type === releaseDate.type) === index);
 
     const languagesQuery = useLanguages();
     const languagesValues: Map<string, string> = new Map([...(languagesQuery.data?.map(language => [language.iso_639_1, language.english_name] as const) ?? [])]);
@@ -80,7 +82,7 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
     return (
         <div className="bg-background-secondary/50 border-2 border-background-tertiary rounded-md divide-y-2 divide-background-tertiary">
             <div className="flex gap-6 px-6 py-2">
-                {movieDetails.imdb_id && (
+                {movieDetails.imdb_id ? (
                     <a
                         href={`https://www.imdb.com/title/${movieDetails.imdb_id}`}
                         target="_blank"
@@ -88,7 +90,7 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
                     >
                         <img className="w-10" src="/imdb_logo.png" />
                     </a>
-                )}
+                ) : null}
                 <a
                     href={`https://www.themoviedb.org/movie/${movieDetails.id}`}
                     target="_blank"
@@ -104,14 +106,14 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
             <div className="flex gap-4 justify-between px-4 py-2">
                 <span className="font-semibold">Release Dates</span>
                 <div>
-                    {movieReleaseDatesQuery.isLoading && <Loading />}
-                    {movieReleaseDatesQuery.error && <Error message={movieReleaseDatesQuery.error.message} />}
+                    {movieReleaseDatesQuery.isLoading ? <Loading /> : null}
+                    {movieReleaseDatesQuery.error ? <Error message={movieReleaseDatesQuery.error.message} /> : null}
                     {
                         releaseDates ? (
                             releaseDates.map(releaseDate => {
                                 return (
                                     <p key={`${formatDate(releaseDate.release_date)}-${releaseDate.type}-${releaseDate.note}`} className="flex items-center gap-2 justify-end">
-                                        <span title={`${formatReleaseType(releaseDate.type)} ${releaseDate.note && `(${releaseDate.note})`}`} className="flex items-center">
+                                        <span title={`${formatReleaseType(releaseDate.type)} ${releaseDate.note ? `(${releaseDate.note})` : ""}`} className="flex items-center">
                                             {releaseTypeSvg(releaseDate.type)}
                                         </span>
                                         <span className="whitespace-nowrap">
@@ -128,11 +130,11 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
             </div>
             <div className="flex gap-4 justify-between px-4 py-2">
                 <span className="font-semibold">Budget</span>
-                <span>{movieDetails.budget ? formatCurrency(movieDetails.budget, {currency: "USD", maximumFractionDigits: 0}) : "-"}</span>
+                <span>{movieDetails.budget ? formatCurrency(movieDetails.budget, { currency: "USD", maximumFractionDigits: 0 }) : "-"}</span>
             </div>
             <div className="flex gap-4 justify-between px-4 py-2">
                 <span className="font-semibold">Revenue</span>
-                <span>{movieDetails.revenue ? formatCurrency(movieDetails.revenue, {currency: "USD", maximumFractionDigits: 0}) : "-"}</span>
+                <span>{movieDetails.revenue ? formatCurrency(movieDetails.revenue, { currency: "USD", maximumFractionDigits: 0 }) : "-"}</span>
             </div>
             <div className="flex gap-4 justify-between px-4 py-2">
                 <span className="font-semibold">Original Language</span>

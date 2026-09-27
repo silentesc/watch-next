@@ -27,7 +27,7 @@ export function Recommendations({ tvSeriesId }: RecommendationsProps) {
     const allTvSeries: Array<TvSeriesOverview> = tvSeriesRecommendationsQuery.data.pages[0].results;
 
     if (allTvSeries.length === 0) {
-        return <></>;
+        return null;
     }
 
     const seeMore = () => {
