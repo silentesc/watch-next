@@ -46,7 +46,7 @@ export function TvSeason({ tvSeriesId, tvSeason, canExpandEpisodes }: TvSeasonPr
                             <img className="rounded-l-md w-full h-full object-cover" src={`https://image.tmdb.org/t/p/w300${tvSeason.poster_path}`} alt={tvSeason.name} />
                         ) : (
                             <div className="flex w-full h-full items-center justify-center">
-                                <img className="w-full h-full rounded-l-md object-contain grayscale opacity-30" src="/sad_logo.png" alt={tvSeason.name} />
+                                <img className="w-full h-full rounded-l-md object-contain grayscale opacity-30" src="/logo_sad.png" alt={tvSeason.name} />
                             </div>
                         )
                     }

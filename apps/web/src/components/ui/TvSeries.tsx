@@ -36,7 +36,7 @@ export function TvSeries({ tvSeries }: TvSeriesProps) {
                             <img className="rounded-t-md w-full h-full object-cover" src={`https://image.tmdb.org/t/p/w300${tvSeries.poster_path}`} alt={tvSeries.name} />
                         ) : (
                             <div className="h-full flex items-center justify-center">
-                                <img className="rounded-t-md object-cover grayscale opacity-30" src="/sad_logo.png" alt={tvSeries.name} />
+                                <img className="rounded-t-md object-cover grayscale opacity-30" src="/logo_sad.png" alt={tvSeries.name} />
                             </div>
                         )
                     }

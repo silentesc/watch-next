@@ -20,7 +20,7 @@ export function TvEpisode({ episode }: TvEpisodeProps) {
                     </div>
                 ) : (
                     <div className="flex w-full h-full items-center justify-center">
-                        <img className="w-full h-full rounded-l-md object-contain  grayscale opacity-30" src="/sad_logo.png" alt={episode.name} />
+                        <img className="w-full h-full rounded-l-md object-contain  grayscale opacity-30" src="/logo_sad.png" alt={episode.name} />
                     </div>
                 )
                 }
