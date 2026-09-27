@@ -51,7 +51,7 @@ export function MovieList({ infiniteQuery }: MovieListProps) {
 
             {/* Target element for the observer */}
             <div ref={bottomRef} className="h-10 w-full">
-                {(infiniteQuery.isLoading || infiniteQuery.isFetchingNextPage) && <Loading />}
+                {(infiniteQuery.isLoading || infiniteQuery.isFetchingNextPage) ? <Loading /> : null}
             </div>
         </>
     );

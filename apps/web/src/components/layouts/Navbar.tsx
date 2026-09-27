@@ -61,9 +61,7 @@ export function Navbar() {
                                 {
                                     me.isEnabled && me.isSuccess ? (
                                         desktopLinksWhenLoggedIn
-                                    ) : (
-                                        <></>
-                                    )
+                                    ) : null
                                 }
                             </div>
                             {/* Right */}
@@ -116,9 +114,7 @@ export function Navbar() {
                     {
                         me.isEnabled && me.isSuccess ? (
                             mobileLinksWhenLoggedIn
-                        ) : (
-                            <></>
-                        )
+                        ) : null
                     }
                 </div>
 

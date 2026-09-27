@@ -74,13 +74,13 @@ export function Dropdown({ title, values, onSelect, alignedRight = false, closeO
 
             {/* Dropdown Menu */}
             {
-                isOpen && (
-                    <div className={`${alignedRight && "right-0"} z-1000 absolute w-56 max-h-100 overflow-scroll mt-2 origin-top-right bg-background-secondary border border-background-tertiary divide-y divide-background-tertiary rounded-md shadow-lg outline-none`}>
+                isOpen ? (
+                    <div className={`${alignedRight ? "right-0" : null} z-1000 absolute w-56 max-h-100 overflow-scroll mt-2 origin-top-right bg-background-secondary border border-background-tertiary divide-y divide-background-tertiary rounded-md shadow-lg outline-none`}>
                         <>
                             {valueElements}
                         </>
                     </div>
-                )
+                ) : null
             }
         </div >
     );

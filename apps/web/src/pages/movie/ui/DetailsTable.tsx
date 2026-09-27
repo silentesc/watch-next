@@ -80,7 +80,7 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
     return (
         <div className="bg-background-secondary/50 border-2 border-background-tertiary rounded-md divide-y-2 divide-background-tertiary">
             <div className="flex gap-6 px-6 py-2">
-                {movieDetails.imdb_id && (
+                {movieDetails.imdb_id ? (
                     <a
                         href={`https://www.imdb.com/title/${movieDetails.imdb_id}`}
                         target="_blank"
@@ -88,7 +88,7 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
                     >
                         <img className="w-10" src="/imdb_logo.png" />
                     </a>
-                )}
+                ) : null}
                 <a
                     href={`https://www.themoviedb.org/movie/${movieDetails.id}`}
                     target="_blank"
@@ -104,14 +104,14 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
             <div className="flex gap-4 justify-between px-4 py-2">
                 <span className="font-semibold">Release Dates</span>
                 <div>
-                    {movieReleaseDatesQuery.isLoading && <Loading />}
-                    {movieReleaseDatesQuery.error && <Error message={movieReleaseDatesQuery.error.message} />}
+                    {movieReleaseDatesQuery.isLoading ? <Loading /> : null}
+                    {movieReleaseDatesQuery.error ? <Error message={movieReleaseDatesQuery.error.message} /> : null}
                     {
                         releaseDates ? (
                             releaseDates.map(releaseDate => {
                                 return (
                                     <p key={`${formatDate(releaseDate.release_date)}-${releaseDate.type}-${releaseDate.note}`} className="flex items-center gap-2 justify-end">
-                                        <span title={`${formatReleaseType(releaseDate.type)} ${releaseDate.note && `(${releaseDate.note})`}`} className="flex items-center">
+                                        <span title={`${formatReleaseType(releaseDate.type)} ${releaseDate.note ? `(${releaseDate.note})` : ""}`} className="flex items-center">
                                             {releaseTypeSvg(releaseDate.type)}
                                         </span>
                                         <span className="whitespace-nowrap">

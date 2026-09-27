@@ -24,15 +24,15 @@ export function QuickInfo({ movieDetails }: QuickInfo) {
                 {/* Title */}
                 <span className="text-3xl sm:text-5xl font-bold">
                     {movieDetails.title}
-                    <span className="text-3xl font-semibold">{releaseYear && ` (${releaseYear})`}</span>
+                    <span className="text-3xl font-semibold">{releaseYear ? ` (${releaseYear})` : null}</span>
                 </span>
                 {/* Tagline */}
-                {movieDetails.tagline && <p className="text-xl text-foreground-secondary italic">{movieDetails.tagline}</p>}
+                {movieDetails.tagline ? <p className="text-xl text-foreground-secondary italic">{movieDetails.tagline}</p> : null}
             </div>
 
             {/* At a glance */}
             <div className="flex items-center gap-6 mb-6 justify-center sm:justify-start">
-                {movieDetails.vote_average !== undefined && (
+                {movieDetails.vote_average !== undefined ? (
                     <div className="flex items-center gap-2">
                         <div className={`text-4xl font-bold ${getRatingColor(movieDetails.vote_average)}`}>
                             {getRatingString(movieDetails.vote_average)}
@@ -44,7 +44,7 @@ export function QuickInfo({ movieDetails }: QuickInfo) {
                             </span>
                         </div>
                     </div>
-                )}
+                ) : null}
 
                 {
                     movieDetails.runtime ? (
@@ -57,7 +57,7 @@ export function QuickInfo({ movieDetails }: QuickInfo) {
 
             {/* Genres */}
             <div>
-                {movieDetails.genres && movieDetails.genres.length > 0 && (
+                {movieDetails.genres?.length ? (
                     <div className="flex flex-wrap gap-2 mb-6 justify-center sm:justify-start">
                         {movieDetails.genres.map((genre) => (
                             <span
@@ -68,7 +68,7 @@ export function QuickInfo({ movieDetails }: QuickInfo) {
                             </span>
                         ))}
                     </div>
-                )}
+                ) : null}
             </div>
         </>
     );

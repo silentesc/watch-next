@@ -43,13 +43,13 @@ export function Seasons({ tvSeriesDetails }: SeasonsProps) {
                 ))}
             </div>
             <div className="text-center">
-                {orderedSeasons.length > 1 && (
+                {orderedSeasons.length > 1 ? (
                     <Button
                         value={isExpanded ? "Show less" : "Show more"}
                         onClick={() => setIsExpanded(expanded => !expanded)}
                         className="mt-3 cursor-pointer"
                     />
-                )}
+                ) : null}
             </div>
         </section>
     );

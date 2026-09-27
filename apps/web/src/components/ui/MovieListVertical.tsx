@@ -19,7 +19,7 @@ export function MovieListVertical({ movies, seeMoreLinkHint, onSeeMoreClick }: M
     return (
         <div className="flex gap-2 overflow-scroll">
             {shownMovies.map(m => <Movie key={m.id} movie={m} />)}
-            {lastMovie && (
+            {lastMovie ? (
                 <div className="relative">
                     <div className="blur-sm pointer-events-none">
                         <Movie movie={lastMovie} />
@@ -34,7 +34,7 @@ export function MovieListVertical({ movies, seeMoreLinkHint, onSeeMoreClick }: M
                         </div>
                     </a>
                 </div>
-            )}
+            ) : null}
         </div>
     );
 }

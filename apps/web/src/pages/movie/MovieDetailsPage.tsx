@@ -39,7 +39,7 @@ export function MovieDetailsPage() {
             {/* Backdrop */}
             <div className="relative h-90 overflow-hidden">
                 {
-                    movieDetailsQuery.data.backdrop_path && (
+                    movieDetailsQuery.data.backdrop_path ? (
                         <>
                             <img
                                 src={`https://image.tmdb.org/t/p/original${movieDetailsQuery.data.backdrop_path}`}
@@ -48,7 +48,7 @@ export function MovieDetailsPage() {
                             />
                             <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background-secondary" />
                         </>
-                    )
+                    ) : null
                 }
             </div>
 

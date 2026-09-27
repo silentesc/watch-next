@@ -52,7 +52,7 @@ export function AggregateCrew({ tvSeriesId }: AggregateCrewProps) {
                     {topCrew.map((c) => (
                         <Person key={`${c.name}-${getJobsString(c)}`} name={c.name || "Unknown"} imgPath={c.profile_path} description={getJobsString(c)} />
                     ))}
-                    {hintCrew && (
+                    {hintCrew ? (
                         <div className="relative">
                             <div className="blur-sm select-none pointer-events-none">
                                 <Person key={`${hintCrew.name}-${getJobsString(hintCrew)}`} name={hintCrew.name || "Unknown"} imgPath={hintCrew.profile_path} description={getJobsString(hintCrew)} />
@@ -67,7 +67,7 @@ export function AggregateCrew({ tvSeriesId }: AggregateCrewProps) {
                                 </div>
                             </a>
                         </div>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </div>

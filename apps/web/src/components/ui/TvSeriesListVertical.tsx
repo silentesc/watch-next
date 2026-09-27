@@ -19,7 +19,7 @@ export function TvSeriesListVertical({ tvSeries, seeMoreLinkHint, onSeeMoreClick
     return (
         <div className="flex gap-2 overflow-scroll">
             {shownTvSeries.map(m => <TvSeries key={m.id} tvSeries={m} />)}
-            {lastTvSeries && (
+            {lastTvSeries ? (
                 <div className="relative">
                     <div className="blur-sm pointer-events-none">
                         <TvSeries tvSeries={lastTvSeries} />
@@ -34,7 +34,7 @@ export function TvSeriesListVertical({ tvSeries, seeMoreLinkHint, onSeeMoreClick
                         </div>
                     </a>
                 </div>
-            )}
+            ) : null}
         </div>
     );
 }

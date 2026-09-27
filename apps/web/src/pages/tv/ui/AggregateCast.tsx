@@ -52,7 +52,7 @@ export function AggregateCast({ tvSeriesId }: AggregateCastProps) {
                     {topCast.map((c) => (
                         <Person key={`${c.name}-${getRolesString(c)}`} name={c.name || "Unknown"} imgPath={c.profile_path} description={getRolesString(c)} />
                     ))}
-                    {hintCast && (
+                    {hintCast ? (
                         <div className="relative">
                             <div className="blur-sm select-none pointer-events-none">
                                 <Person key={`${hintCast.name}-${getRolesString(hintCast)}`} name={hintCast.name || "Unknown"} imgPath={hintCast.profile_path} description={getRolesString(hintCast)} />
@@ -67,7 +67,7 @@ export function AggregateCast({ tvSeriesId }: AggregateCastProps) {
                                 </div>
                             </a>
                         </div>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </div>

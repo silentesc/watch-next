@@ -42,7 +42,7 @@ export function CollectionDetailsPage() {
             {/* Backdrop */}
             <div className="relative h-90 overflow-hidden">
                 {
-                    collectionDetails.backdrop_path && (
+                    collectionDetails.backdrop_path ? (
                         <>
                             <img
                                 src={`https://image.tmdb.org/t/p/original${collectionDetails.backdrop_path}`}
@@ -51,7 +51,7 @@ export function CollectionDetailsPage() {
                             />
                             <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background-secondary" />
                         </>
-                    )
+                    ) : null
                 }
             </div>
 

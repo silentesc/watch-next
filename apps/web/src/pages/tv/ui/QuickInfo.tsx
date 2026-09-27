@@ -17,15 +17,15 @@ export function QuickInfo({ tvSeriesDetails }: QuickInfo) {
                 {/* Name */}
                 <span className="text-3xl sm:text-5xl font-bold">
                     {tvSeriesDetails.name}
-                    <span className="text-3xl font-semibold">{firstAirDate && ` (${firstAirDate})`}</span>
+                    <span className="text-3xl font-semibold">{firstAirDate ? ` (${firstAirDate})` : null}</span>
                 </span>
                 {/* Tagline */}
-                {tvSeriesDetails.tagline && <p className="text-xl text-foreground-secondary italic">{tvSeriesDetails.tagline}</p>}
+                {tvSeriesDetails.tagline ? <p className="text-xl text-foreground-secondary italic">{tvSeriesDetails.tagline}</p> : null}
             </div>
 
             {/* At a glance */}
             <div className="flex items-center gap-6 mb-6 justify-center sm:justify-start">
-                {tvSeriesDetails.vote_average !== undefined && (
+                {tvSeriesDetails.vote_average !== undefined ? (
                     <div className="flex items-center gap-2">
                         <div className={`text-4xl font-bold ${getRatingColor(tvSeriesDetails.vote_average)}`}>
                             {getRatingString(tvSeriesDetails.vote_average)}
@@ -37,12 +37,12 @@ export function QuickInfo({ tvSeriesDetails }: QuickInfo) {
                             </span>
                         </div>
                     </div>
-                )}
+                ) : null}
             </div>
 
             {/* Genres */}
             <div>
-                {tvSeriesDetails.genres && tvSeriesDetails.genres.length > 0 && (
+                {tvSeriesDetails.genres?.length ? (
                     <div className="flex flex-wrap gap-2 mb-6 justify-center sm:justify-start">
                         {tvSeriesDetails.genres.map((genre) => (
                             <span
@@ -53,7 +53,7 @@ export function QuickInfo({ tvSeriesDetails }: QuickInfo) {
                             </span>
                         ))}
                     </div>
-                )}
+                ) : null}
             </div>
         </>
     );

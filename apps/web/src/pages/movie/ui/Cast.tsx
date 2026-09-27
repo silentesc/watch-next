@@ -44,7 +44,7 @@ export function Cast({ movieId }: CastProps) {
                     {topCast.map((c) => (
                         <Person key={`${c.name}-${c.character || ""}`} name={c.name || "Unknown"} imgPath={c.profile_path} description={c.character} />
                     ))}
-                    {hintCast && (
+                    {hintCast ? (
                         <div className="relative">
                             <div className="blur-sm select-none pointer-events-none">
                                 <Person key={`${hintCast.name}-${hintCast.character || ""}`} name={hintCast.name || "Unknown"} imgPath={hintCast.profile_path} description={hintCast.character} />
@@ -59,7 +59,7 @@ export function Cast({ movieId }: CastProps) {
                                 </div>
                             </a>
                         </div>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </div>

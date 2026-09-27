@@ -95,15 +95,15 @@ export function DatePicker({ value, placeholder = "", onChange, alignedRight = f
     }, [isOpen]);
 
     return (
-        <div className={`${handleRelative && "relative"} w-full`} ref={datePickerRef}>
+        <div className={`${handleRelative ? "relative" : ""} w-full`} ref={datePickerRef}>
             <Button
                 value={value ? formatDate(value.getFullYear(), value.getMonth(), value.getDate()) : placeholder ? (<span className="opacity-50">{placeholder}</span>) : (<>&nbsp;</>)}
                 alignment="left"
                 onClick={() => setIsOpen((prev) => !prev)}
             />
 
-            {isOpen && (
-                <div className={`absolute ${topClassName} z-20 w-full min-w-70 max-w-120 bg-background-secondary border-2 border-background-tertiary p-3 shadow-xl ${alignedRight && "right-0"}`}>
+            {isOpen ? (
+                <div className={`absolute ${topClassName} z-20 w-full min-w-70 max-w-120 bg-background-secondary border-2 border-background-tertiary p-3 shadow-xl ${alignedRight ? "right-0": ""}`}>
                     <div className="flex justify-between items-center mb-3">
                         <div className="flex gap-2">
                             <button onClick={() => setViewDate(new Date(year, month - 1, 1))} className="rounded p-1 hover:bg-background-tertiary" type="button">
@@ -134,7 +134,7 @@ export function DatePicker({ value, placeholder = "", onChange, alignedRight = f
                                 <button
                                     key={i}
                                     onClick={() => handleDatePicked(day)}
-                                    className={`p-1.5 text-sm rounded border hover:bg-background-tertiary ${isSelected && "bg-primary text-white"} ${isToday ? "border-primary" : "border-transparent"}`}
+                                    className={`p-1.5 text-sm rounded border hover:bg-background-tertiary ${isSelected ? "bg-primary text-white" : null} ${isToday ? "border-primary" : "border-transparent"}`}
                                     type="button"
                                 >
                                     {day}
@@ -143,7 +143,7 @@ export function DatePicker({ value, placeholder = "", onChange, alignedRight = f
                         })}
                     </div>
                 </div>
-            )}
+            ) : null}
         </div>
     );
 }
