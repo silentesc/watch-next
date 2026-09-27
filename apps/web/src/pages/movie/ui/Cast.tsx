@@ -33,7 +33,7 @@ export function Cast({ movieId }: CastProps) {
     const hintCast = cast.length >= 5 ? cast[5] : undefined;
 
     if (cast.length === 0) {
-        return <></>;
+        return null;
     }
 
     return (

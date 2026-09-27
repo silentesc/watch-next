@@ -41,7 +41,7 @@ export function AggregateCast({ tvSeriesId }: AggregateCastProps) {
     const hintCast = cast.length >= 9 ? cast[9] : undefined;
 
     if (cast.length === 0) {
-        return <></>;
+        return null;
     }
 
     return (

@@ -41,7 +41,7 @@ export function AggregateCrew({ tvSeriesId }: AggregateCrewProps) {
     const hintCrew = crew.length >= 9 ? crew[9] : undefined;
 
     if (crew.length === 0) {
-        return <></>;
+        return null;
     }
 
     return (

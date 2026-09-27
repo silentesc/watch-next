@@ -60,7 +60,7 @@ export function TvSeason({ tvSeriesId, tvSeason, canExpandEpisodes }: TvSeasonPr
                     {
                         tvSeason.episode_count ? (
                             <span className="opacity-75">{tvSeason.episode_count} episodes</span>
-                        ) : (<></>)
+                        ) : null
                     }
                     {
                         tvSeason.vote_average ? (
@@ -68,7 +68,7 @@ export function TvSeason({ tvSeriesId, tvSeason, canExpandEpisodes }: TvSeasonPr
                                 <span className={`opacity-75 ${getRatingColor(tvSeason.vote_average || 0)}`}>{getRatingString(tvSeason.vote_average)}</span>
                                 <span className="opacity-75">/ 10</span>
                             </div>
-                        ) : (<></>)
+                        ) : null
                     }
                 </div>
 

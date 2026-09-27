@@ -51,7 +51,7 @@ export function QuickInfo({ movieDetails }: QuickInfo) {
                         <div className="text-lg text-foreground-secondary">
                             <span className="text-foreground-primary font-semibold">{formatRuntime(movieDetails.runtime)}</span>
                         </div>
-                    ) : (<></>)
+                    ) : null
                 }
             </div>
 

@@ -33,7 +33,7 @@ export function Crew({ movieId }: CrewProps) {
     const hintCrew = crew.length >= 5 ? crew[5] : undefined;
 
     if (crew.length === 0) {
-        return <></>;
+        return null;
     }
 
     return (

@@ -105,12 +105,12 @@ export function CustomListPage() {
                 {
                     updateCustomList.error ? (
                         <Error message={updateCustomList.error.message} />
-                    ) : <></>
+                    ) : null
                 }
                 {
                     deleteCustomList.error ? (
                         <Error message={deleteCustomList.error.message} />
-                    ) : <></>
+                    ) : null
                 }
             </div >
             {

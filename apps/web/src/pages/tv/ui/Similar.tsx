@@ -27,7 +27,7 @@ export function Similar({ tvSeriesId }: SimilarProps) {
     const allTvSeries: Array<TvSeriesOverview> = similarTvSeriesQuery.data.pages[0].results;
 
     if (allTvSeries.length === 0) {
-        return <></>;
+        return null;
     }
 
     const seeMore = () => {
