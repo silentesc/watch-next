@@ -2,8 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { Input } from "../../../components/ui/Input";
 import { Button } from "../../../components/ui/Button";
 import { DatePicker } from "../../../components/ui/DatePicker";
-import { useLanguages } from "../../../hooks/use_languages";
-import { useGenreMovie } from "../../../hooks/use_genre_movie";
+import { useLanguages } from "../../../hooks/tmdb/use_languages";
+import { useGenreMovie } from "../../../hooks/tmdb/use_genre_movie";
 import { MultiSelectDropdown } from "../../../components/ui/MultiSelectDropdown";
 import { Dropdown } from "../../../components/ui/Dropdown";
 

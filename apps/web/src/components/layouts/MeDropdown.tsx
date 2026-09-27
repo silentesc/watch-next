@@ -3,6 +3,7 @@ import type { Me } from "../../api/me"
 import { logout } from "../../api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { meQueryKey } from "../../hooks/use_me";
 
 interface MeDropdownProps {
     me: Me;
@@ -23,7 +24,7 @@ export function MeDropdown({ me, isMobile = false }: MeDropdownProps) {
     const mutation = useMutation({
         mutationFn: logout,
         onSuccess: () => {
-            queryClient.removeQueries({ queryKey: ["me"] });
+            queryClient.removeQueries({ queryKey: meQueryKey });
             navigate("/");
         }
     });
@@ -66,9 +67,8 @@ export function MeDropdown({ me, isMobile = false }: MeDropdownProps) {
             {/* Dropdown Menu */}
             {isOpen && (
                 <div className={`z-1000 absolute w-56 mt-2 origin-top-right bg-background-secondary border border-background-tertiary divide-y divide-background-tertiary rounded-md shadow-lg outline-none ${isMobile ? "-right-1/2 bottom-10" : "right-0"}`}>
-                    <div className="">
-                        <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary cursor-pointer">Dummy 1</button>
-                        <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary cursor-pointer">Dummy 2</button>
+                    <div>
+                        <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary cursor-pointer">(Dummy) Account</button>
                     </div>
                     <div>
                         <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary cursor-pointer" onClick={onLogout}>Sign out</button>

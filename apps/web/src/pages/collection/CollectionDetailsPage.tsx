@@ -2,10 +2,11 @@ import { useParams } from "react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { Movie } from "../../components/ui/Movie";
-import { useCollectionDetails } from "../../hooks/use_collection_details";
+import { useCollectionDetails } from "../../hooks/tmdb/use_collection_details";
 import { Overview } from "./Overview";
 import { QuickInfo } from "./QuickInfo";
 import { Poster } from "./Poster";
+import { CustomListPicker } from "../../components/ui/CustomListPicker";
 
 export function CollectionDetailsPage() {
     const { id } = useParams();
@@ -63,6 +64,10 @@ export function CollectionDetailsPage() {
                     <div className="w-full">
                         <QuickInfo collectionDetails={collectionDetails} />
                     </div>
+                </div>
+
+                <div className="sm:my-5">
+                    <CustomListPicker item={{ kind: "collection", external_source: "tmdb", external_id: collectionId }} />
                 </div>
 
                 <div className="my-5">

@@ -1,9 +1,9 @@
 import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
-import type { TvSeriesOverview } from "../../../api/models";
+import type { TvSeriesOverview } from "../../../api/tmdb/models";
 import { useNavigate } from "react-router";
 import { TvSeriesListVertical } from "../../../components/ui/TvSeriesListVertical";
-import { useSimilarTvSeries } from "../../../hooks/use_similar_tv_series";
+import { useSimilarTvSeries } from "../../../hooks/tmdb/use_similar_tv_series";
 
 interface SimilarProps {
     tvSeriesId: number;

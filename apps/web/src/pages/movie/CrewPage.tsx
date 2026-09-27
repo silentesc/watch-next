@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router";
-import { useMovieCredits } from "../../hooks/use_credits";
+import { useMovieCredits } from "../../hooks/tmdb/use_credits";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { Person } from "../../components/ui/Person";
-import { useMovieDetails } from "../../hooks/use_movie_details";
+import { useMovieDetails } from "../../hooks/tmdb/use_movie_details";
 
 export function CrewPage() {
     const navigate = useNavigate();

@@ -9,7 +9,8 @@ use serde::{Serialize, de::DeserializeOwned};
 use sqlx::PgPool;
 
 use crate::{
-    integrations::tmdb::errors::TmdbError, logger::enums::category::Category, persistence::table_utils::cache, trace,
+    error, integrations::tmdb::errors::TmdbError, logger::enums::category::Category, persistence::table_utils::cache,
+    trace,
 };
 
 #[derive(Clone)]
@@ -30,8 +31,13 @@ impl TmdbClient {
         let mut headers = HeaderMap::new();
         headers.append(
             AUTHORIZATION,
-            HeaderValue::try_from(format!("Bearer {access_token}"))
-                .map_err(|err| TmdbError::InvalidConfiguration { error: err.to_string() })?,
+            HeaderValue::try_from(format!("Bearer {access_token}")).map_err(|err| {
+                error!(
+                    Category::Tmdb,
+                    "Parsing tmdb access token to header value failed with error: {:#?}", err
+                );
+                TmdbError::InvalidConfiguration { error: err.to_string() }
+            })?,
         );
         headers.append(ACCEPT, HeaderValue::from_static("application/json"));
 
@@ -40,7 +46,13 @@ impl TmdbClient {
             .connect_timeout(Duration::from_secs(10))
             .default_headers(headers)
             .build()
-            .map_err(|err| TmdbError::Http { error: err.to_string() })?;
+            .map_err(|err| {
+                error!(
+                    Category::Tmdb,
+                    "Building tmdb http client failed with error: {:#?}", err
+                );
+                TmdbError::Http { error: err.to_string() }
+            })?;
 
         Ok(Self {
             pool,
@@ -55,7 +67,13 @@ impl TmdbClient {
         T: DeserializeOwned + Serialize,
         Q: Serialize + ?Sized,
     {
-        let query_string = serde_json::to_string(query).map_err(|err| TmdbError::Json { error: err.to_string() })?;
+        let query_string = serde_json::to_string(query).map_err(|err| {
+            error!(
+                Category::Tmdb,
+                "Serializing tmdb query params failed with error: {:#?}", err
+            );
+            TmdbError::Json { error: err.to_string() }
+        })?;
         let cache_key = format!("{endpoint}?{query_string}");
 
         if let Some(cached) = self.get_cached(&cache_key).await? {
@@ -92,7 +110,13 @@ impl TmdbClient {
             .query(query)
             .send()
             .await
-            .map_err(|err| TmdbError::Http { error: err.to_string() })?;
+            .map_err(|err| {
+                error!(
+                    Category::Tmdb,
+                    "Sending tmdb http request failed with error: {:#?}", err
+                );
+                TmdbError::Http { error: err.to_string() }
+            })?;
 
         let status = response.status();
 
@@ -101,10 +125,13 @@ impl TmdbClient {
             return Err(TmdbError::Api { status, body });
         }
 
-        response
-            .json()
-            .await
-            .map_err(|err| TmdbError::Json { error: err.to_string() })
+        response.json().await.map_err(|err| {
+            error!(
+                Category::Tmdb,
+                "Desezalizing tmdb response failed with error: {:#?}", err
+            );
+            TmdbError::Json { error: err.to_string() }
+        })
     }
 
     async fn get_cached<T>(&self, cache_key: &str) -> Result<Option<T>, TmdbError>

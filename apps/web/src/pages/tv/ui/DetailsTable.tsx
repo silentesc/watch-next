@@ -1,5 +1,5 @@
-import type { TvSeriesDetails } from "../../../api/models";
-import { useLanguages } from "../../../hooks/use_languages";
+import type { TvSeriesDetails } from "../../../api/tmdb/models";
+import { useLanguages } from "../../../hooks/tmdb/use_languages";
 import { formatDate } from "../../../shared/dateFormatter";
 
 interface DetailsTableProps {

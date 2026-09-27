@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
-import { useTvSeriesDetails } from "../../hooks/use_tv_series_details";
-import { useSimilarTvSeries } from "../../hooks/use_similar_tv_series";
+import { useTvSeriesDetails } from "../../hooks/tmdb/use_tv_series_details";
+import { useSimilarTvSeries } from "../../hooks/tmdb/use_similar_tv_series";
 import { TvSeriesList } from "../../components/ui/TvSeriesList";
 
 export function TvSeriesSimilarPage() {

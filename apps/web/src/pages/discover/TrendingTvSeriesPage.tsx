@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 import { Dropdown } from "../../components/ui/Dropdown";
 import { Error } from "../../components/ui/Error";
-import { useTrendingTvSeries } from "../../hooks/use_trending_tv_series";
+import { useTrendingTvSeries } from "../../hooks/tmdb/use_trending_tv_series";
 import { TvSeriesList } from "../../components/ui/TvSeriesList";
 
 export function TrendingTvSeriesPage() {

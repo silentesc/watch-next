@@ -1,4 +1,4 @@
-import type { CollectionDetails } from "../../api/models";
+import type { CollectionDetails } from "../../api/tmdb/models";
 
 interface PosterProps {
     collectionDetails: CollectionDetails;

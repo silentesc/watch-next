@@ -2,13 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { me } from "../api/me";
 import { useAuthStore } from "../stores/useAuthStore";
 
-export const QUERY_KEY = "me";
+export const meQueryKey = ["me"] as const;
 
 export function useMe() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
     return useQuery({
-        queryKey: [QUERY_KEY],
+        queryKey: meQueryKey,
         queryFn: me,
         staleTime: Infinity,
         retry: false,

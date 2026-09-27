@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, NavLink } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router";
 import { Logo } from "../ui/Logo";
 import { useMe } from "../../hooks/use_me";
 import { Loading } from "../ui/Loading";
@@ -7,19 +7,26 @@ import { MeDropdown } from "./MeDropdown";
 
 export function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const location = useLocation();
 
     const me = useMe();
+
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [location]);
 
     const desktopLinksWhenLoggedIn = (
         <>
             <NavLink className="mx-2 text-2xl" to="/discover">Discover</NavLink>
             <NavLink className="mx-2 text-2xl" to="/search">Search</NavLink>
+            <NavLink className="mx-2 text-2xl" to="/custom-lists">Lists</NavLink>
         </>
     );
     const mobileLinksWhenLoggedIn = (
         <>
-            <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl" to="/discover">Discover</NavLink>
-            <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl" to="/search">Search</NavLink>
+            <NavLink className="mx-2 mb-1 text-2xl" to="/discover">Discover</NavLink>
+            <NavLink className="mx-2 mb-1 text-2xl" to="/search">Search</NavLink>
+            <NavLink className="mx-2 mb-1 text-2xl" to="/custom-lists">Lists</NavLink>
         </>
     );
 
@@ -31,8 +38,8 @@ export function Navbar() {
     );
     const mobileAuthLinks = (
         <>
-            <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl p-2.5" to="/login">Login</NavLink>
-            <NavLink onClick={() => setIsMobileMenuOpen(false)} className="mx-2 mb-1 text-2xl bg-primary rounded-md p-2.5" to="/register">Register</NavLink>
+            <NavLink className="mx-2 mb-1 text-2xl p-2.5" to="/login">Login</NavLink>
+            <NavLink className="mx-2 mb-1 text-2xl bg-primary rounded-md p-2.5" to="/register">Register</NavLink>
         </>
     );
 

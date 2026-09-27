@@ -10,7 +10,8 @@ import { Crew } from "./ui/Crew";
 import { Cast } from "./ui/Cast";
 import { Recommendations } from "./ui/Recommendations";
 import { Similar } from "./ui/Similar";
-import { useMovieDetails } from "../../hooks/use_movie_details";
+import { useMovieDetails } from "../../hooks/tmdb/use_movie_details";
+import { CustomListPicker } from "../../components/ui/CustomListPicker";
 
 export function MovieDetailsPage() {
     const { id } = useParams();
@@ -62,6 +63,10 @@ export function MovieDetailsPage() {
                             <div className="w-full">
                                 <QuickInfo movieDetails={movieDetailsQuery.data} />
                             </div>
+                        </div>
+
+                        <div className="sm:my-5">
+                            <CustomListPicker item={{ kind: "movie", external_source: "tmdb", external_id: movieId }} />
                         </div>
 
                         <div className="my-5">

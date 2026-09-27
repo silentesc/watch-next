@@ -1,6 +1,6 @@
 import { MovieList } from "../../components/ui/MovieList";
 import { useNavigate, useParams } from "react-router";
-import { useTrendingMovies } from "../../hooks/use_trending_movies";
+import { useTrendingMovies } from "../../hooks/tmdb/use_trending_movies";
 import { Dropdown } from "../../components/ui/Dropdown";
 import { Error } from "../../components/ui/Error";
 

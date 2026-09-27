@@ -5,7 +5,7 @@ import { SortBy } from "../../components/ui/SortBy";
 import { MovieList } from "../../components/ui/MovieList";
 import { useSearchParams } from "react-router";
 import { getMovieFiltersFromParams, setMovieParamsFromFilters } from "./utils";
-import { useDiscoverMovies } from "../../hooks/use_discover_movies";
+import { useDiscoverMovies } from "../../hooks/tmdb/use_discover_movies";
 
 export function DiscoverMoviePage() {
     const sortByValues = new Map([

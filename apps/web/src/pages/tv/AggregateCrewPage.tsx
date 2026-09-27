@@ -2,8 +2,8 @@ import { useNavigate, useParams } from "react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { Person } from "../../components/ui/Person";
-import { useTvSeriesDetails } from "../../hooks/use_tv_series_details";
-import { useTvSeriesAggregateCredits } from "../../hooks/use_tv_series_aggregatecredits";
+import { useTvSeriesDetails } from "../../hooks/tmdb/use_tv_series_details";
+import { useTvSeriesAggregateCredits } from "../../hooks/tmdb/use_tv_series_aggregatecredits";
 import { getJobsString } from "./ui/AggregateCrew";
 
 export function AggregateCrewPage() {

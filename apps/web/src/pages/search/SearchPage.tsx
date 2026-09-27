@@ -2,10 +2,10 @@ import { Searchbar } from "../../components/ui/Searchbar";
 import { MovieList } from "../../components/ui/MovieList";
 import { useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
-import { useSearchMovie } from "../../hooks/use_search_movie";
+import { useSearchMovie } from "../../hooks/tmdb/use_search_movie";
 import { CollectionList } from "../../components/ui/CollectionList";
-import { useSearchCollection } from "../../hooks/use_search_collection";
-import { useSearchTvSeries } from "../../hooks/use_search_tv_series";
+import { useSearchCollection } from "../../hooks/tmdb/use_search_collection";
+import { useSearchTvSeries } from "../../hooks/tmdb/use_search_tv_series";
 import { TvSeriesList } from "../../components/ui/TvSeriesList";
 
 export function SearchPage() {
