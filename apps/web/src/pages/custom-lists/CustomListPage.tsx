@@ -4,9 +4,9 @@ import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { useCustomLists } from "../../hooks/customLists/use_custom_lists";
 import { useCustomListItems } from "../../hooks/customLists/use_custom_list_items";
-import { Movie } from "../../components/ui/Movie";
-import { Collection } from "../../components/ui/Collection";
-import { TvSeries } from "../../components/ui/TvSeries";
+import { MovieCard } from "../../components/ui/cards/MovieCard";
+import { CollectionCard } from "../../components/ui/cards/CollectionCard";
+import { TvSeriesCard } from "../../components/ui/cards/TvSeriesCard";
 import { type CollectionOverview, type MovieOverview, type TvSeriesOverview } from "../../api/tmdb/models";
 import { formatDate } from "../../shared/dateFormatter";
 import { useDeleteCustomList } from "../../hooks/customLists/use_delete_custom_list";
@@ -14,14 +14,7 @@ import { useUpdateCustomList } from "../../hooks/customLists/use_update_custom_l
 import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
 import { Popup } from "../../components/ui/Popup";
-
-function PencilIcon() {
-    return <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="m16.5 3.5 4 4M4 20l3.5-.75L19.5 7.25a2.12 2.12 0 0 0-3-3L4.5 16.25 4 20Z" /></svg>;
-}
-
-function TrashIcon() {
-    return <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current stroke-2"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>;
-}
+import { PencilIcon, TrashIcon } from "../../components/ui/icons/Icons";
 
 export function CustomListPage() {
     const { id } = useParams();
@@ -125,17 +118,17 @@ export function CustomListPage() {
                                     const collection = {
                                         id: item.external_id, name: item.title, poster_path: item.poster_path,
                                     } as CollectionOverview;
-                                    return <Collection key={key} collection={collection} />
+                                    return <CollectionCard key={key} collection={collection} />
                                 case "movie":
                                     const movie = {
                                         id: item.external_id, title: item.title, release_date: item.release_date, poster_path: item.poster_path,
                                     } as MovieOverview;
-                                    return <Movie key={key} movie={movie} />
+                                    return <MovieCard key={key} movie={movie} />
                                 case "tv_series":
                                     const tvSeries = {
                                         id: item.external_id, name: item.title, first_air_date: item.release_date, poster_path: item.poster_path,
                                     } as TvSeriesOverview;
-                                    return <TvSeries key={key} tvSeries={tvSeries} />
+                                    return <TvSeriesCard key={key} tvSeries={tvSeries} />
                                 default:
                                     return <Error key={key} message={`Media item has unknown kind: ${item.kind}`} />
                             }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Input } from "../../../components/ui/Input";
 import { Button } from "../../../components/ui/Button";
+import { CloseIcon } from "../../../components/ui/icons/Icons";
 import { DatePicker } from "../../../components/ui/DatePicker";
 import { useLanguages } from "../../../hooks/tmdb/use_languages";
 import { useGenreMovie } from "../../../hooks/tmdb/use_genre_movie";
@@ -126,9 +127,7 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
                     <div className="m-auto">
                     </div>
                     {/* x button */}
-                    <svg onClick={() => onClose()} className="w-6 h-6 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                        <CloseIcon onClick={() => onClose()} className="w-6 h-6 cursor-pointer" />
                 </div>
                 <div className="flex gap-1">
                     <Button value="Apply Filters" onClick={applyFilters} />

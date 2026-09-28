@@ -1,4 +1,4 @@
-import { MovieList } from "../../components/ui/MovieList";
+import { MovieGrid } from "../../components/ui/lists/MovieGrid";
 import { useNavigate, useParams } from "react-router";
 import { useTrendingMovies } from "../../hooks/tmdb/use_trending_movies";
 import { Dropdown } from "../../components/ui/Dropdown";
@@ -42,7 +42,7 @@ export function TrendingMoviePage() {
             </div>
 
             {/* Movies */}
-            <MovieList infiniteQuery={trendingMovieInfiniteQuery} />
+            <MovieGrid infiniteQuery={trendingMovieInfiniteQuery} />
         </>
     );
 }

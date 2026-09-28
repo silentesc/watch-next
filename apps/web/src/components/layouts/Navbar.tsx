@@ -4,6 +4,7 @@ import { Logo } from "../ui/Logo";
 import { useMe } from "../../hooks/use_me";
 import { Loading } from "../ui/Loading";
 import { MeDropdown } from "./MeDropdown";
+import { CloseIcon, MenuIcon } from "../ui/icons/Icons";
 
 export function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -87,9 +88,7 @@ export function Navbar() {
 
                     {/* Mobile (Hamburger Button) */}
                     <div className="flex sm:hidden">
-                        <svg onClick={() => setIsMobileMenuOpen(true)} className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
+                        <MenuIcon onClick={() => setIsMobileMenuOpen(true)} className="w-6 h-6" />
                     </div>
                 </div>
             </nav>
@@ -104,9 +103,7 @@ export function Navbar() {
                         </Link>
                     </div>
                     {/* x button */}
-                    <svg onClick={() => setIsMobileMenuOpen(false)} className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <CloseIcon onClick={() => setIsMobileMenuOpen(false)} className="w-6 h-6" />
                 </div>
 
                 {/* Links (top) */}

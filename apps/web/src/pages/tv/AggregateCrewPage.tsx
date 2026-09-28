@@ -5,6 +5,7 @@ import { Person } from "../../components/ui/Person";
 import { useTvSeriesDetails } from "../../hooks/tmdb/use_tv_series_details";
 import { useTvSeriesAggregateCredits } from "../../hooks/tmdb/use_tv_series_aggregatecredits";
 import { getJobsString } from "./ui/AggregateCrew";
+import { ArrowCircleRightIcon } from "../../components/ui/icons/Icons";
 
 export function AggregateCrewPage() {
     const navigate = useNavigate();
@@ -51,10 +52,7 @@ export function AggregateCrewPage() {
         <div className="flex flex-col gap-3">
             {/* Back button */}
             <div className="my-3 flex gap-1 items-center cursor-pointer" onClick={backToTvSeries}>
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 rotate-180">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z">
-                    </path>
-                </svg>
+                <ArrowCircleRightIcon className="w-7 rotate-180" />
                 <span className="text-lg text-nowrap">Back to {tvSeriesDetails.name}</span>
             </div>
             <h2 className="text-2xl font-bold">Crew</h2>
