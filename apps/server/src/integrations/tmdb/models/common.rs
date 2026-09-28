@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::integrations::tmdb::models::search::MultiSearchResult;
+
 #[derive(Serialize, Deserialize)]
 pub struct Language {
     pub iso_639_1: Option<String>,
@@ -11,6 +13,18 @@ pub struct Language {
 pub struct Genre {
     pub id: Option<i64>,
     pub name: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct PersonOverview {
+    pub adult: Option<bool>,
+    pub gender: Option<i32>,
+    pub id: Option<i64>,
+    pub known_for: Option<Vec<MultiSearchResult>>,
+    pub known_for_department: Option<String>,
+    pub name: Option<String>,
+    pub popularity: Option<f64>,
+    pub profile_path: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
