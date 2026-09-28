@@ -38,7 +38,7 @@ services:
       - 5657:5657
     environment:
       TZ: Etc/UTC
-      DATABASE_URL: postgres://<username>:<password>@watch-next-postgres:5432/<db_name>
+      POSTGRES_URI: postgres://<username>:<password>@watch-next-postgres:5432/<db_name>
       TMDB_API_KEY: tmdb-key
       COOKIE_KEY: long-secret-key
     restart: unless-stopped
@@ -50,7 +50,7 @@ services:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `DATABASE_URL` | - | URI to the postgres database |
+| `POSTGRES_URI` | - | URI to the postgres database |
 | `TMDB_API_KEY` | - | You can create a free TMDB account to get one |
 | `COOKIE_KEY` | - | A long (>64 characters) secret key |
 | `TZ` | `Etc/UTC` | Your timezone |

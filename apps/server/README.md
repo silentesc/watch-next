@@ -47,7 +47,7 @@ services:
 # TRACE, DEBUG, INFO, WARN, ERROR
 LOG_LEVEL="INFO"
 
-DATABASE_URL="postgres://my_postgres_user:strong_password@localhost/name_of_db"
+POSTGRES_URI="postgres://my_postgres_user:strong_password@localhost/name_of_db"
 
 SERVE_ADDR="0.0.0.0:3000"
 

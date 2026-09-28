@@ -30,12 +30,12 @@ pub fn setup_logging() {
 }
 
 pub async fn connect_postgres() -> PgPool {
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL env variable should be set by dotenv");
+    let postgres_uri = env::var("POSTGRES_URI").expect("POSTGRES_URI env variable should be set by dotenv");
     let pool = PgPoolOptions::new()
         .max_connections(constants::POSTGRES_MAX_CONNECTIONS.into())
         .acquire_timeout(Duration::from_secs(constants::POSTGRES_ACQUIRE_TIMEOUT.into()))
         .idle_timeout(Duration::from_secs(constants::POSTGRES_IDLE_TIMEOUT.into()))
-        .connect(&database_url)
+        .connect(&postgres_uri)
         .await
         .expect("Postgres should connect successfully");
     debug!(Category::Setup, "Connected to postgres database successfully");
