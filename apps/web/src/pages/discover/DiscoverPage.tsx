@@ -9,6 +9,11 @@ import { TvSeriesHorizontalList } from "../../components/ui/lists/TvSeriesHorizo
 import { useTrendingTvSeries } from "../../hooks/tmdb/use_trending_tv_series";
 import { ArrowCircleRightIcon } from "../../components/ui/icons/Icons";
 
+const DISCOVER_MOVIES_HREF = "/discover/movie";
+const DISCOVER_SERIES_HREF = "/discover/tv";
+const TRENDING_MOVIES_HREF = "/discover/trending/movie/day";
+const TRENDING_SERIES_HREF = "/discover/trending/tv/day";
+
 export function DiscoverPage() {
     const navigate = useNavigate();
 
@@ -18,19 +23,19 @@ export function DiscoverPage() {
     const trendingTvSeriesQuery = useTrendingTvSeries("day");
 
     const discoverMovies = () => {
-        navigate("/discover/movie");
+        navigate(DISCOVER_MOVIES_HREF);
     }
 
     const discoverTvSeries = () => {
-        navigate("/discover/tv");
+        navigate(DISCOVER_SERIES_HREF);
     }
 
     const trendingMovies = () => {
-        navigate("/discover/trending/movie/day");
+        navigate(TRENDING_MOVIES_HREF);
     }
 
     const trendingTvSeries = () => {
-        navigate("/discover/trending/tv/day");
+        navigate(TRENDING_SERIES_HREF);
     }
 
     return (
@@ -38,10 +43,10 @@ export function DiscoverPage() {
             <div className="flex flex-col gap-4">
                 {/* Popular Movies */}
                 <div>
-                    <div className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={discoverMovies}>
+                    <a href={DISCOVER_MOVIES_HREF} className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); discoverMovies() }}>
                         <span className="text-2xl font-bold">Popular Movies</span>
                         <ArrowCircleRightIcon className="w-7" />
-                    </div>
+                    </a>
 
                     {
                         discoverMovieQuery.error
@@ -55,10 +60,10 @@ export function DiscoverPage() {
                 </div>
                 {/* Popular TV Series */}
                 <div>
-                    <div className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={discoverTvSeries}>
+                    <a href={DISCOVER_SERIES_HREF} className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); discoverTvSeries() }}>
                         <span className="text-2xl font-bold">Popular TV Series</span>
                         <ArrowCircleRightIcon className="w-7" />
-                    </div>
+                    </a>
 
                     {
                         discoverTvSeriesQuery.error
@@ -72,10 +77,10 @@ export function DiscoverPage() {
                 </div>
                 {/* Trending Movies */}
                 <div>
-                    <div className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={trendingMovies}>
+                    <a href={TRENDING_MOVIES_HREF} className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); trendingMovies() }}>
                         <span className="text-2xl font-bold">Trending Movies</span>
                         <ArrowCircleRightIcon className="w-7" />
-                    </div>
+                    </a>
 
                     {/* Check for stuff */}
                     {
@@ -90,10 +95,10 @@ export function DiscoverPage() {
                 </div>
                 {/* Trending TV Series */}
                 <div>
-                    <div className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={trendingTvSeries}>
+                    <a href={TRENDING_SERIES_HREF} className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); trendingTvSeries() }}>
                         <span className="text-2xl font-bold">Trending TV Series</span>
                         <ArrowCircleRightIcon className="w-7" />
-                    </div>
+                    </a>
 
                     {/* Check for stuff */}
                     {
