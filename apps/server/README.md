@@ -47,7 +47,7 @@ services:
 # TRACE, DEBUG, INFO, WARN, ERROR
 LOG_LEVEL="INFO"
 
-DATABASE_URL="postgres://my_postgres_user:strong_password@localhost/name_of_db"
+POSTGRES_URI="postgres://my_postgres_user:strong_password@localhost/name_of_db"
 
 SERVE_ADDR="0.0.0.0:3000"
 
@@ -55,9 +55,7 @@ TMDB_BASE_URL="https://api.themoviedb.org/3"
 TMDB_API_KEY="abcdefghijklmnopqrstuvwxyz"
 TMDB_CACHE_TTL_MINUTES=60
 
-# Must be at least 64 characters long
-# Changing key invalidates all active sessions
-COOKIE_KEY="long_secret_key"
+DATA_DIR="./data"
 
 # Set to false to disable registration for new users
 ALLOW_REGISTRATION="true"

@@ -46,7 +46,8 @@ ENV TZ=Etc/UTC \
     SERVE_ADDR=0.0.0.0:5657 \
     TMDB_BASE_URL=https://api.themoviedb.org/3 \
     TMDB_CACHE_TTL_MINUTES=60 \
-    ALLOW_REGISTRATION=true
+    ALLOW_REGISTRATION=true \
+    DATA_DIR=/app/data
 
 WORKDIR /app
 

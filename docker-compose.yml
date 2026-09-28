@@ -19,9 +19,10 @@ services:
       - 5657:5657
     environment:
       TZ: Etc/UTC
-      DATABASE_URL: postgres://<username>:<password>@watch-next-postgres:5432/<db_name>
+      POSTGRES_URI: postgres://<username>:<password>@watch-next-postgres:5432/<db_name>
       TMDB_API_KEY: tmdb-key
-      COOKIE_KEY: long-secret-key
+    volumes:
+      - ./data/watch-next:/app/data
     restart: unless-stopped
     depends_on:
       - watch-next-postgres
