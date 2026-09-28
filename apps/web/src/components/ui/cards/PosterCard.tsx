@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 interface PosterCardProps {
     title?: string;
     posterPath?: string;
-    href: string;
+    href?: string;
     label: string;
     labelClassName: string;
     year?: string;
@@ -16,7 +16,7 @@ export function PosterCard({ title = "", posterPath, href, label, labelClassName
 
     const onPosterClick = (event: React.MouseEvent) => {
         event.preventDefault();
-        navigate(href);
+        if (href) navigate(href);
     };
 
     return (

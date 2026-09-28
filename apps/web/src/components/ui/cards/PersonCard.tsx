@@ -6,5 +6,5 @@ interface PersonCardProps {
 }
 
 export function PersonCard({ person }: PersonCardProps) {
-    return <PosterCard title={person.name} posterPath={person.profile_path} href="" label="PERSON" labelClassName="bg-orange-600/80" />;
+    return <PosterCard title={person.name} posterPath={person.profile_path} label="PERSON" labelClassName="bg-orange-600/80" />;
 }
