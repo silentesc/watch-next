@@ -51,9 +51,15 @@ export function CustomListsOverviewPage() {
                 </p>
             </div>
 
-            <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(18rem,1fr))] justify-items-center">
-                {lists.map(list => <CustomListCard key={list.id} customList={list} />)}
-            </div>
+            {
+                lists.length > 0 ? (
+                    <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(18rem,1fr))] justify-items-center">
+                        {lists.map(list => <CustomListCard key={list.id} customList={list} />)}
+                    </div>
+                ) : (
+                    <p className="text-foreground-secondary">No lists yet</p>
+                )
+            }
 
             {isCreating ? (
                 <Popup onClose={() => setIsCreating(false)} value={
