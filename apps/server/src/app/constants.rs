@@ -1,5 +1,5 @@
 pub const POSTGRES_MAX_CONNECTIONS: u16 = 20;
-pub const POSTGRES_ACQUIRE_TIMEOUT: u16 = 5;
+pub const POSTGRES_ACQUIRE_TIMEOUT: u16 = 15;
 pub const POSTGRES_IDLE_TIMEOUT: u16 = 30;
 
 pub const SESSION_ID_COOKIE_NAME: &str = "session_id";
