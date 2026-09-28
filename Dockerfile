@@ -42,9 +42,11 @@ RUN apk add --no-cache \
     tzdata
 
 ENV TZ=Etc/UTC \
+    LOG_LEVEL=INFO \
     SERVE_ADDR=0.0.0.0:5657 \
     TMDB_BASE_URL=https://api.themoviedb.org/3 \
-    TMDB_CACHE_TTL_MINUTES=60
+    TMDB_CACHE_TTL_MINUTES=60 \
+    ALLOW_REGISTRATION=true
 
 WORKDIR /app
 
