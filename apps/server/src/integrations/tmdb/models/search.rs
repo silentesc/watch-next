@@ -1,10 +1,10 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, ser::Serializer};
 
 use crate::integrations::tmdb::models::{
     collections::CollectionOverview, common::PersonOverview, movies::MovieOverview, tv_series::TvSeriesOverview,
 };
 
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 #[serde(tag = "media_type")]
 pub enum MultiSearchResult {
     #[serde(rename = "movie")]
@@ -15,6 +15,31 @@ pub enum MultiSearchResult {
     Person(PersonOverview),
     #[serde(rename = "collection")]
     Collection(CollectionOverview),
+}
+
+impl Serialize for MultiSearchResult {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let mut result = match self {
+            MultiSearchResult::Movie(movie_overview) => serde_json::to_value(movie_overview),
+            MultiSearchResult::Tv(tv_series_overview) => serde_json::to_value(tv_series_overview),
+            MultiSearchResult::Person(person_overview) => serde_json::to_value(person_overview),
+            MultiSearchResult::Collection(collection_overview) => serde_json::to_value(collection_overview),
+        }
+        .map_err(serde::ser::Error::custom)?;
+
+        result
+            .as_object_mut()
+            .ok_or_else(|| serde::ser::Error::custom("multi-search result must serialize as a JSON object"))?
+            .insert(
+                "media_type".to_string(),
+                serde_json::Value::String(self.as_str().to_string()),
+            );
+
+        result.serialize(serializer)
+    }
 }
 
 impl MultiSearchResult {
@@ -62,5 +87,11 @@ mod tests {
                 MultiSearchResult::Collection(_),
             ]
         ));
+
+        let serialized = serde_json::to_value(&results).expect("mixed search results should serialize");
+        assert_eq!(serialized[0]["media_type"], "movie");
+        assert_eq!(serialized[1]["media_type"], "tv");
+        assert_eq!(serialized[2]["media_type"], "person");
+        assert_eq!(serialized[3]["media_type"], "collection");
     }
 }
