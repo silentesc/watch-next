@@ -1,8 +1,6 @@
 use serde::{Deserialize, Serialize, ser::Serializer};
 
-use crate::integrations::tmdb::models::{
-    collections::CollectionOverview, common::PersonOverview, movies::MovieOverview, tv_series::TvSeriesOverview,
-};
+use crate::integrations::tmdb::models::{common::PersonOverview, movies::MovieOverview, tv_series::TvSeriesOverview};
 
 #[derive(Deserialize)]
 #[serde(tag = "media_type")]
@@ -13,8 +11,6 @@ pub enum MultiSearchResult {
     Tv(TvSeriesOverview),
     #[serde(rename = "person")]
     Person(PersonOverview),
-    #[serde(rename = "collection")]
-    Collection(CollectionOverview),
 }
 
 impl Serialize for MultiSearchResult {
@@ -26,7 +22,6 @@ impl Serialize for MultiSearchResult {
             MultiSearchResult::Movie(movie_overview) => serde_json::to_value(movie_overview),
             MultiSearchResult::Tv(tv_series_overview) => serde_json::to_value(tv_series_overview),
             MultiSearchResult::Person(person_overview) => serde_json::to_value(person_overview),
-            MultiSearchResult::Collection(collection_overview) => serde_json::to_value(collection_overview),
         }
         .map_err(serde::ser::Error::custom)?;
 
@@ -48,7 +43,6 @@ impl MultiSearchResult {
             MultiSearchResult::Movie(_) => "movie",
             MultiSearchResult::Tv(_) => "tv",
             MultiSearchResult::Person(_) => "person",
-            MultiSearchResult::Collection(_) => "collection",
         }
     }
 
@@ -57,7 +51,6 @@ impl MultiSearchResult {
             MultiSearchResult::Movie(movie_overview) => movie_overview.id,
             MultiSearchResult::Tv(tv_series_overview) => tv_series_overview.id,
             MultiSearchResult::Person(person_overview) => person_overview.id,
-            MultiSearchResult::Collection(collection_overview) => collection_overview.id,
         }
     }
 }
@@ -72,8 +65,7 @@ mod tests {
             r#"[
                 {"media_type":"movie","id":11,"title":"Star Wars"},
                 {"media_type":"tv","id":83867,"name":"Andor"},
-                {"media_type":"person","id":1,"name":"Mark Hamill","known_for":[]},
-                {"media_type":"collection","id":1,"name":"Mark Hamill"}
+                {"media_type":"person","id":1,"name":"Mark Hamill","known_for":[]}
             ]"#,
         )
         .expect("mixed search results should deserialize");
@@ -84,7 +76,6 @@ mod tests {
                 MultiSearchResult::Movie(_),
                 MultiSearchResult::Tv(_),
                 MultiSearchResult::Person(_),
-                MultiSearchResult::Collection(_),
             ]
         ));
 
@@ -92,6 +83,5 @@ mod tests {
         assert_eq!(serialized[0]["media_type"], "movie");
         assert_eq!(serialized[1]["media_type"], "tv");
         assert_eq!(serialized[2]["media_type"], "person");
-        assert_eq!(serialized[3]["media_type"], "collection");
     }
 }
