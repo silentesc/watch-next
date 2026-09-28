@@ -11,6 +11,17 @@ export interface Genre {
     name: string;
 }
 
+export interface PersonOverview {
+    adult?: boolean;
+    gender?: number;
+    id?: number;
+    known_for?: Array<MultiSearchResult>;
+    known_for_department?: string;
+    name?: string;
+    popularity?: number;
+    profile_path?: string;
+}
+
 export interface Cast {
     adult?: boolean;
     gender?: number;
@@ -73,6 +84,13 @@ export interface CollectionDetails {
     backdrop_path?: string;
     parts: Array<MovieOverview>;
 }
+
+// Multi
+
+export type MultiSearchResult =
+    | ({ media_type: "movie" }) & MovieOverview
+    | ({ media_type: "tv" }) & TvSeriesOverview
+    | ({ media_type: "person" }) & PersonOverview;
 
 // Movie
 

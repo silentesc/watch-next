@@ -7,11 +7,14 @@ import { CollectionGrid } from "../../components/ui/lists/CollectionGrid";
 import { useSearchCollection } from "../../hooks/tmdb/use_search_collection";
 import { useSearchTvSeries } from "../../hooks/tmdb/use_search_tv_series";
 import { TvSeriesGrid } from "../../components/ui/lists/TvSeriesGrid";
+import { useSearchMulti } from "../../hooks/tmdb/use_search_multi";
+import { MultiGrid } from "../../components/ui/lists/MultiGrid";
 
 export function SearchPage() {
     const [queryParams, setQueryParams] = useSearchParams();
 
     const categories = new Map([
+        ["multi", "All"],
         ["movies", "Movies"],
         ["tv_series", "TV Series"],
         ["collections", "Collections"],
@@ -22,6 +25,7 @@ export function SearchPage() {
     let [tmpCategory, setTmpCategory] = useState(category);
     let [tmpText, setTmpText] = useState(text);
 
+    const searchMultiInfiniteQuery = useSearchMulti(category, text);
     const searchMovieInfiniteQuery = useSearchMovie(category, text);
     const searchTvSeriesInfiniteQuery = useSearchTvSeries(category, text);
     const searchCollectionInfiniteQuery = useSearchCollection(category, text);
@@ -55,6 +59,7 @@ export function SearchPage() {
         if (!text) return <span className="text-2xl">Search something...</span>;
 
         switch (category) {
+            case "multi": return <MultiGrid infiniteQuery={searchMultiInfiniteQuery} />;
             case "movies": return <MovieGrid infiniteQuery={searchMovieInfiniteQuery} />;
             case "tv_series": return <TvSeriesGrid infiniteQuery={searchTvSeriesInfiniteQuery} />;
             case "collections": return <CollectionGrid infiniteQuery={searchCollectionInfiniteQuery} />;
