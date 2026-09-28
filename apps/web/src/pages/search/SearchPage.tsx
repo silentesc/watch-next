@@ -1,12 +1,12 @@
 import { Searchbar } from "../../components/ui/Searchbar";
-import { MovieList } from "../../components/ui/MovieList";
+import { MovieGrid } from "../../components/ui/lists/MovieGrid";
 import { useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import { useSearchMovie } from "../../hooks/tmdb/use_search_movie";
-import { CollectionList } from "../../components/ui/CollectionList";
+import { CollectionGrid } from "../../components/ui/lists/CollectionGrid";
 import { useSearchCollection } from "../../hooks/tmdb/use_search_collection";
 import { useSearchTvSeries } from "../../hooks/tmdb/use_search_tv_series";
-import { TvSeriesList } from "../../components/ui/TvSeriesList";
+import { TvSeriesGrid } from "../../components/ui/lists/TvSeriesGrid";
 
 export function SearchPage() {
     const [queryParams, setQueryParams] = useSearchParams();
@@ -55,9 +55,9 @@ export function SearchPage() {
         if (!text) return <span className="text-2xl">Search something...</span>;
 
         switch (category) {
-            case "movies": return <MovieList infiniteQuery={searchMovieInfiniteQuery} />;
-            case "tv_series": return <TvSeriesList infiniteQuery={searchTvSeriesInfiniteQuery} />;
-            case "collections": return <CollectionList infiniteQuery={searchCollectionInfiniteQuery} />;
+            case "movies": return <MovieGrid infiniteQuery={searchMovieInfiniteQuery} />;
+            case "tv_series": return <TvSeriesGrid infiniteQuery={searchTvSeriesInfiniteQuery} />;
+            case "collections": return <CollectionGrid infiniteQuery={searchCollectionInfiniteQuery} />;
             default: return <span className="text-2xl">Category {category} not found</span>;
         }
     };

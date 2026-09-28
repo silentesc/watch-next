@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
-import { Movie } from "../../components/ui/Movie";
+import { MovieCard } from "../../components/ui/cards/MovieCard";
 import { useCollectionDetails } from "../../hooks/tmdb/use_collection_details";
 import { Overview } from "./Overview";
 import { QuickInfo } from "./QuickInfo";
@@ -79,7 +79,7 @@ export function CollectionDetailsPage() {
                 <div className="flex flex-col gap-3">
                     <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(9rem,2fr))] justify-items-center">
                         {collectionParts.map((movie) => (
-                            <Movie key={movie.id} movie={movie} />
+                            <MovieCard key={movie.id} movie={movie} />
                         ))}
                     </div>
                 </div>

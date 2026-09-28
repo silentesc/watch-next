@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Button } from "../../components/ui/Button";
 import { MovieFilters } from "./ui/MovieFilters";
 import { SortBy } from "../../components/ui/SortBy";
-import { MovieList } from "../../components/ui/MovieList";
+import { MovieGrid } from "../../components/ui/lists/MovieGrid";
 import { useSearchParams } from "react-router";
 import { getMovieFiltersFromParams, setMovieParamsFromFilters } from "./utils";
 import { useDiscoverMovies } from "../../hooks/tmdb/use_discover_movies";
@@ -87,7 +87,7 @@ export function DiscoverMoviePage() {
             <MovieFilters isOpen={isFiltersOpen} filters={memoizedFilters} onFiltersChange={onFiltersChange} onClose={() => setIsFiltersOpen(false)} />
 
             {/* Movies */}
-            <MovieList infiniteQuery={discoverMovieInfiniteQuery} />
+            <MovieGrid infiniteQuery={discoverMovieInfiniteQuery} />
         </>
     );
 }

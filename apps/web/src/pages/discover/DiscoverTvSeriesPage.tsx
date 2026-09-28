@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router";
 import { getTvSeriesFiltersFromParams, setTvSeriesParamsFromFilters } from "./utils";
 import { useDiscoverTvSeries } from "../../hooks/tmdb/use_discover_tv_series";
 import { TvSeriesFilters } from "./ui/TvSeriesFilters";
-import { TvSeriesList } from "../../components/ui/TvSeriesList";
+import { TvSeriesGrid } from "../../components/ui/lists/TvSeriesGrid";
 
 export function DiscoverTvSeriesPage() {
     const sortByValues = new Map([
@@ -88,7 +88,7 @@ export function DiscoverTvSeriesPage() {
             <TvSeriesFilters isOpen={isFiltersOpen} filters={memoizedFilters} onFiltersChange={onFiltersChange} onClose={() => setIsFiltersOpen(false)} />
 
             {/* TV Series */}
-            <TvSeriesList infiniteQuery={discoverTvSeriesInfiniteQuery} />
+            <TvSeriesGrid infiniteQuery={discoverTvSeriesInfiniteQuery} />
         </>
     );
 }

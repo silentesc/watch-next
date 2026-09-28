@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../components/ui/Button";
-import { CustomListCard } from "../../components/ui/CustomListCard";
+import { CustomListCard } from "../../components/ui/cards/CustomListCard";
 import { Error } from "../../components/ui/Error";
 import { Input } from "../../components/ui/Input";
 import { Loading } from "../../components/ui/Loading";

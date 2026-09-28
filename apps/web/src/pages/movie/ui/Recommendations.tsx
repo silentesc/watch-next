@@ -3,7 +3,7 @@ import { Error } from "../../../components/ui/Error";
 import type { MovieOverview } from "../../../api/tmdb/models";
 import { useNavigate } from "react-router";
 import { useMovieRecommendations } from "../../../hooks/tmdb/use_movie_recommendations";
-import { MovieListVertical } from "../../../components/ui/MovieListVertical";
+import { MovieHorizontalList } from "../../../components/ui/lists/MovieHorizontalList";
 
 interface RecommendationsProps {
     movieId: number;
@@ -37,7 +37,7 @@ export function Recommendations({ movieId }: RecommendationsProps) {
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Recommendations</h2>
-            <MovieListVertical movies={allMovies} seeMoreLinkHint={`/movie/${movieId}/recommendations`} onSeeMoreClick={seeMore} />
+            <MovieHorizontalList movies={allMovies} seeMoreLinkHint={`/movie/${movieId}/recommendations`} onSeeMoreClick={seeMore} />
         </div>
     );
 }

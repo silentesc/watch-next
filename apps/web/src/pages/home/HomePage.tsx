@@ -1,16 +1,17 @@
 import { useState } from "react";
 import type { SubmitEvent } from "react";
 import { useNavigate } from "react-router";
-import { CustomListCard } from "../../components/ui/CustomListCard";
+import { CustomListCard } from "../../components/ui/cards/CustomListCard";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
-import { MovieListVertical } from "../../components/ui/MovieListVertical";
-import { TvSeriesListVertical } from "../../components/ui/TvSeriesListVertical";
+import { MovieHorizontalList } from "../../components/ui/lists/MovieHorizontalList";
+import { TvSeriesHorizontalList } from "../../components/ui/lists/TvSeriesHorizontalList";
 import { useCustomLists } from "../../hooks/customLists/use_custom_lists";
 import { useTrendingMovies } from "../../hooks/tmdb/use_trending_movies";
 import { useTrendingTvSeries } from "../../hooks/tmdb/use_trending_tv_series";
 import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
+import { ArrowCircleRightIcon } from "../../components/ui/icons/Icons";
 
 export function HomePage() {
     const navigate = useNavigate();
@@ -47,10 +48,7 @@ export function HomePage() {
                         <p className="mb-1 text-sm font-semibold uppercase tracking-[0.18em] text-foreground-secondary">A little inspiration</p>
                         <a href="/discover" className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); navigate("/discover") }}>
                             <span className="text-2xl font-bold">Trending today</span>
-                            <svg viewBox="0 0 24 24" fill="currentColor" className="w-7">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z">
-                                </path>
-                            </svg>
+                            <ArrowCircleRightIcon className="w-7" />
                         </a>
                     </div>
                 </div>
@@ -62,7 +60,7 @@ export function HomePage() {
                         ) : trendingMoviesQuery.isLoading ? (
                             <Loading />
                         ) : trendingMoviesQuery.data ? (
-                            <MovieListVertical movies={trendingMoviesQuery.data.pages[0].results} seeMoreLinkHint="/discover/trending/movie/day" onSeeMoreClick={() => navigate("/discover/trending/movie/day")} />
+                            <MovieHorizontalList movies={trendingMoviesQuery.data.pages[0].results} seeMoreLinkHint="/discover/trending/movie/day" onSeeMoreClick={() => navigate("/discover/trending/movie/day")} />
                         ) : <Error message="No data returned" />}
                     </div>
                     <div>
@@ -72,22 +70,19 @@ export function HomePage() {
                         ) : trendingTvSeriesQuery.isLoading ? (
                             <Loading />
                         ) : trendingTvSeriesQuery.data ? (
-                            <TvSeriesListVertical tvSeries={trendingTvSeriesQuery.data.pages[0].results} seeMoreLinkHint="/discover/trending/tv/day" onSeeMoreClick={() => navigate("/discover/trending/tv/day")} />
+                            <TvSeriesHorizontalList tvSeries={trendingTvSeriesQuery.data.pages[0].results} seeMoreLinkHint="/discover/trending/tv/day" onSeeMoreClick={() => navigate("/discover/trending/tv/day")} />
                         ) : <Error message="No data returned" />}
                     </div>
                 </div>
             </section>
 
-            <section className="border-t border-background-tertiary pt-8">
+            <section className="border-background-tertiary pt-8">
                 <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
                     <div>
                         <p className="mb-1 text-sm font-semibold uppercase tracking-[0.18em] text-foreground-secondary">Your library</p>
                         <a href="/custom-lists" className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); navigate("/custom-lists") }}>
                             <span className="text-2xl font-bold">Your lists</span>
-                            <svg viewBox="0 0 24 24" fill="currentColor" className="w-7">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z">
-                                </path>
-                            </svg>
+                            <ArrowCircleRightIcon className="w-7" />
                         </a>
                     </div>
                 </div>
@@ -110,10 +105,7 @@ export function HomePage() {
                                         <a href={"/custom-lists"} onClick={(e) => { e.preventDefault(); navigate("/custom-lists") }}>
                                             <div className="absolute top-1/2 left-1/2 -translate-1/2 cursor-pointer flex flex-col gap-1 items-center">
                                                 <span className="font-semibold text-nowrap">See more</span>
-                                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-7">
-                                                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z">
-                                                    </path>
-                                                </svg>
+                                                <ArrowCircleRightIcon className="w-7" />
                                             </div>
                                         </a>
                                     </div>

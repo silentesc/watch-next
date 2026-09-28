@@ -3,7 +3,7 @@ import { Error } from "../../../components/ui/Error";
 import type { MovieOverview } from "../../../api/tmdb/models";
 import { useSimilarMovies } from "../../../hooks/tmdb/use_similar_movies";
 import { useNavigate } from "react-router";
-import { MovieListVertical } from "../../../components/ui/MovieListVertical";
+import { MovieHorizontalList } from "../../../components/ui/lists/MovieHorizontalList";
 
 interface SimilarProps {
     movieId: number;
@@ -37,7 +37,7 @@ export function Similar({ movieId }: SimilarProps) {
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Similar</h2>
-            <MovieListVertical movies={allMovies} seeMoreLinkHint={`/movie/${movieId}/similar`} onSeeMoreClick={seeMore} />
+            <MovieHorizontalList movies={allMovies} seeMoreLinkHint={`/movie/${movieId}/similar`} onSeeMoreClick={seeMore} />
         </div>
     );
 }

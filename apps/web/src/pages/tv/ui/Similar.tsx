@@ -2,7 +2,7 @@ import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
 import type { TvSeriesOverview } from "../../../api/tmdb/models";
 import { useNavigate } from "react-router";
-import { TvSeriesListVertical } from "../../../components/ui/TvSeriesListVertical";
+import { TvSeriesHorizontalList } from "../../../components/ui/lists/TvSeriesHorizontalList";
 import { useSimilarTvSeries } from "../../../hooks/tmdb/use_similar_tv_series";
 
 interface SimilarProps {
@@ -37,7 +37,7 @@ export function Similar({ tvSeriesId }: SimilarProps) {
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Similar</h2>
-            <TvSeriesListVertical tvSeries={allTvSeries} seeMoreLinkHint={`/tv/${tvSeriesId}/similar`} onSeeMoreClick={seeMore} />
+            <TvSeriesHorizontalList tvSeries={allTvSeries} seeMoreLinkHint={`/tv/${tvSeriesId}/similar`} onSeeMoreClick={seeMore} />
         </div>
     );
 }

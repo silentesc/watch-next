@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "./Button";
+import { ChevronLeftIcon, ChevronRightIcon } from "./icons/Icons";
 
 interface DatePickerProps {
     value: Date | undefined;
@@ -107,10 +108,10 @@ export function DatePicker({ value, placeholder = "", onChange, alignedRight = f
                     <div className="flex justify-between items-center mb-3">
                         <div className="flex gap-2">
                             <button onClick={() => setViewDate(new Date(year, month - 1, 1))} className="rounded p-1 hover:bg-background-tertiary" type="button">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                                <ChevronLeftIcon className="w-5 h-5" />
                             </button>
                             <button onClick={() => setViewDate(new Date(year, month + 1, 1))} className="rounded p-1 hover:bg-background-tertiary" type="button">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                                <ChevronRightIcon className="w-5 h-5" />
                             </button>
                         </div>
                         <span className="font-bold">{viewDate.toLocaleString("default", { month: "long", year: "numeric" })}</span>

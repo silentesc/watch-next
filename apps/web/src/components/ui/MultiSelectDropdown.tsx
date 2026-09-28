@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Dropdown } from "./Dropdown";
+import { CloseIcon } from "./icons/Icons";
 
 interface MultiSelectDropdownProps {
     placeholder: string;
@@ -23,9 +24,7 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, values, onSelec
                         <div key={key} className="flex items-center gap-2 px-2 py-1 bg-background-primary rounded-md border-2 border-background-tertiary">
                             <span className="text-sm">{values.get(key)}</span>
                             <span onClick={() => removeSelected(key)} className="p-1 text-gray-300 hover:text-error hover:bg-error/30 rounded transition-colors">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                                <CloseIcon className="w-4 h-4" />
                             </span>
                         </div>
                     ))

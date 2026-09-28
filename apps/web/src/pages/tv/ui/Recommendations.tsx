@@ -3,7 +3,7 @@ import { Error } from "../../../components/ui/Error";
 import type { TvSeriesOverview } from "../../../api/tmdb/models";
 import { useNavigate } from "react-router";
 import { useTvSeriesRecommendations } from "../../../hooks/tmdb/use_tv_series_recommendations";
-import { TvSeriesListVertical } from "../../../components/ui/TvSeriesListVertical";
+import { TvSeriesHorizontalList } from "../../../components/ui/lists/TvSeriesHorizontalList";
 
 interface RecommendationsProps {
     tvSeriesId: number;
@@ -37,7 +37,7 @@ export function Recommendations({ tvSeriesId }: RecommendationsProps) {
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Recommendations</h2>
-            <TvSeriesListVertical tvSeries={allTvSeries} seeMoreLinkHint={`/tv/${tvSeriesId}/recommendations`} onSeeMoreClick={seeMore} />
+            <TvSeriesHorizontalList tvSeries={allTvSeries} seeMoreLinkHint={`/tv/${tvSeriesId}/recommendations`} onSeeMoreClick={seeMore} />
         </div>
     );
 }

@@ -6,6 +6,7 @@ import { Error } from "../../../components/ui/Error";
 import { useLanguages } from "../../../hooks/tmdb/use_languages";
 import { formatDate } from "../../../shared/dateFormatter";
 import { formatCurrency } from "../../../shared/currencyFormatter";
+import { BoxIcon, DownloadIcon, FilmIcon, StarIcon, TicketIcon, TvIcon } from "../../../components/ui/icons/Icons";
 
 interface DetailsTableProps {
     movieDetails: MovieDetails;
@@ -38,44 +39,12 @@ export function DetailsTable({ movieDetails }: DetailsTableProps) {
 
     const releaseTypeSvg = (t: number) => {
         switch (t) {
-            case 1: return (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
-                    <path d="M12 2l2.5 6L21 9l-5 3.5L17 20l-5-3-5 3 1-7.5L3 9l6.5-1L12 2z" />
-                </svg>
-            );
-            case 2: return (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="6" width="20" height="12" rx="2" />
-                    <circle cx="18" cy="12" r="1" />
-                </svg>
-            );
-            case 3: return (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="16" rx="2" />
-                    <path d="M7 4v16M17 4v16" />
-                    <path d="M4 8h4M4 12h4M4 16h4M20 8h-4M20 12h-4M20 16h-4" />
-                </svg>
-            );
-            case 4: return (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-            );
-            case 5: return (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73L13 3a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73L11 21a2 2 0 0 0 2 0l7-3.27A2 2 0 0 0 21 16z" />
-                    <polyline points="3.27 6.96 12 11 20.73 6.96" />
-                </svg>
-            );
-            case 6: return (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="5" width="20" height="14" rx="2" />
-                    <polyline points="17 2 12 7 7 2" />
-                    <line x1="8" y1="21" x2="16" y2="21" />
-                </svg>
-            );
+            case 1: return <StarIcon width="16" height="16" />;
+            case 2: return <FilmIcon width="16" height="16" />;
+            case 3: return <TvIcon width="16" height="16" />;
+            case 4: return <DownloadIcon width="16" height="16" />;
+            case 5: return <BoxIcon width="16" height="16" />;
+            case 6: return <TicketIcon width="16" height="16" />;
         }
     }
 
