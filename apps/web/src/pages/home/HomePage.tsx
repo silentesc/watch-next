@@ -98,9 +98,7 @@ export function HomePage() {
                         <Loading />
                     ) : customListsQuery.data ? (
                         customListsQuery.data.length === 0 ? (
-                            <button className="w-full border border-dashed border-background-tertiary p-6 text-left text-foreground-secondary hover:border-primary hover:text-foreground-primary" onClick={() => navigate("/custom-lists")}>
-                                Create your first list to keep track of what you want to watch next.
-                            </button>
+                            <p className="text-foreground-secondary">You haven't created any lists yet.</p>
                         ) : (
                             <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(18rem,1fr))] justify-items-center">
                                 {customListsQuery.data.slice(0, 3).map(list => <CustomListCard key={list.id} customList={list} />)}
