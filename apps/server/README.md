@@ -55,9 +55,7 @@ TMDB_BASE_URL="https://api.themoviedb.org/3"
 TMDB_API_KEY="abcdefghijklmnopqrstuvwxyz"
 TMDB_CACHE_TTL_MINUTES=60
 
-# Must be at least 64 characters long
-# Changing key invalidates all active sessions
-COOKIE_KEY="long_secret_key"
+DATA_DIR="./data"
 
 # Set to false to disable registration for new users
 ALLOW_REGISTRATION="true"

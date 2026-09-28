@@ -40,7 +40,8 @@ services:
       TZ: Etc/UTC
       POSTGRES_URI: postgres://<username>:<password>@watch-next-postgres:5432/<db_name>
       TMDB_API_KEY: tmdb-key
-      COOKIE_KEY: long-secret-key
+    volumes:
+      - ./data/watch-next:/app/data
     restart: unless-stopped
     depends_on:
       - watch-next-postgres
@@ -52,13 +53,13 @@ services:
 | --- | --- | --- |
 | `POSTGRES_URI` | - | URI to the postgres database |
 | `TMDB_API_KEY` | - | You can create a free TMDB account to get one |
-| `COOKIE_KEY` | - | A long (>64 characters) secret key |
 | `TZ` | `Etc/UTC` | Your timezone |
 | `LOG_LEVEL` | `INFO` | Accepts `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR` |
 | `SERVE_ADDR` | `0.0.0.0:5657` | Address/Port the app listens on |
 | `TMDB_BASE_URL` | `https://api.themoviedb.org/3` | URL of the TMDB API |
 | `TMDB_CACHE_TTL_MINUTES` | `60` | How many minutes to keep stuff retrieved from TMDB in cache |
 | `ALLOW_REGISTRATION` | `true` | Whether to allow registrations of new users |
+| `DATA_DIR` | `/app/data` | Directory where app data (like secret keys generated on first startup) is stored |
 
 #### Release Channels
 
