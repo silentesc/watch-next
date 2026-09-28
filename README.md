@@ -20,14 +20,11 @@ Look at the [Roadmap](#roadmap) below to see upcoming features.
 services:
   watch-next-postgres:
     image: postgres:18-alpine
-    # Only add port mappings if the db should be accessable from outside this compose
-    # ports:
-    #   - 5432:5432
     environment:
       TZ: Etc/UTC
-      POSTGRES_USER: <username>
-      POSTGRES_PASSWORD: <password>
-      POSTGRES_DB: <db_name>
+      POSTGRES_USER: watch_next
+      POSTGRES_PASSWORD: watch_next
+      POSTGRES_DB: watch_next
     volumes:
       - ./data/postgres:/var/lib/postgresql
     restart: unless-stopped
@@ -38,8 +35,7 @@ services:
       - 5657:5657
     environment:
       TZ: Etc/UTC
-      POSTGRES_URI: postgres://<username>:<password>@watch-next-postgres:5432/<db_name>
-      TMDB_API_KEY: tmdb-key
+      TMDB_API_KEY: your-tmdb-key
     volumes:
       - ./data/watch-next:/app/data
     restart: unless-stopped
@@ -51,7 +47,6 @@ services:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `POSTGRES_URI` | - | URI to the postgres database |
 | `TMDB_API_KEY` | - | You can create a free TMDB account to get one |
 | `TZ` | `Etc/UTC` | Your timezone |
 | `LOG_LEVEL` | `INFO` | Accepts `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR` |
@@ -59,6 +54,7 @@ services:
 | `TMDB_BASE_URL` | `https://api.themoviedb.org/3` | URL of the TMDB API |
 | `TMDB_CACHE_TTL_MINUTES` | `60` | How many minutes to keep stuff retrieved from TMDB in cache |
 | `ALLOW_REGISTRATION` | `true` | Whether to allow registrations of new users |
+| `POSTGRES_URI` | `postgres://watch_next:watch_next@watch-next-postgres:5432/watch_next` | URI to the postgres database |
 | `DATA_DIR` | `/app/data` | Directory where app data (like secret keys generated on first startup) is stored |
 
 #### Release Channels

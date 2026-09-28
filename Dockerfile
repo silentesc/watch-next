@@ -42,6 +42,7 @@ RUN apk add --no-cache \
     tzdata
 
 ENV TZ=Etc/UTC \
+    POSTGRES_URI=postgres://watch_next:watch_next@watch-next-postgres:5432/watch_next \
     LOG_LEVEL=INFO \
     SERVE_ADDR=0.0.0.0:5657 \
     TMDB_BASE_URL=https://api.themoviedb.org/3 \

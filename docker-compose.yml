@@ -1,14 +1,11 @@
 services:
   watch-next-postgres:
     image: postgres:18-alpine
-    # Only add port mappings if the db should be accessable from outside this compose
-    # ports:
-    #   - 5432:5432
     environment:
       TZ: Etc/UTC
-      POSTGRES_USER: <username>
-      POSTGRES_PASSWORD: <password>
-      POSTGRES_DB: <db_name>
+      POSTGRES_USER: watch_next
+      POSTGRES_PASSWORD: watch_next
+      POSTGRES_DB: watch_next
     volumes:
       - ./data/postgres:/var/lib/postgresql
     restart: unless-stopped
@@ -19,8 +16,7 @@ services:
       - 5657:5657
     environment:
       TZ: Etc/UTC
-      POSTGRES_URI: postgres://<username>:<password>@watch-next-postgres:5432/<db_name>
-      TMDB_API_KEY: tmdb-key
+      TMDB_API_KEY: your-tmdb-key
     volumes:
       - ./data/watch-next:/app/data
     restart: unless-stopped
