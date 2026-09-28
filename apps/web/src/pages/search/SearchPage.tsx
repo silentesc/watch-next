@@ -31,9 +31,25 @@ export function SearchPage() {
     }
 
     useEffect(() => {
-        setTmpCategory(category);
-        setTmpText(text);
+        if (category !== tmpCategory) setTmpCategory(category);
+        if (text != tmpText) setTmpText(text);
     }, [category, text]);
+
+    useEffect(() => {
+        if (tmpText.length > 0) {
+            onSearch();
+        }
+    }, [tmpCategory]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (tmpCategory !== category || tmpText !== text) {
+                onSearch();
+            }
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [tmpText]);
 
     const renderContent = () => {
         if (!text) return <span className="text-2xl">Search something...</span>;
