@@ -8,10 +8,9 @@ import { ChevronDownIcon } from "../ui/icons/Icons";
 
 interface MeDropdownProps {
     me: Me;
-    isMobile?: boolean;
 }
 
-export function MeDropdown({ me, isMobile = false }: MeDropdownProps) {
+export function MeDropdown({ me }: MeDropdownProps) {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const queryClient = useQueryClient();
@@ -65,7 +64,7 @@ export function MeDropdown({ me, isMobile = false }: MeDropdownProps) {
 
             {/* Dropdown Menu */}
             {isOpen ? (
-                <div className={`z-1000 absolute w-56 mt-2 origin-top-right bg-background-secondary border border-background-tertiary divide-y divide-background-tertiary rounded-md shadow-lg outline-none ${isMobile ? "-right-1/2 bottom-10" : "right-0"}`}>
+                <div className={`z-1000 absolute w-56 mt-2 origin-top-right bg-background-secondary border border-background-tertiary divide-y divide-background-tertiary rounded-md shadow-lg outline-none bottom-full mb-2 left-1/2 -translate-x-1/2`}>
                     <div>
                         <button className="block w-full px-4 py-2 text-md text-left transition-colors hover:bg-background-tertiary cursor-pointer">(Dummy) Account</button>
                     </div>

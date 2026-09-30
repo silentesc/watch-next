@@ -32,7 +32,7 @@ export function HomePage() {
         <div className="flex flex-col gap-10 pb-10">
             <section className="relative overflow-hidden border border-background-tertiary bg-background-primary px-6 py-10 sm:px-10 sm:py-14">
                 <div className="relative max-w-2xl">
-                    <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-foreground-secondary">Watch Next</p>
+                    <p className="mb-3 font-semibold uppercase tracking-[0.2em] text-foreground-secondary">Watch Next</p>
                     <h1 className="max-w-xl text-4xl font-bold tracking-tight sm:text-5xl">Find your next watch.</h1>
                     <p className="mt-4 max-w-lg text-lg text-foreground-secondary">A place to organize your media, or just search around for something new.</p>
                     <form className="mt-7 flex flex-col gap-2 sm:flex-row" onSubmit={submitSearch}>
@@ -43,15 +43,10 @@ export function HomePage() {
             </section>
 
             <section>
-                <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-                    <div>
-                        <p className="mb-1 text-sm font-semibold uppercase tracking-[0.18em] text-foreground-secondary">A little inspiration</p>
-                        <a href="/discover" className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); navigate("/discover") }}>
-                            <span className="text-2xl font-bold">Trending today</span>
-                            <ArrowCircleRightIcon className="w-7" />
-                        </a>
-                    </div>
-                </div>
+                <a href="/discover" className="my-4 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); navigate("/discover") }}>
+                    <span className="text-2xl font-bold">Trending today</span>
+                    <ArrowCircleRightIcon className="w-7" />
+                </a>
                 <div className="flex flex-col gap-8">
                     <div>
                         <h2 className="mb-3 text-lg font-semibold">Movies</h2>
@@ -77,15 +72,10 @@ export function HomePage() {
             </section>
 
             <section className="border-background-tertiary pt-8">
-                <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-                    <div>
-                        <p className="mb-1 text-sm font-semibold uppercase tracking-[0.18em] text-foreground-secondary">Your library</p>
-                        <a href="/custom-lists" className="my-3 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); navigate("/custom-lists") }}>
-                            <span className="text-2xl font-bold">Your lists</span>
-                            <ArrowCircleRightIcon className="w-7" />
-                        </a>
-                    </div>
-                </div>
+                <a href="/custom-lists" className="my-4 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); navigate("/custom-lists") }}>
+                    <span className="text-2xl font-bold">Your lists</span>
+                    <ArrowCircleRightIcon className="w-7" />
+                </a>
                 {
                     customListsQuery.error ? (
                         <Error message={customListsQuery.error.message} />
