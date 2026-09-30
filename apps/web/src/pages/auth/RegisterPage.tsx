@@ -7,6 +7,8 @@ import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { Info } from "../../components/ui/Info";
 import { InputPassword } from "../../components/ui/InputPassword";
+import { Logo } from "../../components/ui/Logo";
+import { Link } from "react-router";
 
 export function RegisterPage() {
     const [username, setUsername] = useState("");
@@ -61,7 +63,13 @@ export function RegisterPage() {
             {mutation.isSuccess ? <Info message="Registered successfully. You can log in now." /> : null}
             {mutation.isError ? <Error message={mutation.error.message} /> : null}
 
-            <form onSubmit={onSubmit} className="flex justify-center m-10">
+            <section className="mt-5 flex flex-col items-center justify-center">
+                <Logo />
+                <h1 className="mt-4 text-3xl font-bold">Watch Next</h1>
+                <p className="mt-2 text-foreground-secondary">Log in to your account</p>
+            </section>
+
+            <form onSubmit={onSubmit} className="mt-10 flex justify-center">
                 <div className="w-120 p-7 bg-background-primary shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)]">
                     <div className="mb-5">
                         <p className="text-lg">Username</p>
@@ -81,6 +89,9 @@ export function RegisterPage() {
                     <div>
                         <Button value="Register" type="submit" />
                     </div>
+                    <p className="mt-5 text-center text-foreground-secondary">
+                        Already have an account? <Link to="/login" className="text-foreground underline">Login</Link>
+                    </p>
                 </div>
             </form>
         </>
