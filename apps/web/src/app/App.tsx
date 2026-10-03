@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import { Navbar } from "../components/layouts/Navbar";
 import { ChevronLeftIcon, ChevronRightIcon } from "../components/ui/icons/Icons";
@@ -8,6 +8,12 @@ import { useAuthStore } from "../stores/useAuthStore";
 export function App() {
     const isLoggedIn = useAuthStore(state => state.isLoggedIn);
     const [isNavbarOpen, setIsNavbarOpen] = useState(() => isLoggedIn ? window.matchMedia("(min-width: 768px)").matches : false);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            setIsNavbarOpen(window.matchMedia("(min-width: 768px)").matches);
+        }
+    }, [isLoggedIn]);
 
     return (
         <div>
