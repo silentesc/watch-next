@@ -77,12 +77,12 @@ export function CustomListPage() {
                                     <Input type="text" value={name} onChange={(event) => setName(event.target.value)} />
                                     <Button value={"Save"} type="button" fullWidth={false} variant="primary" onClick={saveChanges} disabled={!name.trim() || updateCustomList.isPending} />
                                     <Button value={"Cancel"} type="button" fullWidth={false} onClick={() => setIsEditing(false)} disabled={!name.trim() || updateCustomList.isPending} />
-                                    <Button value={<span className="flex items-center gap-2"><TrashIcon /> Delete list</span>} fullWidth={false} onClick={removeList} variant="danger" disabled={deleteCustomList.isPending} />
+                                    <Button value={<span className="flex items-center gap-2"><TrashIcon className="w-5" /> Delete list</span>} fullWidth={false} onClick={removeList} variant="danger" disabled={deleteCustomList.isPending} />
                                 </div>
                             ) : (
                                 <div className="flex items-center justify-between">
                                     <h1 className="text-3xl font-semibold">{customList.name}</h1>
-                                    <Button value={<span className="flex items-center gap-2"><PencilIcon /> Edit</span>} fullWidth={false} onClick={startEditing} />
+                                    <Button value={<span className="flex items-center gap-2"><PencilIcon className="w-5" /> Edit</span>} fullWidth={false} onClick={startEditing} />
                                 </div>
                             )
                         }

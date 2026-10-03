@@ -15,7 +15,7 @@ export function ChevronDownIcon(props: IconProps) {
 }
 
 export function MenuIcon(props: IconProps) {
-    return <BaseIcon {...props} fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></BaseIcon>;
+    return <BaseIcon {...props} fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></BaseIcon>;
 }
 
 export function CloseIcon(props: IconProps) {
