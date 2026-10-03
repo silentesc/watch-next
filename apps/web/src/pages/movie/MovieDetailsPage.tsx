@@ -55,7 +55,7 @@ export function MovieDetailsPage() {
             {/* Main Content */}
             <div className="px-4 -mt-80 relative z-10">
                 <div className="flex flex-wrap gap-8">
-                    <div className="flex-1">
+                    <div className="min-w-0 flex-1">
                         {/* Most important info */}
                         <div className="flex flex-wrap gap-8 justify-center text-center sm:text-left sm:flex-nowrap">
                             <Poster movieDetails={movieDetailsQuery.data} />

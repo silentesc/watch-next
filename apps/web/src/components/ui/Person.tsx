@@ -1,4 +1,4 @@
-interface PersonProps {
+export interface PersonProps {
     imgPath?: string;
     name: string;
     description?: string;
