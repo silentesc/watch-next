@@ -3,7 +3,6 @@ import type { Me } from "../../api/me"
 import { logout } from "../../api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { meQueryKey } from "../../hooks/use_me";
 import { ChevronDownIcon } from "../ui/icons/Icons";
 
 interface MeDropdownProps {
@@ -24,8 +23,8 @@ export function MeDropdown({ me }: MeDropdownProps) {
     const mutation = useMutation({
         mutationFn: logout,
         onSuccess: () => {
-            queryClient.removeQueries({ queryKey: meQueryKey });
-            navigate("/");
+            queryClient.removeQueries();
+            navigate("/login");
         }
     });
 

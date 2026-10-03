@@ -1,19 +1,11 @@
-import { Link, NavLink, useNavigate } from "react-router";
+import { Link, NavLink } from "react-router";
 import { useMe } from "../../hooks/use_me";
 import { Loading } from "../ui/Loading";
 import { MeDropdown } from "./MeDropdown";
-import { useAuthStore } from "../../stores/useAuthStore";
 import { Error } from "../ui/Error";
 import { LogoText } from "../ui/LogoText";
 
 export function Navbar() {
-    const navigate = useNavigate();
-    const isLoggedIn = useAuthStore(state => state.isLoggedIn);
-
-    if (!isLoggedIn) {
-        navigate("/login")
-    }
-
     const me = useMe();
 
     return (
