@@ -20,7 +20,7 @@ const renderItem = (multi_search_result: MultiSearchResult) => {
         case "tv":
             return <TvSeriesCard tvSeries={multi_search_result} />
         case "person":
-            return <PersonCard person={multi_search_result} />
+            return <PersonCard name={multi_search_result.name || "Unknown"} posterPath={multi_search_result.profile_path} />
     }
 };
 

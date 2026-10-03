@@ -1,10 +1,11 @@
-import type { PersonOverview } from "../../../api/tmdb/models";
 import { PosterCard } from "./PosterCard";
 
-interface PersonCardProps {
-    person: PersonOverview;
+export interface PersonCardProps {
+    name: string;
+    description?: string;
+    posterPath?: string;
 }
 
-export function PersonCard({ person }: PersonCardProps) {
-    return <PosterCard title={person.name} posterPath={person.profile_path} label="PERSON" labelClassName="bg-orange-600/80" />;
+export function PersonCard({ name, description, posterPath }: PersonCardProps) {
+    return <PosterCard title={name} description={description} posterPath={posterPath} label="PERSON" labelClassName="bg-orange-600/80" />;
 }
