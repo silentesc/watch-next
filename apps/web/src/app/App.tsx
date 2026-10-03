@@ -1,19 +1,30 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import { Navbar } from "../components/layouts/Navbar";
 import { ChevronLeftIcon, ChevronRightIcon } from "../components/ui/icons/Icons";
 import { LogoText } from "../components/ui/LogoText";
 import { useAuthStore } from "../stores/useAuthStore";
 
+const isScreenBig = () => {
+    return window.matchMedia("(min-width: 768px)").matches;
+}
+
 export function App() {
+    const location = useLocation();
     const isLoggedIn = useAuthStore(state => state.isLoggedIn);
-    const [isNavbarOpen, setIsNavbarOpen] = useState(() => isLoggedIn ? window.matchMedia("(min-width: 768px)").matches : false);
+    const [isNavbarOpen, setIsNavbarOpen] = useState(() => isLoggedIn ? isScreenBig() : false);
 
     useEffect(() => {
         if (isLoggedIn) {
-            setIsNavbarOpen(window.matchMedia("(min-width: 768px)").matches);
+            setIsNavbarOpen(isScreenBig());
         }
     }, [isLoggedIn]);
+
+    useEffect(() => {
+        if (isNavbarOpen && !isScreenBig()) {
+            setIsNavbarOpen(false);
+        }
+    }, [location]);
 
     return (
         <div>
