@@ -33,8 +33,8 @@ export function HomePage() {
             <section className="relative overflow-hidden border border-background-tertiary bg-background-primary px-6 py-10 sm:px-10 sm:py-14">
                 <div className="relative max-w-2xl">
                     <p className="mb-3 font-semibold uppercase tracking-[0.2em] text-foreground-secondary">Watch Next</p>
-                    <h1 className="max-w-xl text-4xl font-bold tracking-tight sm:text-5xl">Find your next watch.</h1>
-                    <p className="mt-4 max-w-lg text-lg text-foreground-secondary">A place to organize your media, or just search around for something new.</p>
+                    <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Find your next watch.</h1>
+                    <p className="mt-4 text-lg text-foreground-secondary">A place to organize your media, or just search around for something new.</p>
                     <form className="mt-7 flex flex-col gap-2 sm:flex-row" onSubmit={submitSearch}>
                         <Input placeholder="Search movies and TV series" value={search} onChange={event => setSearch(event.target.value)} />
                         <Button type="submit" value="Search" fullWidth={false} variant="primary" />
