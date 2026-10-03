@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router";
+import { Link, Outlet, useLocation } from "react-router";
 import { Navbar } from "../components/layouts/Navbar";
 import { ChevronLeftIcon, ChevronRightIcon } from "../components/ui/icons/Icons";
 import { LogoText } from "../components/ui/LogoText";
@@ -38,7 +38,7 @@ export function App() {
                             <div className="w-fit p-2 cursor-pointer" onClick={() => setIsNavbarOpen(!isNavbarOpen)}>
                                 {isNavbarOpen ? <ChevronLeftIcon className="w-5" /> : <ChevronRightIcon className="w-5" />}
                             </div>
-                            {!isNavbarOpen ? <LogoText width={35} height={35} /> : null}
+                            {!isNavbarOpen ? <Link to="/" className="w-fit"><LogoText width={35} height={35} /></Link> : null}
                         </div>
                     </>
                 ) : (
