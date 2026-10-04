@@ -15,7 +15,7 @@ RUN npm run build
 ##################
 # Server builder #
 ##################
-FROM rust:1.98-alpine3.24 AS server-builder
+FROM rust:1.99-alpine3.24 AS server-builder
 
 RUN apk add --no-cache \
     build-base \
