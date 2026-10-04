@@ -1,6 +1,7 @@
 pub mod collections;
 pub mod common;
 pub mod movies;
+pub mod people;
 pub mod search;
 pub mod tv_episodes;
 pub mod tv_season;

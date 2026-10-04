@@ -16,6 +16,7 @@ pub fn setup_router(app_state: AppState) -> Router {
         .merge(features::tv_series::routes::router())
         .merge(features::tv_seasons::routes::router())
         .merge(features::collections::routes::router())
+        .merge(features::people::routes::router())
         .merge(features::custom_lists::routes::router())
         .merge(features::media_items::routes::router())
         .layer(from_fn_with_state(
