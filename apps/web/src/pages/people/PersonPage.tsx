@@ -9,6 +9,7 @@ import { SortBy } from "../../components/ui/SortBy";
 import type { PersonCombinedCredit } from "../../api/tmdb/models";
 import { formatDate } from "../../shared/dateFormatter";
 import { useState } from "react";
+import { Dropdown } from "../../components/ui/Dropdown";
 
 function creditDate(credit: PersonCombinedCredit) {
     return credit.media_type === "movie" ? credit.release_date : credit.first_air_date;
@@ -23,6 +24,12 @@ function creditRole(credit: PersonCombinedCredit) {
     return credit.job || credit.department;
 }
 
+const filterValues = new Map([
+    ["all", "All"],
+    ["movie", "Movie"],
+    ["tv", "TV Series"],
+]);
+
 const sortByValues = new Map([
     ["popularity", "Popularity"],
     ["date", "Date"],
@@ -30,6 +37,11 @@ const sortByValues = new Map([
     ["vote_average", "Vote Average"],
     ["vote_count", "Vote Count"],
 ]);
+
+function filterCredits(credits: PersonCombinedCredit[], filter: string) {
+    if (filter === "all") return credits;
+    return credits.filter(c => c.media_type === filter);
+}
 
 function sortCredits(credits: PersonCombinedCredit[], sortBy: string, isAsc: boolean) {
     return credits
@@ -80,6 +92,7 @@ export function PersonPage() {
 
     const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(true);
     const [queryParams, setQueryParams] = useSearchParams();
+    const filter = queryParams.get("filter") || "all";
     const sortBy = queryParams.get("sortBy")?.split(".")[0] || "vote_count";
     const isSortAscending = queryParams.get("sortBy")?.endsWith(".asc") || false;
 
@@ -96,11 +109,20 @@ export function PersonPage() {
     if (!personDetailsQuery.data) return <Error message="No data returned" />;
 
     const person = personDetailsQuery.data;
-    const cast = personCombinedCreditsQuery.data?.cast || [];
-    const crew = personCombinedCreditsQuery.data?.crew || [];
-    const sortedCast = sortCredits(cast, sortBy, isSortAscending);
-    const sortedCrew = sortCredits(crew, sortBy, isSortAscending);
+    let cast = personCombinedCreditsQuery.data?.cast || [];
+    let crew = personCombinedCreditsQuery.data?.crew || [];
+    cast = filterCredits(cast, filter);
+    crew = filterCredits(crew, filter);
+    cast = sortCredits(cast, sortBy, isSortAscending);
+    crew = sortCredits(crew, sortBy, isSortAscending);
 
+    const onFilterChange = (nextFilter: string) => {
+        setQueryParams(previousParams => {
+            const nextParams = new URLSearchParams(previousParams);
+            nextParams.set("filter", nextFilter)
+            return nextParams;
+        });
+    };
     const onSortByChange = (nextSortBy: string) => {
         setQueryParams(previousParams => {
             const nextParams = new URLSearchParams(previousParams);
@@ -154,7 +176,7 @@ export function PersonPage() {
             {personCombinedCreditsQuery.error ? <Error message={personCombinedCreditsQuery.error.message} /> : null}
             {!personCombinedCreditsQuery.isLoading && !personCombinedCreditsQuery.error ? (
                 <div className="mt-10 flex flex-col gap-10">
-                    <div className="flex justify-end">
+                    <div className="flex gap-2 justify-end">
                         <SortBy
                             sortByKey={sortBy}
                             isAsc={isSortAscending}
@@ -163,17 +185,18 @@ export function PersonPage() {
                             onAscChange={onAscChange}
                             alignedRight
                         />
+                        <Dropdown title={filterValues.get(filter) || filter} values={filterValues} onSelect={onFilterChange} alignedRight />
                     </div>
                     {cast.length ? (
                         <section>
                             <h2 className="text-2xl font-bold mb-4">Cast ({cast.length})</h2>
-                            <CreditGrid credits={sortedCast} />
+                            <CreditGrid credits={cast} />
                         </section>
                     ) : null}
                     {crew.length ? (
                         <section>
                             <h2 className="text-2xl font-bold mb-4">Crew ({crew.length})</h2>
-                            <CreditGrid credits={sortedCrew} />
+                            <CreditGrid credits={crew} />
                         </section>
                     ) : null}
                     {!cast.length && !crew.length ? <p className="text-foreground-secondary">No cast found.</p> : null}
