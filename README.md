@@ -20,6 +20,7 @@ Look at the [Roadmap](#roadmap) below to see upcoming features.
 services:
   watch-next-postgres:
     image: postgres:18-alpine
+    container_name: watch-next-postgres
     environment:
       TZ: Etc/UTC
       POSTGRES_USER: watch_next
@@ -31,6 +32,7 @@ services:
 
   watch-next:
     image: watch-next
+    container_name: watch-next
     ports:
       - 5657:5657
     environment:
@@ -54,6 +56,7 @@ services:
 | `TMDB_BASE_URL` | `https://api.themoviedb.org/3` | URL of the TMDB API |
 | `TMDB_CACHE_TTL_MINUTES` | `60` | How many minutes to keep stuff retrieved from TMDB in cache |
 | `ALLOW_REGISTRATION` | `true` | Whether to allow registrations of new users |
+| `COOKIE_SECURE` | `false` | Enable when exposing to the internet and using https |
 | `POSTGRES_URI` | `postgres://watch_next:watch_next@watch-next-postgres:5432/watch_next` | URI to the postgres database |
 | `DATA_DIR` | `/app/data` | Directory where app data (like secret keys generated on first startup) is stored |
 

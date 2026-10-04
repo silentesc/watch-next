@@ -30,7 +30,15 @@ pub async fn login(
     jar: SignedCookieJar,
     Json(payload): Json<LoginRequest>,
 ) -> Result<(StatusCode, SignedCookieJar), AppError> {
-    match crate::features::auth::service::login(&app_state.pool, jar, payload.username, payload.password).await {
+    match crate::features::auth::service::login(
+        &app_state.pool,
+        jar,
+        payload.username,
+        payload.password,
+        app_state.cookie_secure,
+    )
+    .await
+    {
         Ok(signed_cookie_jar) => Ok((StatusCode::NO_CONTENT, signed_cookie_jar)),
         Err(app_error) => Err(app_error),
     }
@@ -41,7 +49,7 @@ pub async fn logout(
     State(app_state): State<AppState>,
     jar: SignedCookieJar,
 ) -> Result<(StatusCode, SignedCookieJar), AppError> {
-    match crate::features::auth::service::logout(&app_state.pool, jar).await {
+    match crate::features::auth::service::logout(&app_state.pool, jar, app_state.cookie_secure).await {
         Ok(updated_jar) => Ok((StatusCode::OK, updated_jar)),
         Err(app_error) => Err(app_error),
     }

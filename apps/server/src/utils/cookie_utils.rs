@@ -3,23 +3,23 @@ use time::{Duration, OffsetDateTime};
 
 use crate::app::constants;
 
-pub fn removal_cookie<'a>(cookie_name: String) -> Cookie<'a> {
+pub fn removal_cookie<'a>(cookie_name: String, secure: bool) -> Cookie<'a> {
     Cookie::build((cookie_name, ""))
         .http_only(true)
         .path("/")
         .same_site(SameSite::Strict)
-        .secure(true)
+        .secure(secure)
         .max_age(Duration::ZERO)
         .build()
 }
 
-pub fn default_cookie<'a>(session_token: String, expires: OffsetDateTime) -> Cookie<'a> {
+pub fn default_cookie<'a>(session_token: String, expires: OffsetDateTime, secure: bool) -> Cookie<'a> {
     Cookie::build((constants::SESSION_ID_COOKIE_NAME, session_token))
         .http_only(true)
         .path("/")
         .same_site(SameSite::Strict)
         .expires(expires)
-        .secure(true)
+        .secure(secure)
         .build()
 }
 
@@ -37,7 +37,7 @@ mod tests {
     #[test]
     fn default_cookie_contains_secure_session_settings() {
         let expiration = OffsetDateTime::now_utc() + Duration::days(7);
-        let cookie = default_cookie(String::from("session-id"), expiration);
+        let cookie = default_cookie(String::from("session-id"), expiration, true);
 
         assert_eq!(cookie.name(), constants::SESSION_ID_COOKIE_NAME);
         assert_eq!(cookie.value(), "session-id");
@@ -50,7 +50,7 @@ mod tests {
 
     #[test]
     fn removal_cookie_expires_the_session_cookie() {
-        let cookie = removal_cookie(String::from(constants::SESSION_ID_COOKIE_NAME));
+        let cookie = removal_cookie(String::from(constants::SESSION_ID_COOKIE_NAME), true);
 
         assert_eq!(cookie.name(), constants::SESSION_ID_COOKIE_NAME);
         assert_eq!(cookie.value(), "");
