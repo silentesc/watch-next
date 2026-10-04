@@ -22,6 +22,7 @@ import { AggregateCastPage } from "../pages/tv/AggregateCastPage";
 import { AggregateCrewPage } from "../pages/tv/AggregateCrewPage";
 import { CustomListsOverviewPage } from "../pages/custom-lists/CustomListsOverviewPage";
 import { CustomListPage } from "../pages/custom-lists/CustomListPage";
+import { PersonPage } from "../pages/people/PersonPage";
 
 export const router = createBrowserRouter([
     {
@@ -75,6 +76,7 @@ export const router = createBrowserRouter([
             },
             { path: "search", Component: SearchPage },
             { path: "collection/:id", Component: CollectionDetailsPage },
+            { path: "person/:id", Component: PersonPage },
         ],
     },
 ]);

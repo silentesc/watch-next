@@ -2,7 +2,7 @@ use crate::integrations::tmdb::{
     client::TmdbClient,
     resources::{
         collections::CollectionsApi, configuration::ConfigurationApi, genres::GenresApi, movies::MoviesApi,
-        search::SearchApi, tv_seasons::TvSeasonApi, tv_series::TvSeriesApi,
+        people::PeopleApi, search::SearchApi, tv_seasons::TvSeasonApi, tv_series::TvSeriesApi,
     },
 };
 
@@ -47,5 +47,9 @@ impl TmdbApi {
 
     pub fn search(&self) -> SearchApi<'_> {
         SearchApi::new(&self.tmdb_client)
+    }
+
+    pub fn people(&self) -> PeopleApi<'_> {
+        PeopleApi::new(&self.tmdb_client)
     }
 }

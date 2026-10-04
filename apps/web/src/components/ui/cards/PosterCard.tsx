@@ -2,17 +2,16 @@ import { useNavigate } from "react-router";
 
 interface PosterCardProps {
     title?: string;
+    description?: string;
     posterPath?: string;
     href?: string;
     label: string;
     labelClassName: string;
-    year?: string;
 }
 
-export function PosterCard({ title = "", posterPath, href, label, labelClassName, year }: PosterCardProps) {
+export function PosterCard({ title = "", description, posterPath, href, label, labelClassName }: PosterCardProps) {
     const navigate = useNavigate();
     const displayTitle = title.length > 30 ? `${title.substring(0, 30)}...` : title;
-    const displayYear = year?.split("-")[0];
 
     const onPosterClick = (event: React.MouseEvent) => {
         event.preventDefault();
@@ -37,7 +36,7 @@ export function PosterCard({ title = "", posterPath, href, label, labelClassName
             </div>
             <div className="flex flex-col text-center p-1">
                 <span title={displayTitle}>{displayTitle}</span>
-                {displayYear ? <span title={year} className="opacity-75">{displayYear}</span> : null}
+                {description ? <span title={description} className="opacity-75 whitespace-pre-line">{description}</span> : null}
             </div>
         </div>
     );

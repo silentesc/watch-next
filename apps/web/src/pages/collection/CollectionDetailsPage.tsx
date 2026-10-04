@@ -5,8 +5,8 @@ import { MovieCard } from "../../components/ui/cards/MovieCard";
 import { useCollectionDetails } from "../../hooks/tmdb/use_collection_details";
 import { Overview } from "./Overview";
 import { QuickInfo } from "./QuickInfo";
-import { Poster } from "./Poster";
 import { CustomListPicker } from "../../components/ui/CustomListPicker";
+import { Poster } from "../../components/ui/Poster";
 
 export function CollectionDetailsPage() {
     const { id } = useParams();
@@ -59,7 +59,7 @@ export function CollectionDetailsPage() {
             <div className="px-4 -mt-80 relative z-10">
                 {/* Most important info */}
                 <div className="flex flex-wrap gap-8 justify-center text-center sm:text-left sm:flex-nowrap">
-                    <Poster collectionDetails={collectionDetails} />
+                    <Poster src={collectionDetails.poster_path} alt={collectionDetails.name} />
 
                     <div className="w-full">
                         <QuickInfo collectionDetails={collectionDetails} />

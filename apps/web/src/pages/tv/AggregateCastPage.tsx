@@ -58,7 +58,7 @@ export function AggregateCastPage() {
             <h2 className="text-2xl font-bold">Cast</h2>
             <div className="flex flex-col gap-3 bg-background-secondary rounded-lg">
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
-                    {aggregateCast.map((c) => <Person key={`${c.name}-${getRolesString(c)}`} name={c.name || "Unknown"} imgPath={c.profile_path} description={getRolesString(c)} />)}
+                    {aggregateCast.map((c) => c.id === undefined ? null : <Person key={`${c.name}-${getRolesString(c)}`} id={c.id} name={c.name || "Unknown"} imgPath={c.profile_path} description={getRolesString(c)} />)}
                 </div>
             </div>
         </div>

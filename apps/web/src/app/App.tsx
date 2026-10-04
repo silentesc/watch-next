@@ -5,7 +5,7 @@ import { MenuIcon } from "../components/ui/icons/Icons";
 import { LogoText } from "../components/ui/LogoText";
 import { useAuthStore } from "../stores/useAuthStore";
 
-const isScreenBig = () => {
+export const isScreenBig = () => {
     return window.matchMedia("(min-width: 768px)").matches;
 }
 

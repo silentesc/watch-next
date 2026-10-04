@@ -20,6 +20,7 @@ Necessary TMDB endpoints are implemented and can be used exactly like the origin
 | TV Series | <ul><li>[Details](https://developer.themoviedb.org/reference/tv-series-details)</li><li>[Aggregate Credits](https://developer.themoviedb.org/reference/tv-series-aggregate-credits)</li><li>[Videos](https://developer.themoviedb.org/reference/tv-series-videos)</li><li>[Recommendations](https://developer.themoviedb.org/reference/tv-series-recommendations)</li><li>[Similar](https://developer.themoviedb.org/reference/tv-series-similar)</li><li>[Discover](https://developer.themoviedb.org/reference/discover-tv)</li><li>[Trending](https://developer.themoviedb.org/reference/trending-tv)</li><li>[Search](https://developer.themoviedb.org/reference/search-tv)</li></ul> |
 | TV Seasons | <ul><li>[Details](https://developer.themoviedb.org/reference/tv-season-details)</li></ul> |
 | Collections | <ul><li>[Details](https://developer.themoviedb.org/reference/collection-details)</li><li>[Search](https://developer.themoviedb.org/reference/search-collection)</li></ul> |
+| People | <ul><li>[Details](https://developer.themoviedb.org/reference/person-details)</li><li>[Combined Credits](https://developer.themoviedb.org/reference/person-combined-credits)</li></ul> |
 
 ## Quick Start
 
