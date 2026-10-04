@@ -1,10 +1,11 @@
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { usePersonDetails } from "../../hooks/tmdb/use_person_details";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { usePersonCombinedCredits } from "../../hooks/tmdb/use_person_combined_credits";
 import { Poster } from "../../components/ui/Poster";
 import { PosterCard } from "../../components/ui/cards/PosterCard";
+import { SortBy } from "../../components/ui/SortBy";
 import type { PersonCombinedCredit } from "../../api/tmdb/models";
 import { formatDate } from "../../shared/dateFormatter";
 import { useState } from "react";
@@ -20,6 +21,32 @@ function creditTitle(credit: PersonCombinedCredit) {
 function creditRole(credit: PersonCombinedCredit) {
     if (credit.character) return credit.character;
     return credit.job || credit.department;
+}
+
+const sortByValues = new Map([
+    ["popularity", "Popularity"],
+    ["date", "Date"],
+    ["title", "Title"],
+    ["vote_average", "Vote Average"],
+    ["vote_count", "Vote Count"],
+]);
+
+function sortCredits(credits: PersonCombinedCredit[], sortBy: string, isAsc: boolean) {
+    return credits
+        .map((credit, index) => ({ credit, index }))
+        .sort((left, right) => {
+            const leftValue = sortBy === "date" ? creditDate(left.credit) : sortBy === "title" ? creditTitle(left.credit) : left.credit[sortBy as keyof PersonCombinedCredit];
+            const rightValue = sortBy === "date" ? creditDate(right.credit) : sortBy === "title" ? creditTitle(right.credit) : right.credit[sortBy as keyof PersonCombinedCredit];
+
+            if (leftValue == null || leftValue === "") return rightValue == null || rightValue === "" ? left.index - right.index : 1;
+            if (rightValue == null || rightValue === "") return -1;
+
+            const comparison = typeof leftValue === "number" && typeof rightValue === "number"
+                ? leftValue - rightValue
+                : String(leftValue).localeCompare(String(rightValue));
+            return (isAsc ? comparison : -comparison) || left.index - right.index;
+        })
+        .map(({ credit }) => credit);
 }
 
 function CreditGrid({ credits }: { credits: PersonCombinedCredit[] }) {
@@ -52,6 +79,9 @@ export function PersonPage() {
     const { id } = useParams();
 
     const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(true);
+    const [queryParams, setQueryParams] = useSearchParams();
+    const sortBy = queryParams.get("sortBy")?.split(".")[0] || "vote_count";
+    const isSortAscending = queryParams.get("sortBy")?.endsWith(".asc") || false;
 
     const personId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
     const personDetailsQuery = usePersonDetails(personId);
@@ -66,8 +96,25 @@ export function PersonPage() {
     if (!personDetailsQuery.data) return <Error message="No data returned" />;
 
     const person = personDetailsQuery.data;
-    const cast = (personCombinedCreditsQuery.data?.cast || []).sort((a, b) => (creditDate(b) || "").localeCompare(creditDate(a) || ""));
-    const crew = (personCombinedCreditsQuery.data?.crew || []).sort((a, b) => (creditDate(b) || "").localeCompare(creditDate(a) || ""));
+    const cast = personCombinedCreditsQuery.data?.cast || [];
+    const crew = personCombinedCreditsQuery.data?.crew || [];
+    const sortedCast = sortCredits(cast, sortBy, isSortAscending);
+    const sortedCrew = sortCredits(crew, sortBy, isSortAscending);
+
+    const onSortByChange = (nextSortBy: string) => {
+        setQueryParams(previousParams => {
+            const nextParams = new URLSearchParams(previousParams);
+            nextParams.set("sortBy", `${nextSortBy}${isSortAscending ? ".asc" : ".desc"}`);
+            return nextParams;
+        });
+    };
+    const onAscChange = (nextIsAscending: boolean) => {
+        setQueryParams(previousParams => {
+            const nextParams = new URLSearchParams(previousParams);
+            nextParams.set("sortBy", `${sortBy}${nextIsAscending ? ".asc" : ".desc"}`);
+            return nextParams;
+        });
+    };
 
     return (
         <div>
@@ -107,16 +154,26 @@ export function PersonPage() {
             {personCombinedCreditsQuery.error ? <Error message={personCombinedCreditsQuery.error.message} /> : null}
             {!personCombinedCreditsQuery.isLoading && !personCombinedCreditsQuery.error ? (
                 <div className="mt-10 flex flex-col gap-10">
+                    <div className="flex justify-end">
+                        <SortBy
+                            sortByKey={sortBy}
+                            isAsc={isSortAscending}
+                            sortByValues={sortByValues}
+                            onSortByChange={onSortByChange}
+                            onAscChange={onAscChange}
+                            alignedRight
+                        />
+                    </div>
                     {cast.length ? (
                         <section>
                             <h2 className="text-2xl font-bold mb-4">Cast ({cast.length})</h2>
-                            <CreditGrid credits={cast} />
+                            <CreditGrid credits={sortedCast} />
                         </section>
                     ) : null}
                     {crew.length ? (
                         <section>
                             <h2 className="text-2xl font-bold mb-4">Crew ({crew.length})</h2>
-                            <CreditGrid credits={crew} />
+                            <CreditGrid credits={sortedCrew} />
                         </section>
                     ) : null}
                     {!cast.length && !crew.length ? <p className="text-foreground-secondary">No cast found.</p> : null}
