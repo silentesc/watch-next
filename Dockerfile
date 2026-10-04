@@ -48,6 +48,7 @@ ENV TZ=Etc/UTC \
     TMDB_BASE_URL=https://api.themoviedb.org/3 \
     TMDB_CACHE_TTL_MINUTES=60 \
     ALLOW_REGISTRATION=true \
+    COOKIE_SECURE=false \
     DATA_DIR=/app/data
 
 WORKDIR /app

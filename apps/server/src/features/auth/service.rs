@@ -73,6 +73,7 @@ pub async fn login(
     jar: SignedCookieJar,
     username: String,
     password: String,
+    cookie_secure: bool,
 ) -> Result<SignedCookieJar, AppError> {
     // Get user by username
     let db_user = match users::get_user_by_username(pool, &username).await {
@@ -109,7 +110,7 @@ pub async fn login(
     };
 
     // Create cookie
-    let cookie = cookie_utils::default_cookie(session_token, session_expiration);
+    let cookie = cookie_utils::default_cookie(session_token, session_expiration, cookie_secure);
     let signed_cookie_jar = jar.add(cookie);
 
     // Set last login
@@ -121,16 +122,17 @@ pub async fn login(
     Ok(signed_cookie_jar)
 }
 
-pub async fn logout(pool: &PgPool, jar: SignedCookieJar) -> Result<SignedCookieJar, AppError> {
+pub async fn logout(pool: &PgPool, jar: SignedCookieJar, cookie_secure: bool) -> Result<SignedCookieJar, AppError> {
     // Get session token from cookie and delete session in db
     if let Some(cookie) = jar.get(constants::SESSION_ID_COOKIE_NAME) {
         sessions::delete_session(pool, cookie.value()).await?;
     }
 
     // Add remove cookie
-    let signed_cookie_jar = jar.add(cookie_utils::removal_cookie(String::from(
-        constants::SESSION_ID_COOKIE_NAME,
-    )));
+    let signed_cookie_jar = jar.add(cookie_utils::removal_cookie(
+        String::from(constants::SESSION_ID_COOKIE_NAME),
+        cookie_secure,
+    ));
 
     Ok(signed_cookie_jar)
 }

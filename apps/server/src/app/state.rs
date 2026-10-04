@@ -10,6 +10,7 @@ pub struct AppState {
     pub tmdb: TmdbApi,
     pub key: Key,
     pub allow_registration: bool,
+    pub cookie_secure: bool,
 }
 
 impl FromRef<AppState> for Key {
