@@ -92,6 +92,10 @@ export type MultiSearchResult =
     | ({ media_type: "tv" }) & TvSeriesOverview
     | ({ media_type: "person" }) & PersonOverview;
 
+export type PersonCombinedCredit =
+    | ({ media_type: "movie" }) & PersonMovieCredit
+    | ({ media_type: "tv" }) & PersonTvCredit;
+
 // Movie
 
 export interface MovieOverview {
@@ -330,4 +334,67 @@ export interface TvEpisodeDetails {
     vote_count?: number;
     crew?: Array<Crew>;
     guest_stars?: Array<Cast>;
+}
+
+// People
+
+export interface PersonDetails {
+    adult?: boolean;
+    also_known_as?: string[];
+    biography?: string;
+    birthday?: string;
+    deathday?: string;
+    gender?: number;
+    homepage?: string;
+    id?: number;
+    imdb_id?: string;
+    known_for_department?: string;
+    name?: string;
+    place_of_birth?: string;
+    popularity?: number;
+    profile_path?: string;
+}
+
+export interface PersonMovieCredit {
+    adult?: boolean;
+    backdrop_path?: string;
+    character?: string;
+    credit_id?: string;
+    department?: string;
+    genre_ids?: number[];
+    id?: number;
+    order?: number;
+    original_language?: string;
+    original_title?: string;
+    overview?: string;
+    popularity?: number;
+    poster_path?: string;
+    release_date?: string;
+    title?: string;
+    video?: boolean;
+    job?: string;
+    vote_average?: number;
+    vote_count?: number;
+}
+
+export interface PersonTvCredit {
+    adult?: boolean;
+    backdrop_path?: string;
+    character?: string;
+    credit_id?: string;
+    department?: string;
+    episode_count?: number;
+    first_air_date?: string;
+    genre_ids?: number[];
+    id?: number;
+    name?: string;
+    origin_country?: string[];
+    original_language?: string;
+    original_name?: string;
+    overview?: string;
+    popularity?: number;
+    poster_path?: string;
+    job?: string;
+    vote_average?: number;
+    vote_count?: number;
 }
