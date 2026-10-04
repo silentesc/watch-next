@@ -4,7 +4,6 @@ import { Loading } from "../../components/ui/Loading";
 import { DetailsTable } from "./ui/DetailsTable";
 import { Overview } from "./ui/Overview";
 import { QuickInfo } from "./ui/QuickInfo";
-import { Poster } from "./ui/Poster";
 import { Recommendations } from "./ui/Recommendations";
 import { Similar } from "./ui/Similar";
 import { useTvSeriesDetails } from "../../hooks/tmdb/use_tv_series_details";
@@ -12,6 +11,7 @@ import { Seasons } from "./ui/Seasons";
 import { AggregateCast } from "./ui/AggregateCast";
 import { AggregateCrew } from "./ui/AggregateCrew";
 import { CustomListPicker } from "../../components/ui/CustomListPicker";
+import { Poster } from "../../components/ui/Poster";
 
 export function TvSeriesDetailsPage() {
     const { id } = useParams();
@@ -58,7 +58,7 @@ export function TvSeriesDetailsPage() {
                     <div className="flex-1">
                         {/* Most important info */}
                         <div className="flex flex-wrap gap-8 justify-center text-center sm:text-left sm:flex-nowrap">
-                            <Poster tvSeriesDetails={tvSeriesDetailsQuery.data} />
+                            <Poster src={tvSeriesDetailsQuery.data.poster_path} alt={tvSeriesDetailsQuery.data.name} />
 
                             <div className="w-full">
                                 <QuickInfo tvSeriesDetails={tvSeriesDetailsQuery.data} />

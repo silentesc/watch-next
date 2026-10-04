@@ -5,13 +5,13 @@ import { Collection } from "./ui/Collection";
 import { DetailsTable } from "./ui/DetailsTable";
 import { Overview } from "./ui/Overview";
 import { QuickInfo } from "./ui/QuickInfo";
-import { Poster } from "./ui/Poster";
 import { Crew } from "./ui/Crew";
 import { Cast } from "./ui/Cast";
 import { Recommendations } from "./ui/Recommendations";
 import { Similar } from "./ui/Similar";
 import { useMovieDetails } from "../../hooks/tmdb/use_movie_details";
 import { CustomListPicker } from "../../components/ui/CustomListPicker";
+import { Poster } from "../../components/ui/Poster";
 
 export function MovieDetailsPage() {
     const { id } = useParams();
@@ -58,7 +58,7 @@ export function MovieDetailsPage() {
                     <div className="min-w-0 flex-1">
                         {/* Most important info */}
                         <div className="flex flex-wrap gap-8 justify-center text-center sm:text-left sm:flex-nowrap">
-                            <Poster movieDetails={movieDetailsQuery.data} />
+                            <Poster src={movieDetailsQuery.data.poster_path} alt={movieDetailsQuery.data.title} />
 
                             <div className="w-full">
                                 <QuickInfo movieDetails={movieDetailsQuery.data} />
