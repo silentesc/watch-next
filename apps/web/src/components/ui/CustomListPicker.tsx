@@ -3,9 +3,9 @@ import { useAddCustomListItem } from "../../hooks/customLists/use_add_custom_lis
 import { useCustomLists } from "../../hooks/customLists/use_custom_lists";
 import { useDeleteCustomListItem } from "../../hooks/customLists/use_delete_custom_list_item";
 import { useMediaItemCustomLists } from "../../hooks/mediaItems/use_media_item_custom_lists";
-import { Dropdown } from "./Dropdown";
 import { Error } from "./Error";
 import { Loading } from "./Loading";
+import { MultiSelectDropdown } from "./MultiSelectDropdown";
 
 interface CustomListPickerProps {
     item: AddCustomListItemRequest;
@@ -30,11 +30,9 @@ export function CustomListPicker({ item }: CustomListPickerProps) {
     }
 
     const mediaItemCustomListIds = new Set((mediaItemCustomListsQuery.data ?? []).map((customList) => customList.id));
-    const values = new Map(customListsQuery.data.map((customList) => {
-        const isInList = mediaItemCustomListIds.has(customList.id);
 
-        return [String(customList.id), `${isInList ? "✓ " : ""}${customList.name}`];
-    }));
+    const selectedKeys = Array.from(mediaItemCustomListIds, (id) => String(id));
+    const values = new Map(customListsQuery.data.map((customList) => [String(customList.id), customList.name]));
 
     const toggleList = (listIdString: string) => {
         const listId = Number(listIdString);
@@ -50,12 +48,14 @@ export function CustomListPicker({ item }: CustomListPickerProps) {
     const mutationError = addCustomListItem.error || deleteCustomListItem.error;
 
     return (
-        <div className="mt-1 flex flex-col items-center gap-2 sm:items-start">
-            <Dropdown
-                title="Custom Lists"
+        <div className="mt-1 w-fit flex flex-col gap-2 items-start">
+            <span className="text-lg font-medium">Custom lists</span>
+            <MultiSelectDropdown
+                placeholder="Add to custom list"
+                selectedKeys={selectedKeys}
                 values={values}
                 onSelect={toggleList}
-                closeOnSelect={false}
+                onDeselect={toggleList}
             />
             {mutationError ? <Error message={mutationError.message} /> : null}
         </div>
