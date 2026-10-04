@@ -18,7 +18,7 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, values, onSelec
         }
 
         return (
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1" onClick={e => e.stopPropagation()}>
                 {
                     [...keys].map(key => (
                         <div key={key} className="flex items-center gap-2 px-2 py-1 bg-background-primary rounded-md border-2 border-background-tertiary">
