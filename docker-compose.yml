@@ -1,0 +1,24 @@
+services:
+  watch-next-postgres:
+    image: postgres:18-alpine
+    environment:
+      TZ: Etc/UTC
+      POSTGRES_USER: watch_next
+      POSTGRES_PASSWORD: watch_next
+      POSTGRES_DB: watch_next
+    volumes:
+      - ./data/postgres:/var/lib/postgresql
+    restart: unless-stopped
+
+  watch-next:
+    image: watch-next
+    ports:
+      - 5657:5657
+    environment:
+      TZ: Etc/UTC
+      TMDB_API_KEY: your-tmdb-key
+    volumes:
+      - ./data/watch-next:/app/data
+    restart: unless-stopped
+    depends_on:
+      - watch-next-postgres

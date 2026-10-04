@@ -1,0 +1,10 @@
+pub const POSTGRES_MAX_CONNECTIONS: u16 = 20;
+pub const POSTGRES_ACQUIRE_TIMEOUT: u16 = 15;
+pub const POSTGRES_IDLE_TIMEOUT: u16 = 30;
+
+pub const SESSION_ID_COOKIE_NAME: &str = "session_id";
+pub const SESSION_EXPIRATION_DAYS: u16 = 7;
+
+pub const DB_CLEANUP_INTERNAL_MINS: u16 = 60;
+
+pub const COOKIE_KEY_FILE_NAME: &str = "cookie.key";

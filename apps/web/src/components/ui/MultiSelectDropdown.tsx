@@ -1,0 +1,57 @@
+import { useMemo } from "react";
+import { Dropdown } from "./Dropdown";
+import { CloseIcon } from "./icons/Icons";
+
+interface MultiSelectDropdownProps {
+    placeholder: string;
+    selectedKeys: Array<string>;
+    values: Map<string, string>;
+    onSelect: (key: string) => void;
+    onDeselect: (key: string) => void;
+    alignedRight?: boolean;
+}
+
+export function MultiSelectDropdown({ placeholder, selectedKeys, values, onSelect, onDeselect, alignedRight = false }: MultiSelectDropdownProps) {
+    const renderTitle = (keys: string[]) => {
+        if (keys.length === 0) {
+            return <span className="opacity-50">{placeholder}</span>
+        }
+
+        return (
+            <div className="flex flex-wrap gap-1 w-fit" onClick={e => e.stopPropagation()}>
+                {
+                    [...keys].map(key => (
+                        <div key={key} className="flex items-center gap-2 px-2 py-1 bg-background-primary rounded-md border-2 border-background-tertiary">
+                            <span className="text-sm">{values.get(key)}</span>
+                            <span onClick={() => removeSelected(key)} className="p-1 text-gray-300 hover:text-error hover:bg-error/30 rounded transition-colors">
+                                <CloseIcon className="w-4 h-4" />
+                            </span>
+                        </div>
+                    ))
+                }
+            </div>
+        );
+    }
+
+    const title = useMemo(() => {
+        return renderTitle(selectedKeys);
+    }, [selectedKeys, values]);
+
+    const innerValues = useMemo(() => {
+        const map = new Map(values);
+        selectedKeys.forEach(k => map.delete(k));
+        return map;
+    }, [values, selectedKeys]);
+
+    const onDropdownValueSelect = (key: string) => {
+        onSelect(key);
+    }
+
+    const removeSelected = (key: string) => {
+        onDeselect(key)
+    }
+
+    return (
+        <Dropdown title={title} values={innerValues} onSelect={onDropdownValueSelect} alignedRight={alignedRight} />
+    );
+};
