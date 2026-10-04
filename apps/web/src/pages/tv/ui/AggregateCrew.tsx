@@ -33,7 +33,9 @@ export function AggregateCrew({ tvSeriesId }: AggregateCrewProps) {
         return <Error message="No data returned" />;
     }
 
-    const crew = tvSeriesAggregateCreditsQuery.data.crew.map(c => ({ name: c.name, description: getJobsString(c), imgPath: c.profile_path } as PersonProps));
+    const crew = tvSeriesAggregateCreditsQuery.data.crew
+        .filter(c => c.id !== undefined)
+        .map(c => ({ id: c.id, name: c.name || "Unknown", description: getJobsString(c), imgPath: c.profile_path } as PersonProps));
 
     if (crew.length === 0) {
         return null;

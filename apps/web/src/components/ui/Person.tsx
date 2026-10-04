@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router";
+
 export interface PersonProps {
-    imgPath?: string;
+    id: number;
     name: string;
     description?: string;
+    imgPath?: string;
 }
 
 function Avatar({ name, src }: { name: string; src?: string }) {
@@ -13,9 +16,11 @@ function Avatar({ name, src }: { name: string; src?: string }) {
     );
 }
 
-export function Person({ imgPath, name, description }: PersonProps) {
+export function Person({ id, name, description, imgPath }: PersonProps) {
+    const navigate = useNavigate();
+
     return (
-        <div className="flex items-center gap-3 p-2 bg-background-primary rounded-md">
+        <a href={`/person/${id}`} onClick={e => { e.preventDefault(); navigate(`/person/${id}`); }} className="flex items-center gap-3 p-2 bg-background-primary rounded-md">
             <Avatar name={name} src={imgPath ? `https://image.tmdb.org/t/p/w185${imgPath}` : undefined} />
             <div className="min-w-0">
                 <p className="text-sm font-medium text-foreground-primary">{name}</p>
@@ -26,6 +31,6 @@ export function Person({ imgPath, name, description }: PersonProps) {
                     {description || ""}
                 </span>
             </div>
-        </div>
+        </a>
     );
 }

@@ -25,7 +25,7 @@ export function Crew({ movieId }: CrewProps) {
         return <Error message="No data returned" />;
     }
 
-    const crew = movieCreditsQuery.data.crew.map(c => ({ name: c.name, description: c.job, imgPath: c.profile_path } as PersonProps));
+    const crew = movieCreditsQuery.data.crew.map(c => ({ id: c.id, name: c.name || "Unknown", description: c.job, imgPath: c.profile_path } as PersonProps));
 
     if (crew.length === 0) {
         return null;

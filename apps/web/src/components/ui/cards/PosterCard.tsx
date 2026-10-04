@@ -36,7 +36,7 @@ export function PosterCard({ title = "", description, posterPath, href, label, l
             </div>
             <div className="flex flex-col text-center p-1">
                 <span title={displayTitle}>{displayTitle}</span>
-                {description ? <span title={description} className="opacity-75">{description}</span> : null}
+                {description ? <span title={description} className="opacity-75 whitespace-pre-line">{description}</span> : null}
             </div>
         </div>
     );

@@ -33,7 +33,9 @@ export function AggregateCast({ tvSeriesId }: AggregateCastProps) {
         return <Error message="No data returned" />;
     }
 
-    const cast = tvSeriesAggregateCreditsQuery.data.cast.map(c => ({ name: c.name, description: getRolesString(c), imgPath: c.profile_path } as PersonProps));
+    const cast = tvSeriesAggregateCreditsQuery.data.cast
+        .filter(c => c.id !== undefined)
+        .map(c => ({ id: c.id, name: c.name || "Unknown", description: getRolesString(c), imgPath: c.profile_path } as PersonProps));
 
     if (cast.length === 0) {
         return null;

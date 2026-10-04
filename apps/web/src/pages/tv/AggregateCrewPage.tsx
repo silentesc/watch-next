@@ -58,7 +58,7 @@ export function AggregateCrewPage() {
             <h2 className="text-2xl font-bold">Crew</h2>
             <div className="flex flex-col gap-3 bg-background-secondary rounded-lg">
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
-                    {crew.map((c) => <Person key={`${c.name}-${getJobsString(c)}`} name={c.name || "Unknown"} imgPath={c.profile_path} description={getJobsString(c)} />)}
+                    {crew.map((c) => c.id === undefined ? null : <Person key={`${c.name}-${getJobsString(c)}`} id={c.id} name={c.name || "Unknown"} imgPath={c.profile_path} description={getJobsString(c)} />)}
                 </div>
             </div>
         </div>

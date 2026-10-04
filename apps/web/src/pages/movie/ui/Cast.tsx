@@ -25,7 +25,7 @@ export function Cast({ movieId }: CastProps) {
         return <Error message="No data returned" />;
     }
 
-    const cast = movieCreditsQuery.data.cast.map(c => ({ name: c.name, description: c.character, imgPath: c.profile_path } as PersonProps));
+    const cast = movieCreditsQuery.data.cast.map(c => ({ id: c.id, name: c.name || "Unknown", description: c.character, imgPath: c.profile_path } as PersonProps));
 
     if (cast.length === 0) {
         return null;
