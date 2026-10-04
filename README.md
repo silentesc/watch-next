@@ -75,17 +75,17 @@ Broad plan of features, might change at any time.
   - [x] User accounts
   - [x] TMDB integration
   - [x] Custom lists for movies/shows
-
-### **v1.1** (next)
-
   - [ ] Custom tags for movies/shows
   - [ ] Mark movies/shows/seasons/episodes as watched
 
-### v?.? (future)
+### **v1.1** (next)
 
 - [ ] Notifications / Reminders
 - [ ] Personal configurable region, language, etc.
 - [ ] Refresh token so sessions don't expire after 7 days
+
+### v?.? (future)
+
 - [ ] Personal analytics dashboard
 - [ ] Personal recommendations based on analytics
 - [ ] Seasonal recommendations
