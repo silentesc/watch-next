@@ -73,8 +73,7 @@ Broad plan of features, might change at any time.
 ### **v1.0** (current)
 
   - [x] User accounts
-  - [x] Core TMDB endpoints
-  - [x] TMDB caching
+  - [x] TMDB integration
   - [x] Custom lists for movies/shows
   - [ ] Custom tags for movies/shows
   - [ ] Mark movies/shows/seasons/episodes as watched
