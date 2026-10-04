@@ -4,6 +4,7 @@ import { MovieCard } from "../cards/MovieCard";
 import { InfiniteGrid, type InfinitePage } from "./InfiniteGrid";
 import { TvSeriesCard } from "../cards/TvSeriesCard";
 import { PersonCard } from "../cards/PersonCard";
+import { CollectionCard } from "../cards/CollectionCard";
 
 interface MultiGridProps {
     infiniteQuery: UseInfiniteQueryResult<InfiniteData<InfinitePage<MultiSearchResult>, unknown>, globalThis.Error>;
@@ -19,6 +20,8 @@ const renderItem = (multi_search_result: MultiSearchResult) => {
             return <MovieCard movie={multi_search_result} />
         case "tv":
             return <TvSeriesCard tvSeries={multi_search_result} />
+        case "collection":
+            return <CollectionCard collection={multi_search_result} />
         case "person":
             return multi_search_result.id === undefined ? null : <PersonCard id={multi_search_result.id} name={multi_search_result.name || "Unknown"} posterPath={multi_search_result.profile_path} />
     }
