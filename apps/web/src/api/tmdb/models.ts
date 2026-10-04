@@ -90,6 +90,7 @@ export interface CollectionDetails {
 export type MultiSearchResult =
     | ({ media_type: "movie" }) & MovieOverview
     | ({ media_type: "tv" }) & TvSeriesOverview
+    | ({ media_type: "collection" }) & CollectionOverview
     | ({ media_type: "person" }) & PersonOverview;
 
 export type PersonCombinedCredit =

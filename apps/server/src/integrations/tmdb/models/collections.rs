@@ -6,9 +6,11 @@ pub struct CollectionOverview {
     pub backdrop_path: Option<String>,
     pub id: Option<i64>,
     pub original_language: Option<String>,
+    #[serde(alias = "original_title")]
     pub original_name: Option<String>,
     pub overview: Option<String>,
     pub poster_path: Option<String>,
+    #[serde(alias = "title")]
     pub name: Option<String>,
 }
 
