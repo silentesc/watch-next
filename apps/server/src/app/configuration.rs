@@ -83,11 +83,16 @@ pub fn setup_app_state(pool: PgPool) -> AppState {
         .expect("ALLOW_REGISTRATION env variable should be set")
         .parse()
         .expect("ALLOW_REGISTRATION env variable should be of type boolean");
+    let cookie_secure = env::var("COOKIE_SECURE")
+        .unwrap_or_else(|_| String::from("true"))
+        .parse()
+        .expect("COOKIE_SECURE env variable should be of type boolean");
 
     AppState {
         pool,
         tmdb,
         key,
         allow_registration,
+        cookie_secure,
     }
 }
