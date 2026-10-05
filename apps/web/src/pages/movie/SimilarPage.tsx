@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { useMovieDetails } from "../../hooks/tmdb/use_movie_details";
@@ -9,7 +9,7 @@ import { ArrowCircleRightIcon } from "../../components/ui/icons/Icons";
 export function SimilarPage() {
     const navigate = useNavigate();
 
-    const { id } = useParams();
+    const { id } = useParams({ from: "/movie/$id/similar" });
 
     const movieId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
 
@@ -33,7 +33,7 @@ export function SimilarPage() {
     const movieDetails = movieDetailsQuery.data;
 
     const backToMovie = () => {
-        navigate(`/movie/${movieDetails.id}`);
+        navigate({ to: "/movie/$id", params: { id: String(movieDetails.id) } });
     }
 
     return (

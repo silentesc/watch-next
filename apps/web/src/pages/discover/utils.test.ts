@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
     getMovieFiltersFromParams,
     getTvSeriesFiltersFromParams,
-    setMovieParamsFromFilters,
-    setTvSeriesParamsFromFilters,
+    getMovieSearchFromFilters,
+    getTvSeriesSearchFromFilters,
 } from "./utils";
 
 describe("discover filter query parameters", () => {
@@ -21,11 +21,7 @@ describe("discover filter query parameters", () => {
             withoutGenres: "27",
             originalLanguage: "en",
         };
-        let queryParams = new URLSearchParams();
-
-        setMovieParamsFromFilters(filters, "vote_average.desc", update => {
-            queryParams = (update as (previous: URLSearchParams) => URLSearchParams)(queryParams);
-        });
+        const queryParams = getMovieSearchFromFilters(filters, "vote_average.desc");
 
         expect(getMovieFiltersFromParams(queryParams)).toEqual(filters);
     });
@@ -45,11 +41,7 @@ describe("discover filter query parameters", () => {
             withoutGenres: undefined,
             originalLanguage: undefined,
         };
-        let queryParams = new URLSearchParams();
-
-        setTvSeriesParamsFromFilters(filters, "popularity.desc", update => {
-            queryParams = (update as (previous: URLSearchParams) => URLSearchParams)(queryParams);
-        });
+        const queryParams = getTvSeriesSearchFromFilters(filters, "popularity.desc");
 
         expect(getTvSeriesFiltersFromParams(queryParams)).toEqual(filters);
     });
@@ -68,14 +60,10 @@ describe("discover filter query parameters", () => {
             withoutGenres: undefined,
             originalLanguage: undefined,
         };
-        let queryParams = new URLSearchParams();
+        const queryParams = getMovieSearchFromFilters(filters, "popularity.desc");
 
-        setMovieParamsFromFilters(filters, "popularity.desc", update => {
-            queryParams = (update as (previous: URLSearchParams) => URLSearchParams)(queryParams);
-        });
-
-        expect(queryParams.get("runtimeFrom")).toBe("0");
-        expect(queryParams.get("tmdbRatingFrom")).toBe("0");
-        expect(queryParams.get("tmdbVoteCountFrom")).toBe("0");
+        expect(queryParams.runtimeFrom).toBe("0");
+        expect(queryParams.tmdbRatingFrom).toBe("0");
+        expect(queryParams.tmdbVoteCountFrom).toBe("0");
     });
 });

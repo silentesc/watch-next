@@ -1,174 +1,72 @@
-import type { SetURLSearchParams } from "react-router";
 import type { MovieFilters } from "./ui/MovieFilters";
 import type { TvSeriesFilters } from "./ui/TvSeriesFilters";
 import { formatDate, parseIsoDate } from "../../components/ui/DatePicker";
+import type { DiscoverMovieSearch, DiscoverTvSearch } from "../../app/search";
 
-export function getMovieFiltersFromParams(queryParams: URLSearchParams) {
-    const releaseDateFromParam = queryParams.get("releaseDateFrom");
-    const releaseDateToParam = queryParams.get("releaseDateTo");
-    const runtimeFromParam = queryParams.get("runtimeFrom");
-    const runtimeToParam = queryParams.get("runtimeTo");
-    const tmdbRatingFromParam = queryParams.get("tmdbRatingFrom");
-    const tmdbRatingToParam = queryParams.get("tmdbRatingTo");
-    const tmdbVoteCountFromParam = queryParams.get("tmdbVoteCountFrom");
-    const tmdbVoteCountToParam = queryParams.get("tmdbVoteCountTo");
-    const withGenresParam = queryParams.get("withGenres");
-    const withoutGenresParam = queryParams.get("withoutGenres");
-    const originalLanguageParam = queryParams.get("originalLanguage");
-
+export function getMovieFiltersFromParams(queryParams: DiscoverMovieSearch) {
     return {
-        releaseDateFrom: releaseDateFromParam ? parseIsoDate(releaseDateFromParam) : undefined,
-        releaseDateTo: releaseDateToParam ? parseIsoDate(releaseDateToParam) : undefined,
-        runtimeFrom: runtimeFromParam ? Number(runtimeFromParam) : undefined,
-        runtimeTo: runtimeToParam ? Number(runtimeToParam) : undefined,
-        tmdbRatingFrom: tmdbRatingFromParam ? Number(tmdbRatingFromParam) : undefined,
-        tmdbRatingTo: tmdbRatingToParam ? Number(tmdbRatingToParam) : undefined,
-        tmdbVoteCountFrom: tmdbVoteCountFromParam ? Number(tmdbVoteCountFromParam) : undefined,
-        tmdbVoteCountTo: tmdbVoteCountToParam ? Number(tmdbVoteCountToParam) : undefined,
-        withGenres: withGenresParam ? withGenresParam : undefined,
-        withoutGenres: withoutGenresParam ? withoutGenresParam : undefined,
-        originalLanguage: originalLanguageParam ? originalLanguageParam : undefined,
+        releaseDateFrom: queryParams.releaseDateFrom ? parseIsoDate(queryParams.releaseDateFrom) : undefined,
+        releaseDateTo: queryParams.releaseDateTo ? parseIsoDate(queryParams.releaseDateTo) : undefined,
+        runtimeFrom: queryParams.runtimeFrom ? Number(queryParams.runtimeFrom) : undefined,
+        runtimeTo: queryParams.runtimeTo ? Number(queryParams.runtimeTo) : undefined,
+        tmdbRatingFrom: queryParams.tmdbRatingFrom ? Number(queryParams.tmdbRatingFrom) : undefined,
+        tmdbRatingTo: queryParams.tmdbRatingTo ? Number(queryParams.tmdbRatingTo) : undefined,
+        tmdbVoteCountFrom: queryParams.tmdbVoteCountFrom ? Number(queryParams.tmdbVoteCountFrom) : undefined,
+        tmdbVoteCountTo: queryParams.tmdbVoteCountTo ? Number(queryParams.tmdbVoteCountTo) : undefined,
+        withGenres: queryParams.withGenres || undefined,
+        withoutGenres: queryParams.withoutGenres || undefined,
+        originalLanguage: queryParams.originalLanguage || undefined,
     } as MovieFilters;
 }
 
-export function getTvSeriesFiltersFromParams(queryParams: URLSearchParams) {
-    const firstAirDateFromParam = queryParams.get("firstAirDateFrom");
-    const firstAirDateToParam = queryParams.get("firstAirDateTo");
-    const runtimeFromParam = queryParams.get("runtimeFrom");
-    const runtimeToParam = queryParams.get("runtimeTo");
-    const tmdbRatingFromParam = queryParams.get("tmdbRatingFrom");
-    const tmdbRatingToParam = queryParams.get("tmdbRatingTo");
-    const tmdbVoteCountFromParam = queryParams.get("tmdbVoteCountFrom");
-    const tmdbVoteCountToParam = queryParams.get("tmdbVoteCountTo");
-    const withStatusParam = queryParams.get("withStatus");
-    const withGenresParam = queryParams.get("withGenres");
-    const withoutGenresParam = queryParams.get("withoutGenres");
-    const originalLanguageParam = queryParams.get("originalLanguage");
-
+export function getTvSeriesFiltersFromParams(queryParams: DiscoverTvSearch) {
     return {
-        firstAirDateFrom: firstAirDateFromParam ? parseIsoDate(firstAirDateFromParam) : undefined,
-        firstAirDateTo: firstAirDateToParam ? parseIsoDate(firstAirDateToParam) : undefined,
-        runtimeFrom: runtimeFromParam ? Number(runtimeFromParam) : undefined,
-        runtimeTo: runtimeToParam ? Number(runtimeToParam) : undefined,
-        tmdbRatingFrom: tmdbRatingFromParam ? Number(tmdbRatingFromParam) : undefined,
-        tmdbRatingTo: tmdbRatingToParam ? Number(tmdbRatingToParam) : undefined,
-        tmdbVoteCountFrom: tmdbVoteCountFromParam ? Number(tmdbVoteCountFromParam) : undefined,
-        tmdbVoteCountTo: tmdbVoteCountToParam ? Number(tmdbVoteCountToParam) : undefined,
-        withStatus: withStatusParam ? withStatusParam : undefined,
-        withGenres: withGenresParam ? withGenresParam : undefined,
-        withoutGenres: withoutGenresParam ? withoutGenresParam : undefined,
-        originalLanguage: originalLanguageParam ? originalLanguageParam : undefined,
+        firstAirDateFrom: queryParams.firstAirDateFrom ? parseIsoDate(queryParams.firstAirDateFrom) : undefined,
+        firstAirDateTo: queryParams.firstAirDateTo ? parseIsoDate(queryParams.firstAirDateTo) : undefined,
+        runtimeFrom: queryParams.runtimeFrom ? Number(queryParams.runtimeFrom) : undefined,
+        runtimeTo: queryParams.runtimeTo ? Number(queryParams.runtimeTo) : undefined,
+        tmdbRatingFrom: queryParams.tmdbRatingFrom ? Number(queryParams.tmdbRatingFrom) : undefined,
+        tmdbRatingTo: queryParams.tmdbRatingTo ? Number(queryParams.tmdbRatingTo) : undefined,
+        tmdbVoteCountFrom: queryParams.tmdbVoteCountFrom ? Number(queryParams.tmdbVoteCountFrom) : undefined,
+        tmdbVoteCountTo: queryParams.tmdbVoteCountTo ? Number(queryParams.tmdbVoteCountTo) : undefined,
+        withStatus: queryParams.withStatus || undefined,
+        withGenres: queryParams.withGenres || undefined,
+        withoutGenres: queryParams.withoutGenres || undefined,
+        originalLanguage: queryParams.originalLanguage || undefined,
     } as TvSeriesFilters;
 }
 
-export function setMovieParamsFromFilters(filters: MovieFilters, sortBy: string, setQueryParams: SetURLSearchParams) {
-    setQueryParams(() => {
-        const newParams = new URLSearchParams();
-
-        newParams.set("sortBy", sortBy);
-
-        if (filters.releaseDateFrom) {
-            newParams.set("releaseDateFrom", formatDate(filters.releaseDateFrom.getFullYear(), filters.releaseDateFrom.getMonth(), filters.releaseDateFrom.getDate()));
-        }
-
-        if (filters.releaseDateTo) {
-            newParams.set("releaseDateTo", formatDate(filters.releaseDateTo.getFullYear(), filters.releaseDateTo.getMonth(), filters.releaseDateTo.getDate()));
-        }
-
-        if (filters.runtimeFrom !== undefined) {
-            newParams.set("runtimeFrom", filters.runtimeFrom.toString());
-        }
-
-        if (filters.runtimeTo !== undefined) {
-            newParams.set("runtimeTo", filters.runtimeTo.toString());
-        }
-
-        if (filters.tmdbRatingFrom !== undefined) {
-            newParams.set("tmdbRatingFrom", filters.tmdbRatingFrom.toString());
-        }
-
-        if (filters.tmdbRatingTo !== undefined) {
-            newParams.set("tmdbRatingTo", filters.tmdbRatingTo.toString());
-        }
-
-        if (filters.tmdbVoteCountFrom !== undefined) {
-            newParams.set("tmdbVoteCountFrom", filters.tmdbVoteCountFrom.toString());
-        }
-
-        if (filters.tmdbVoteCountTo !== undefined) {
-            newParams.set("tmdbVoteCountTo", filters.tmdbVoteCountTo.toString());
-        }
-
-        if (filters.withGenres) {
-            newParams.set("withGenres", filters.withGenres);
-        }
-
-        if (filters.withoutGenres) {
-            newParams.set("withoutGenres", filters.withoutGenres);
-        }
-
-        if (filters.originalLanguage) {
-            newParams.set("originalLanguage", filters.originalLanguage);
-        }
-
-        return newParams;
-    });
+export function getMovieSearchFromFilters(filters: MovieFilters, sortBy: string): DiscoverMovieSearch {
+    return {
+        sortBy,
+        releaseDateFrom: filters.releaseDateFrom ? formatDate(filters.releaseDateFrom.getFullYear(), filters.releaseDateFrom.getMonth(), filters.releaseDateFrom.getDate()) : undefined,
+        releaseDateTo: filters.releaseDateTo ? formatDate(filters.releaseDateTo.getFullYear(), filters.releaseDateTo.getMonth(), filters.releaseDateTo.getDate()) : undefined,
+        runtimeFrom: filters.runtimeFrom?.toString(),
+        runtimeTo: filters.runtimeTo?.toString(),
+        tmdbRatingFrom: filters.tmdbRatingFrom?.toString(),
+        tmdbRatingTo: filters.tmdbRatingTo?.toString(),
+        tmdbVoteCountFrom: filters.tmdbVoteCountFrom?.toString(),
+        tmdbVoteCountTo: filters.tmdbVoteCountTo?.toString(),
+        withGenres: filters.withGenres,
+        withoutGenres: filters.withoutGenres,
+        originalLanguage: filters.originalLanguage,
+    };
 }
 
-export function setTvSeriesParamsFromFilters(filters: TvSeriesFilters, sortBy: string, setQueryParams: SetURLSearchParams) {
-    setQueryParams(() => {
-        const newParams = new URLSearchParams();
-
-        newParams.set("sortBy", sortBy);
-
-        if (filters.firstAirDateFrom) {
-            newParams.set("firstAirDateFrom", formatDate(filters.firstAirDateFrom.getFullYear(), filters.firstAirDateFrom.getMonth(), filters.firstAirDateFrom.getDate()));
-        }
-
-        if (filters.firstAirDateTo) {
-            newParams.set("firstAirDateTo", formatDate(filters.firstAirDateTo.getFullYear(), filters.firstAirDateTo.getMonth(), filters.firstAirDateTo.getDate()));
-        }
-
-        if (filters.runtimeFrom !== undefined) {
-            newParams.set("runtimeFrom", filters.runtimeFrom.toString());
-        }
-
-        if (filters.runtimeTo !== undefined) {
-            newParams.set("runtimeTo", filters.runtimeTo.toString());
-        }
-
-        if (filters.tmdbRatingFrom !== undefined) {
-            newParams.set("tmdbRatingFrom", filters.tmdbRatingFrom.toString());
-        }
-
-        if (filters.tmdbRatingTo !== undefined) {
-            newParams.set("tmdbRatingTo", filters.tmdbRatingTo.toString());
-        }
-
-        if (filters.tmdbVoteCountFrom !== undefined) {
-            newParams.set("tmdbVoteCountFrom", filters.tmdbVoteCountFrom.toString());
-        }
-
-        if (filters.tmdbVoteCountTo !== undefined) {
-            newParams.set("tmdbVoteCountTo", filters.tmdbVoteCountTo.toString());
-        }
-
-        if (filters.withStatus) {
-            newParams.set("withStatus", filters.withStatus);
-        }
-
-        if (filters.withGenres) {
-            newParams.set("withGenres", filters.withGenres);
-        }
-
-        if (filters.withoutGenres) {
-            newParams.set("withoutGenres", filters.withoutGenres);
-        }
-
-        if (filters.originalLanguage) {
-            newParams.set("originalLanguage", filters.originalLanguage);
-        }
-
-        return newParams;
-    });
+export function getTvSeriesSearchFromFilters(filters: TvSeriesFilters, sortBy: string): DiscoverTvSearch {
+    return {
+        sortBy,
+        firstAirDateFrom: filters.firstAirDateFrom ? formatDate(filters.firstAirDateFrom.getFullYear(), filters.firstAirDateFrom.getMonth(), filters.firstAirDateFrom.getDate()) : undefined,
+        firstAirDateTo: filters.firstAirDateTo ? formatDate(filters.firstAirDateTo.getFullYear(), filters.firstAirDateTo.getMonth(), filters.firstAirDateTo.getDate()) : undefined,
+        runtimeFrom: filters.runtimeFrom?.toString(),
+        runtimeTo: filters.runtimeTo?.toString(),
+        tmdbRatingFrom: filters.tmdbRatingFrom?.toString(),
+        tmdbRatingTo: filters.tmdbRatingTo?.toString(),
+        tmdbVoteCountFrom: filters.tmdbVoteCountFrom?.toString(),
+        tmdbVoteCountTo: filters.tmdbVoteCountTo?.toString(),
+        withStatus: filters.withStatus,
+        withGenres: filters.withGenres,
+        withoutGenres: filters.withoutGenres,
+        originalLanguage: filters.originalLanguage,
+    };
 }

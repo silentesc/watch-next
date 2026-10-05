@@ -3,8 +3,8 @@ import { Button } from "../../components/ui/Button";
 import { MovieFilters } from "./ui/MovieFilters";
 import { SortBy } from "../../components/ui/SortBy";
 import { MovieGrid } from "../../components/ui/lists/MovieGrid";
-import { useSearchParams } from "react-router";
-import { getMovieFiltersFromParams, setMovieParamsFromFilters } from "./utils";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { getMovieFiltersFromParams, getMovieSearchFromFilters } from "./utils";
 import { useDiscoverMovies } from "../../hooks/tmdb/use_discover_movies";
 
 export function DiscoverMoviePage() {
@@ -17,10 +17,11 @@ export function DiscoverMoviePage() {
         ["title", "Title"],
     ]);
 
-    const [queryParams, setQueryParams] = useSearchParams();
+    const queryParams = useSearch({ from: "/discover/movie" });
+    const navigate = useNavigate({ from: "/discover/movie" });
 
-    const currentSortBy = queryParams.get("sortBy")?.split(".")[0] || "popularity";
-    const isAsc = queryParams.get("sortBy")?.endsWith(".asc") || false;
+    const currentSortBy = queryParams.sortBy?.split(".")[0] || "popularity";
+    const isAsc = queryParams.sortBy?.endsWith(".asc") || false;
     const currentFilters = getMovieFiltersFromParams(queryParams);
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
@@ -55,16 +56,16 @@ export function DiscoverMoviePage() {
     });
 
     const onFiltersChange = (filters: MovieFilters) => {
-        setMovieParamsFromFilters(filters, `${currentSortBy}${isAsc ? ".asc" : ".desc"}`, setQueryParams);
+        navigate({ search: getMovieSearchFromFilters(filters, `${currentSortBy}${isAsc ? ".asc" : ".desc"}`) });
         setIsFiltersOpen(false);
     };
 
     const onSortByChange = (sortBy: string) => {
-        setMovieParamsFromFilters(memoizedFilters, `${sortBy}${isAsc ? ".asc" : ".desc"}`, setQueryParams);
+        navigate({ search: getMovieSearchFromFilters(memoizedFilters, `${sortBy}${isAsc ? ".asc" : ".desc"}`) });
     }
 
     const onAscChange = (isAsc: boolean) => {
-        setMovieParamsFromFilters(memoizedFilters, `${currentSortBy}${isAsc ? ".asc" : ".desc"}`, setQueryParams);
+        navigate({ search: getMovieSearchFromFilters(memoizedFilters, `${currentSortBy}${isAsc ? ".asc" : ".desc"}`) });
     }
 
     return (

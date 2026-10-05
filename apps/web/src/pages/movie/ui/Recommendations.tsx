@@ -1,7 +1,6 @@
 import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
 import type { MovieOverview } from "../../../api/tmdb/models";
-import { useNavigate } from "react-router";
 import { useMovieRecommendations } from "../../../hooks/tmdb/use_movie_recommendations";
 import { MovieHorizontalList } from "../../../components/ui/lists/MovieHorizontalList";
 
@@ -10,8 +9,6 @@ interface RecommendationsProps {
 }
 
 export function Recommendations({ movieId }: RecommendationsProps) {
-    const navigate = useNavigate();
-
     const movieRecommendationsQuery = useMovieRecommendations(movieId);
 
     if (movieRecommendationsQuery.error) {
@@ -30,14 +27,10 @@ export function Recommendations({ movieId }: RecommendationsProps) {
         return null;
     }
 
-    const seeMore = () => {
-        navigate(`/movie/${movieId}/recommendations`);
-    }
-
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Recommendations</h2>
-            <MovieHorizontalList movies={allMovies} seeMoreLinkHint={`/movie/${movieId}/recommendations`} onSeeMoreClick={seeMore} />
+            <MovieHorizontalList movies={allMovies} seeMoreLinkOptions={{ to: "/movie/$id/recommendations", params: { id: String(movieId) } }} />
         </div>
     );
 }

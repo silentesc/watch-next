@@ -1,7 +1,6 @@
 import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
 import type { TvSeriesOverview } from "../../../api/tmdb/models";
-import { useNavigate } from "react-router";
 import { TvSeriesHorizontalList } from "../../../components/ui/lists/TvSeriesHorizontalList";
 import { useSimilarTvSeries } from "../../../hooks/tmdb/use_similar_tv_series";
 
@@ -10,8 +9,6 @@ interface SimilarProps {
 }
 
 export function Similar({ tvSeriesId }: SimilarProps) {
-    const navigate = useNavigate();
-
     const similarTvSeriesQuery = useSimilarTvSeries(tvSeriesId);
 
     if (similarTvSeriesQuery.error) {
@@ -30,14 +27,10 @@ export function Similar({ tvSeriesId }: SimilarProps) {
         return null;
     }
 
-    const seeMore = () => {
-        navigate(`/tv/${tvSeriesId}/similar`);
-    }
-
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Similar</h2>
-            <TvSeriesHorizontalList tvSeries={allTvSeries} seeMoreLinkHint={`/tv/${tvSeriesId}/similar`} onSeeMoreClick={seeMore} />
+            <TvSeriesHorizontalList tvSeries={allTvSeries} seeMoreLinkOptions={{ to: "/tv/$id/similar", params: { id: String(tvSeriesId) } }} />
         </div>
     );
 }

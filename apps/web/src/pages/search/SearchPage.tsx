@@ -1,6 +1,6 @@
 import { Searchbar } from "../../components/ui/Searchbar";
 import { MovieGrid } from "../../components/ui/lists/MovieGrid";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useSearchMovie } from "../../hooks/tmdb/use_search_movie";
 import { CollectionGrid } from "../../components/ui/lists/CollectionGrid";
@@ -11,7 +11,8 @@ import { useSearchMulti } from "../../hooks/tmdb/use_search_multi";
 import { MultiGrid } from "../../components/ui/lists/MultiGrid";
 
 export function SearchPage() {
-    const [queryParams, setQueryParams] = useSearchParams();
+    const queryParams = useSearch({ from: "/search" });
+    const navigate = useNavigate({ from: "/search" });
 
     const categories = new Map([
         ["multi", "All"],
@@ -20,8 +21,8 @@ export function SearchPage() {
         ["collections", "Collections"],
     ]);
 
-    const category = queryParams.get("category") || Array.from(categories.keys())[0];
-    const text = queryParams.get("query") || "";
+    const category = queryParams.category || Array.from(categories.keys())[0];
+    const text = queryParams.query || "";
     let [tmpCategory, setTmpCategory] = useState(category);
     let [tmpText, setTmpText] = useState(text);
 
@@ -31,7 +32,7 @@ export function SearchPage() {
     const searchCollectionInfiniteQuery = useSearchCollection(category, text);
 
     const onSearch = () => {
-        setQueryParams({ category: tmpCategory, query: tmpText });
+        navigate({ search: { category: tmpCategory, query: tmpText } });
     }
 
     useEffect(() => {

@@ -6,7 +6,7 @@ import { login } from "../../api/auth";
 import { Loading } from "../../components/ui/Loading";
 import { Info } from "../../components/ui/Info";
 import { Error } from "../../components/ui/Error";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { InputPassword } from "../../components/ui/InputPassword";
 import { Logo } from "../../components/ui/Logo";
 
@@ -18,7 +18,7 @@ export function LoginPage() {
 
     const mutation = useMutation({
         mutationFn: (data: { username: string, password: string }) => login(data.username, data.password),
-        onSuccess: () => navigate("/"),
+        onSuccess: () => navigate({ to: "/" }),
     });
 
     // Login

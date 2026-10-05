@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams } from "@tanstack/react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { Collection } from "./ui/Collection";
@@ -14,7 +14,7 @@ import { CustomListPicker } from "../../components/ui/CustomListPicker";
 import { Poster } from "../../components/ui/Poster";
 
 export function MovieDetailsPage() {
-    const { id } = useParams();
+    const { id } = useParams({ from: "/movie/$id" });
 
     const movieId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
 
