@@ -8,5 +8,5 @@ export interface PersonCardProps {
 }
 
 export function PersonCard({ id, name, description, posterPath }: PersonCardProps) {
-    return <PosterCard title={name} description={description} posterPath={posterPath} href={`/person/${id}`} label="PERSON" labelClassName="bg-orange-600/80" />;
+    return <PosterCard title={name} description={description} posterPath={posterPath} link={{ to: "/person/$id", params: { id: String(id) } }} label="PERSON" labelClassName="bg-orange-600/80" />;
 }

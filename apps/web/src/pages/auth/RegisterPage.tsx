@@ -8,7 +8,7 @@ import { Loading } from "../../components/ui/Loading";
 import { Info } from "../../components/ui/Info";
 import { InputPassword } from "../../components/ui/InputPassword";
 import { Logo } from "../../components/ui/Logo";
-import { Link } from "react-router";
+import { Link } from "@tanstack/react-router";
 
 export function RegisterPage() {
     const [username, setUsername] = useState("");

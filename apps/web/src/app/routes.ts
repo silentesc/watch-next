@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
 import { App } from "./App";
 import { LoginPage } from "../pages/auth/LoginPage";
 import { RegisterPage } from "../pages/auth/RegisterPage";
@@ -23,60 +23,40 @@ import { AggregateCrewPage } from "../pages/tv/AggregateCrewPage";
 import { CustomListsOverviewPage } from "../pages/custom-lists/CustomListsOverviewPage";
 import { CustomListPage } from "../pages/custom-lists/CustomListPage";
 import { PersonPage } from "../pages/people/PersonPage";
+import { validateStringSearch, type DiscoverMovieSearch, type DiscoverTvSearch, type PersonPageSearch, type SearchPageSearch } from "./search";
 
-export const router = createBrowserRouter([
-    {
-        path: "/",
-        Component: App,
-        children: [
-            { index: true, Component: HomePage },
-            { path: "login", Component: LoginPage },
-            { path: "register", Component: RegisterPage },
-            {
-                path: "custom-lists",
-                children: [
-                    { index: true, Component: CustomListsOverviewPage },
-                    { path: ":id", Component: CustomListPage },
-                ]
-            },
-            {
-                path: "discover",
-                children: [
-                    { index: true, Component: DiscoverPage },
-                    { path: "movie", Component: DiscoverMoviePage },
-                    { path: "tv", Component: DiscoverTvSeriesPage },
-                    {
-                        path: "trending",
-                        children: [
-                            { path: "movie/:timeWindow", Component: TrendingMoviePage },
-                            { path: "tv/:timeWindow", Component: TrendingTvSeriesPage },
-                        ]
-                    },
-                ]
-            },
-            {
-                path: "/movie/:id",
-                children: [
-                    { index: true, Component: MovieDetailsPage },
-                    { path: "crew", Component: CrewPage },
-                    { path: "cast", Component: CastPage },
-                    { path: "recommendations", Component: RecommendationsPage },
-                    { path: "similar", Component: SimilarPage },
-                ]
-            },
-            {
-                path: "/tv/:id",
-                children: [
-                    { index: true, Component: TvSeriesDetailsPage },
-                    { path: "aggregate_crew", Component: AggregateCrewPage },
-                    { path: "aggregate_cast", Component: AggregateCastPage },
-                    { path: "recommendations", Component: TvSeriesRecommendationsPage },
-                    { path: "similar", Component: TvSeriesSimilarPage },
-                ]
-            },
-            { path: "search", Component: SearchPage },
-            { path: "collection/:id", Component: CollectionDetailsPage },
-            { path: "person/:id", Component: PersonPage },
-        ],
-    },
-]);
+const rootRoute = createRootRoute({ component: App });
+
+const routes = [
+    createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/login", component: LoginPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/register", component: RegisterPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/custom-lists", component: CustomListsOverviewPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/custom-lists/$id", component: CustomListPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/discover", component: DiscoverPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/discover/movie", validateSearch: (search) => validateStringSearch<DiscoverMovieSearch>(search), component: DiscoverMoviePage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/discover/tv", validateSearch: (search) => validateStringSearch<DiscoverTvSearch>(search), component: DiscoverTvSeriesPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/discover/trending/movie/$timeWindow", component: TrendingMoviePage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/discover/trending/tv/$timeWindow", component: TrendingTvSeriesPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/movie/$id", component: MovieDetailsPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/movie/$id/crew", component: CrewPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/movie/$id/cast", component: CastPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/movie/$id/recommendations", component: RecommendationsPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/movie/$id/similar", component: SimilarPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/tv/$id", component: TvSeriesDetailsPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/tv/$id/aggregate_crew", component: AggregateCrewPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/tv/$id/aggregate_cast", component: AggregateCastPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/tv/$id/recommendations", component: TvSeriesRecommendationsPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/tv/$id/similar", component: TvSeriesSimilarPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/search", validateSearch: (search) => validateStringSearch<SearchPageSearch>(search), component: SearchPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/collection/$id", component: CollectionDetailsPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/person/$id", validateSearch: (search) => validateStringSearch<PersonPageSearch>(search), component: PersonPage }),
+];
+
+export const router = createRouter({ routeTree: rootRoute.addChildren(routes), defaultPreload: "intent", scrollRestoration: true });
+
+declare module "@tanstack/react-router" {
+    interface Register {
+        router: typeof router;
+    }
+}

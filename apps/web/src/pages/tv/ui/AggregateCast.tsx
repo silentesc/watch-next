@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import { Error } from "../../../components/ui/Error";
 import { Loading } from "../../../components/ui/Loading";
 import { type PersonProps } from "../../../components/ui/Person";
@@ -19,8 +18,6 @@ export const getRolesString = (cast: AggregateCast) => {
 }
 
 export function AggregateCast({ tvSeriesId }: AggregateCastProps) {
-    const navigate = useNavigate();
-
     const tvSeriesAggregateCreditsQuery = useTvSeriesAggregateCredits(tvSeriesId);
 
     if (tvSeriesAggregateCreditsQuery.error) {
@@ -44,7 +41,7 @@ export function AggregateCast({ tvSeriesId }: AggregateCastProps) {
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Cast</h2>
-            <PersonHorizontalList people={cast} maxPeopleDisplayed={isScreenBig() ? 12 : 6} seeMoreLinkHint={`/tv/${tvSeriesId}/aggregate_cast`} onSeeMoreClick={() => navigate(`/tv/${tvSeriesId}/aggregate_cast`)} />
+            <PersonHorizontalList people={cast} maxPeopleDisplayed={isScreenBig() ? 12 : 6} seeMoreLinkOptions={{ to: "/tv/$id/aggregate_cast", params: { id: String(tvSeriesId) } }} />
         </div>
     );
 }

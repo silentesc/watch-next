@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams } from "@tanstack/react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { MovieCard } from "../../components/ui/cards/MovieCard";
@@ -9,7 +9,7 @@ import { CustomListPicker } from "../../components/ui/CustomListPicker";
 import { Poster } from "../../components/ui/Poster";
 
 export function CollectionDetailsPage() {
-    const { id } = useParams();
+    const { id } = useParams({ from: "/collection/$id" });
 
     const collectionId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
 

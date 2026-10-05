@@ -1,14 +1,15 @@
-import { ArrowCircleRightIcon } from "../icons/Icons";
+import { Link } from "@tanstack/react-router";
 import { Person, type PersonProps } from "../Person";
+import { ArrowCircleRightIcon } from "../icons/Icons";
+import type { SeeMoreLinkOptions } from "./SeeMoreHorizontalList";
 
 interface PersonHorizontalListProps {
     people: Array<PersonProps>;
     maxPeopleDisplayed: number;
-    seeMoreLinkHint: string;
-    onSeeMoreClick: () => void;
+    seeMoreLinkOptions: SeeMoreLinkOptions;
 }
 
-export function PersonHorizontalList({ people, maxPeopleDisplayed, seeMoreLinkHint, onSeeMoreClick }: PersonHorizontalListProps) {
+export function PersonHorizontalList({ people, maxPeopleDisplayed, seeMoreLinkOptions }: PersonHorizontalListProps) {
     if (!people || people.length < 1) {
         return null;
     }
@@ -30,12 +31,10 @@ export function PersonHorizontalList({ people, maxPeopleDisplayed, seeMoreLinkHi
                             <div className="blur-sm select-none pointer-events-none">
                                 <Person key={`${last.name}-${last.description}`} id={last.id} name={last.name} imgPath={last.imgPath} description={last.description} />
                             </div>
-                            <a href={seeMoreLinkHint} onClick={e => { e.preventDefault(); onSeeMoreClick(); }}>
-                                <div className="absolute top-1/2 left-1/2 -translate-1/2 cursor-pointer flex gap-1 items-center">
-                                    <span className="font-semibold">See more</span>
-                                    <ArrowCircleRightIcon className="w-5" />
-                                </div>
-                            </a>
+                            <Link {...seeMoreLinkOptions} className="absolute top-1/2 left-1/2 -translate-1/2 cursor-pointer flex gap-1 items-center">
+                                <span className="font-semibold">See more</span>
+                                <ArrowCircleRightIcon className="w-5" />
+                            </Link>
                         </div>
                     ) : null
                 }

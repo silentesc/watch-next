@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router";
+import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { Navbar } from "../components/layouts/Navbar";
 import { MenuIcon } from "../components/ui/icons/Icons";
 import { LogoText } from "../components/ui/LogoText";
@@ -10,7 +10,7 @@ export const isScreenBig = () => {
 }
 
 export function App() {
-    const location = useLocation();
+    const pathname = useRouterState({ select: state => state.location.pathname });
     const isLoggedIn = useAuthStore(state => state.isLoggedIn);
     const [isNavbarOpen, setIsNavbarOpen] = useState(() => isLoggedIn ? isScreenBig() : false);
 
@@ -24,7 +24,7 @@ export function App() {
         if (isNavbarOpen && !isScreenBig()) {
             setIsNavbarOpen(false);
         }
-    }, [location]);
+    }, [pathname]);
 
     return (
         <div>

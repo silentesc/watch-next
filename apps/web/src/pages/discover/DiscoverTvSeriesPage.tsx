@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import { Button } from "../../components/ui/Button";
 import { SortBy } from "../../components/ui/SortBy";
-import { useSearchParams } from "react-router";
-import { getTvSeriesFiltersFromParams, setTvSeriesParamsFromFilters } from "./utils";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { getTvSeriesFiltersFromParams, getTvSeriesSearchFromFilters } from "./utils";
 import { useDiscoverTvSeries } from "../../hooks/tmdb/use_discover_tv_series";
 import { TvSeriesFilters } from "./ui/TvSeriesFilters";
 import { TvSeriesGrid } from "../../components/ui/lists/TvSeriesGrid";
@@ -16,10 +16,11 @@ export function DiscoverTvSeriesPage() {
         ["name", "Name"],
     ]);
 
-    const [queryParams, setQueryParams] = useSearchParams();
+    const queryParams = useSearch({ from: "/discover/tv" });
+    const navigate = useNavigate({ from: "/discover/tv" });
 
-    const currentSortBy = queryParams.get("sortBy")?.split(".")[0] || "popularity";
-    const isAsc = queryParams.get("sortBy")?.endsWith(".asc") || false;
+    const currentSortBy = queryParams.sortBy?.split(".")[0] || "popularity";
+    const isAsc = queryParams.sortBy?.endsWith(".asc") || false;
     const currentFilters = getTvSeriesFiltersFromParams(queryParams);
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
@@ -56,16 +57,16 @@ export function DiscoverTvSeriesPage() {
     });
 
     const onFiltersChange = (filters: TvSeriesFilters) => {
-        setTvSeriesParamsFromFilters(filters, `${currentSortBy}${isAsc ? ".asc" : ".desc"}`, setQueryParams);
+        navigate({ search: getTvSeriesSearchFromFilters(filters, `${currentSortBy}${isAsc ? ".asc" : ".desc"}`) });
         setIsFiltersOpen(false);
     };
 
     const onSortByChange = (sortBy: string) => {
-        setTvSeriesParamsFromFilters(memoizedFilters, `${sortBy}${isAsc ? ".asc" : ".desc"}`, setQueryParams);
+        navigate({ search: getTvSeriesSearchFromFilters(memoizedFilters, `${sortBy}${isAsc ? ".asc" : ".desc"}`) });
     }
 
     const onAscChange = (isAsc: boolean) => {
-        setTvSeriesParamsFromFilters(memoizedFilters, `${currentSortBy}${isAsc ? ".asc" : ".desc"}`, setQueryParams);
+        navigate({ search: getTvSeriesSearchFromFilters(memoizedFilters, `${currentSortBy}${isAsc ? ".asc" : ".desc"}`) });
     }
 
     return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { useCustomLists } from "../../hooks/customLists/use_custom_lists";
@@ -17,7 +17,7 @@ import { Popup } from "../../components/ui/Popup";
 import { PencilIcon, TrashIcon } from "../../components/ui/icons/Icons";
 
 export function CustomListPage() {
-    const { id } = useParams();
+    const { id } = useParams({ from: "/custom-lists/$id" });
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
@@ -63,7 +63,7 @@ export function CustomListPage() {
     };
 
     const confirmRemoveList = () => {
-        deleteCustomList.mutate(listId, { onSuccess: () => navigate("/custom-lists") });
+        deleteCustomList.mutate(listId, { onSuccess: () => navigate({ to: "/custom-lists" }) });
     };
 
     return (

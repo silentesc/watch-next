@@ -2,7 +2,6 @@ import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
 import type { MovieOverview } from "../../../api/tmdb/models";
 import { useSimilarMovies } from "../../../hooks/tmdb/use_similar_movies";
-import { useNavigate } from "react-router";
 import { MovieHorizontalList } from "../../../components/ui/lists/MovieHorizontalList";
 
 interface SimilarProps {
@@ -10,8 +9,6 @@ interface SimilarProps {
 }
 
 export function Similar({ movieId }: SimilarProps) {
-    const navigate = useNavigate();
-
     const similarMoviesQuery = useSimilarMovies(movieId);
 
     if (similarMoviesQuery.error) {
@@ -30,14 +27,10 @@ export function Similar({ movieId }: SimilarProps) {
         return null;
     }
 
-    const seeMore = () => {
-        navigate(`/movie/${movieId}/similar`);
-    }
-
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Similar</h2>
-            <MovieHorizontalList movies={allMovies} seeMoreLinkHint={`/movie/${movieId}/similar`} onSeeMoreClick={seeMore} />
+            <MovieHorizontalList movies={allMovies} seeMoreLinkOptions={{ to: "/movie/$id/similar", params: { id: String(movieId) } }} />
         </div>
     );
 }

@@ -1,7 +1,6 @@
 import { Loading } from "../../../components/ui/Loading";
 import { Error } from "../../../components/ui/Error";
 import type { TvSeriesOverview } from "../../../api/tmdb/models";
-import { useNavigate } from "react-router";
 import { useTvSeriesRecommendations } from "../../../hooks/tmdb/use_tv_series_recommendations";
 import { TvSeriesHorizontalList } from "../../../components/ui/lists/TvSeriesHorizontalList";
 
@@ -10,8 +9,6 @@ interface RecommendationsProps {
 }
 
 export function Recommendations({ tvSeriesId }: RecommendationsProps) {
-    const navigate = useNavigate();
-
     const tvSeriesRecommendationsQuery = useTvSeriesRecommendations(tvSeriesId);
 
     if (tvSeriesRecommendationsQuery.error) {
@@ -30,14 +27,10 @@ export function Recommendations({ tvSeriesId }: RecommendationsProps) {
         return null;
     }
 
-    const seeMore = () => {
-        navigate(`/tv/${tvSeriesId}/recommendations`);
-    }
-
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Recommendations</h2>
-            <TvSeriesHorizontalList tvSeries={allTvSeries} seeMoreLinkHint={`/tv/${tvSeriesId}/recommendations`} onSeeMoreClick={seeMore} />
+            <TvSeriesHorizontalList tvSeries={allTvSeries} seeMoreLinkOptions={{ to: "/tv/$id/recommendations", params: { id: String(tvSeriesId) } }} />
         </div>
     );
 }

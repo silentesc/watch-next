@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import type { Me } from "../../api/me"
 import { logout } from "../../api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { ChevronDownIcon } from "../ui/icons/Icons";
 
 interface MeDropdownProps {
@@ -24,7 +24,7 @@ export function MeDropdown({ me }: MeDropdownProps) {
         mutationFn: logout,
         onSuccess: () => {
             queryClient.removeQueries();
-            navigate("/login");
+            navigate({ to: "/login" });
         }
     });
 

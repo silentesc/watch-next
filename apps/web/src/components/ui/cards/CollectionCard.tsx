@@ -6,5 +6,5 @@ interface CollectionCardProps {
 }
 
 export function CollectionCard({ collection }: CollectionCardProps) {
-    return <PosterCard title={collection.name} posterPath={collection.poster_path} href={`/collection/${collection.id}`} label="COLLECTION" labelClassName="bg-green-600/80" />;
+    return <PosterCard title={collection.name} posterPath={collection.poster_path} link={{ to: "/collection/$id", params: { id: String(collection.id) } }} label="COLLECTION" labelClassName="bg-green-600/80" />;
 }
