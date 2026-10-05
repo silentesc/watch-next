@@ -9,7 +9,7 @@ export function Navbar() {
     const me = useMe();
 
     return (
-        <nav className="min-h-screen flex flex-col gap-6 p-6">
+        <nav className="min-h-full flex flex-col gap-6 p-6">
             {/* Logo */}
             <Link to="/" className="w-fit">
                 <LogoText width={35} height={35} />

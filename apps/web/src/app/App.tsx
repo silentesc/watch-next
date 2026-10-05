@@ -15,9 +15,12 @@ export function App() {
     const [isNavbarOpen, setIsNavbarOpen] = useState(() => isLoggedIn ? isScreenBig() : false);
 
     useEffect(() => {
-        if (isLoggedIn) {
-            setIsNavbarOpen(isScreenBig());
-        }
+        const desktop = window.matchMedia("(min-width: 768px)");
+        const syncNavbar = () => setIsNavbarOpen(isLoggedIn && desktop.matches);
+
+        syncNavbar();
+        desktop.addEventListener("change", syncNavbar);
+        return () => desktop.removeEventListener("change", syncNavbar);
     }, [isLoggedIn]);
 
     useEffect(() => {
@@ -26,26 +29,54 @@ export function App() {
         }
     }, [pathname]);
 
+    useEffect(() => {
+        const desktop = window.matchMedia("(min-width: 768px)");
+        const previousOverflow = document.body.style.overflow;
+        const syncScrollLock = () => {
+            document.body.style.overflow = isNavbarOpen && isLoggedIn && !desktop.matches
+                ? "hidden"
+                : previousOverflow;
+        };
+
+        syncScrollLock();
+        desktop.addEventListener("change", syncScrollLock);
+
+        return () => {
+            desktop.removeEventListener("change", syncScrollLock);
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [isNavbarOpen, isLoggedIn]);
+
     return (
         <div>
             {
                 isLoggedIn ? (
                     <>
-                        <aside className={`${isNavbarOpen ? "block" : "hidden"} fixed left-0 top-0 z-40 w-75 h-screen bg-background-primary`}>
+                        <div
+                            className={`md:hidden fixed inset-0 z-30 bg-background-secondary/50 transition-opacity duration-300 ${isNavbarOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+                            onClick={() => setIsNavbarOpen(false)}
+                        />
+                        <aside
+                            inert={!isNavbarOpen}
+                            className={`fixed inset-y-0 left-0 z-40 w-75 overflow-y-auto bg-background-primary transition-transform duration-300 ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"}`}
+                        >
                             <Navbar />
                         </aside>
-                        <div className={`${isNavbarOpen && isLoggedIn ? "left-60 md:left-75" : "left-0"} fixed right-0 top-0 z-50 h-16 flex items-center gap-3 bg-background-primary p-4`}>
-                            <div className="w-fit p-1 cursor-pointer" onClick={() => setIsNavbarOpen(!isNavbarOpen)}>
+                        <header className={`${isNavbarOpen && isLoggedIn ? "left-60 md:left-75" : "left-0"} fixed right-0 top-0 z-50 h-16 flex items-center gap-3 bg-background-primary p-4 transition-[left] duration-300`}>
+                            <button className="w-fit p-1 cursor-pointer" onClick={() => setIsNavbarOpen(open => !open)}>
                                 <MenuIcon className="w-5" />
-                            </div>
+                            </button>
                             {!isNavbarOpen ? <Link to="/" className="w-fit"><LogoText width={35} height={35} /></Link> : null}
-                        </div>
+                        </header>
                     </>
                 ) : (
                     null
                 )
             }
-            <main className={`${isNavbarOpen && isLoggedIn ? "md:ml-75 h-screen md:min-h-screen overflow-hidden md:overflow-auto pointer-events-none md:pointer-events-auto opacity-50 md:opacity-100" : ""} p-6 pt-22`}>
+            <main
+                inert={isNavbarOpen && isLoggedIn && !isScreenBig()}
+                className={`${isNavbarOpen && isLoggedIn ? "md:ml-75" : ""} p-6 ${isLoggedIn ? "pt-22" : "pt-6"}`}
+            >
                 <Outlet />
             </main>
         </div>
