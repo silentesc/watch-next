@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "@tanstack/react-router";
 import type { MovieDetails } from "../../../api/tmdb/models";
 import { Button } from "../../../components/ui/Button";
 
@@ -10,7 +10,7 @@ export function Collection({ movieDetails }: CollectionProps) {
     const navigate = useNavigate();
 
     const viewCollection = () => {
-        navigate(`/collection/${movieDetails.belongs_to_collection!.id}`);
+        navigate({ to: "/collection/$id", params: { id: String(movieDetails.belongs_to_collection!.id) } });
     }
 
     return (

@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router";
+import { Link } from "@tanstack/react-router";
 import { useMe } from "../../hooks/use_me";
 import { Loading } from "../ui/Loading";
 import { MeDropdown } from "./MeDropdown";
@@ -9,7 +9,7 @@ export function Navbar() {
     const me = useMe();
 
     return (
-        <nav className="min-h-screen flex flex-col gap-6 p-6">
+        <nav className="min-h-full flex flex-col gap-6 p-6">
             {/* Logo */}
             <Link to="/" className="w-fit">
                 <LogoText width={35} height={35} />
@@ -18,15 +18,15 @@ export function Navbar() {
             <section className="flex flex-col gap-3">
                 <h2 className="font-semibold text-foreground-secondary">Discovery</h2>
                 <div className="flex flex-col gap-1">
-                    <NavLink className="ml-1 text-2xl" to="/discover">Discover</NavLink>
-                    <NavLink className="ml-1 text-2xl" to="/search">Search</NavLink>
+                    <Link className="ml-1 text-2xl" to="/discover">Discover</Link>
+                    <Link className="ml-1 text-2xl" to="/search">Search</Link>
                 </div>
             </section>
             {/* Library Links */}
             <section className="flex flex-col gap-3">
                 <h2 className="font-semibold text-foreground-secondary">Library</h2>
                 <div className="flex flex-col gap-1">
-                    <NavLink className="ml-1 text-2xl" to="/custom-lists">Lists</NavLink>
+                    <Link className="ml-1 text-2xl" to="/custom-lists">Lists</Link>
                 </div>
             </section>
             {/* Auth & Account */}

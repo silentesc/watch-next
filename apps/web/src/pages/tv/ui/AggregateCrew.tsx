@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import { Error } from "../../../components/ui/Error";
 import { Loading } from "../../../components/ui/Loading";
 import { type PersonProps } from "../../../components/ui/Person";
@@ -19,8 +18,6 @@ export const getJobsString = (crew: AggregateCrew) => {
 }
 
 export function AggregateCrew({ tvSeriesId }: AggregateCrewProps) {
-    const navigate = useNavigate();
-
     const tvSeriesAggregateCreditsQuery = useTvSeriesAggregateCredits(tvSeriesId);
 
     if (tvSeriesAggregateCreditsQuery.error) {
@@ -44,7 +41,7 @@ export function AggregateCrew({ tvSeriesId }: AggregateCrewProps) {
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Crew</h2>
-            <PersonHorizontalList people={crew} maxPeopleDisplayed={isScreenBig() ? 12 : 6} seeMoreLinkHint={`/tv/${tvSeriesId}/aggregate_crew`} onSeeMoreClick={() => navigate(`/tv/${tvSeriesId}/aggregate_crew`)} />
+            <PersonHorizontalList people={crew} maxPeopleDisplayed={isScreenBig() ? 12 : 6} seeMoreLinkOptions={{ to: "/tv/$id/aggregate_crew", params: { id: String(tvSeriesId) } }} />
         </div>
     );
 }

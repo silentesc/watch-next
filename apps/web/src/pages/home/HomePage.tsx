@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { SubmitEvent } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { CustomListCard } from "../../components/ui/cards/CustomListCard";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
@@ -24,8 +24,7 @@ export function HomePage() {
     const submitSearch = (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
         const query = search.trim();
-        if (query) navigate(`/search?query=${encodeURIComponent(query)}`);
-        else navigate("/search");
+        navigate({ to: "/search", search: query ? { query } : {} });
     };
 
     return (
@@ -43,10 +42,10 @@ export function HomePage() {
             </section>
 
             <section>
-                <a href="/discover" className="my-4 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); navigate("/discover") }}>
+                <Link to="/discover" className="my-4 flex gap-1 items-center cursor-pointer w-max">
                     <span className="text-2xl font-bold">Trending today</span>
                     <ArrowCircleRightIcon className="w-7" />
-                </a>
+                </Link>
                 <div className="flex flex-col gap-8">
                     <div>
                         <h2 className="mb-3 text-lg font-semibold">Movies</h2>
@@ -55,7 +54,7 @@ export function HomePage() {
                         ) : trendingMoviesQuery.isLoading ? (
                             <Loading />
                         ) : trendingMoviesQuery.data ? (
-                            <MovieHorizontalList movies={trendingMoviesQuery.data.pages[0].results} seeMoreLinkHint="/discover/trending/movie/day" onSeeMoreClick={() => navigate("/discover/trending/movie/day")} />
+                            <MovieHorizontalList movies={trendingMoviesQuery.data.pages[0].results} seeMoreLinkOptions={{ to: "/discover/trending/movie/$timeWindow", params: { timeWindow: "day" } }} />
                         ) : <Error message="No data returned" />}
                     </div>
                     <div>
@@ -65,17 +64,17 @@ export function HomePage() {
                         ) : trendingTvSeriesQuery.isLoading ? (
                             <Loading />
                         ) : trendingTvSeriesQuery.data ? (
-                            <TvSeriesHorizontalList tvSeries={trendingTvSeriesQuery.data.pages[0].results} seeMoreLinkHint="/discover/trending/tv/day" onSeeMoreClick={() => navigate("/discover/trending/tv/day")} />
+                            <TvSeriesHorizontalList tvSeries={trendingTvSeriesQuery.data.pages[0].results} seeMoreLinkOptions={{ to: "/discover/trending/tv/$timeWindow", params: { timeWindow: "day" } }} />
                         ) : <Error message="No data returned" />}
                     </div>
                 </div>
             </section>
 
             <section className="border-background-tertiary pt-8">
-                <a href="/custom-lists" className="my-4 flex gap-1 items-center cursor-pointer w-max" onClick={e => { e.preventDefault(); navigate("/custom-lists") }}>
+                <Link to="/custom-lists" className="my-4 flex gap-1 items-center cursor-pointer w-max">
                     <span className="text-2xl font-bold">Your lists</span>
                     <ArrowCircleRightIcon className="w-7" />
-                </a>
+                </Link>
                 {
                     customListsQuery.error ? (
                         <Error message={customListsQuery.error.message} />
@@ -92,12 +91,12 @@ export function HomePage() {
                                         <div className="blur-sm pointer-events-none">
                                             <CustomListCard customList={customListsQuery.data[2]} />
                                         </div>
-                                        <a href={"/custom-lists"} onClick={(e) => { e.preventDefault(); navigate("/custom-lists") }}>
+                                        <Link to="/custom-lists">
                                             <div className="absolute top-1/2 left-1/2 -translate-1/2 cursor-pointer flex flex-col gap-1 items-center">
                                                 <span className="font-semibold text-nowrap">See more</span>
                                                 <ArrowCircleRightIcon className="w-7" />
                                             </div>
-                                        </a>
+                                        </Link>
                                     </div>
                                 ) : null}
                             </div>

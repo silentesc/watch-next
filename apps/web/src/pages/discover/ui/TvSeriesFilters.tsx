@@ -101,9 +101,9 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
             tmdbRatingTo,
             tmdbVoteCountFrom,
             tmdbVoteCountTo,
-            withStatus: withStatus.join(","),
-            withGenres: withGenres.join(","),
-            withoutGenres: withoutGenres.join(","),
+            withStatus: withStatus.join(",") || undefined,
+            withGenres: withGenres.join(",") || undefined,
+            withoutGenres: withoutGenres.join(",") || undefined,
             originalLanguage,
         };
 

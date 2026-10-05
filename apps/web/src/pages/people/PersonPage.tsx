@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router";
+import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { usePersonDetails } from "../../hooks/tmdb/use_person_details";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
@@ -69,7 +69,11 @@ function CreditGrid({ credits }: { credits: PersonCombinedCredit[] }) {
                 const date = creditDate(credit);
                 const role = creditRole(credit);
                 const description = [date?.split("-")[0], role].filter(Boolean).join("\n");
-                const href = credit.id ? `/${credit.media_type}/${credit.id}` : undefined;
+                const link = credit.id
+                    ? credit.media_type === "movie"
+                        ? { to: "/movie/$id" as const, params: { id: String(credit.id) } }
+                        : { to: "/tv/$id" as const, params: { id: String(credit.id) } }
+                    : undefined;
 
                 return (
                     <PosterCard
@@ -77,7 +81,7 @@ function CreditGrid({ credits }: { credits: PersonCombinedCredit[] }) {
                         title={title}
                         description={description}
                         posterPath={credit.poster_path}
-                        href={href}
+                        link={link}
                         label={credit.media_type === "movie" ? "MOVIE" : "SERIES"}
                         labelClassName={credit.media_type === "movie" ? "bg-blue-600/80" : "bg-purple-600/80"}
                     />
@@ -88,13 +92,14 @@ function CreditGrid({ credits }: { credits: PersonCombinedCredit[] }) {
 }
 
 export function PersonPage() {
-    const { id } = useParams();
+    const { id } = useParams({ from: "/person/$id" });
 
     const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(true);
-    const [queryParams, setQueryParams] = useSearchParams();
-    const filter = queryParams.get("filter") || "all";
-    const sortBy = queryParams.get("sortBy")?.split(".")[0] || "vote_count";
-    const isSortAscending = queryParams.get("sortBy")?.endsWith(".asc") || false;
+    const queryParams = useSearch({ from: "/person/$id" });
+    const navigate = useNavigate({ from: "/person/$id" });
+    const filter = queryParams.filter || "all";
+    const sortBy = queryParams.sortBy?.split(".")[0] || "vote_count";
+    const isSortAscending = queryParams.sortBy?.endsWith(".asc") || false;
 
     const personId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
     const personDetailsQuery = usePersonDetails(personId);
@@ -117,25 +122,13 @@ export function PersonPage() {
     crew = sortCredits(crew, sortBy, isSortAscending);
 
     const onFilterChange = (nextFilter: string) => {
-        setQueryParams(previousParams => {
-            const nextParams = new URLSearchParams(previousParams);
-            nextParams.set("filter", nextFilter)
-            return nextParams;
-        });
+        navigate({ search: previous => ({ ...previous, filter: nextFilter }) });
     };
     const onSortByChange = (nextSortBy: string) => {
-        setQueryParams(previousParams => {
-            const nextParams = new URLSearchParams(previousParams);
-            nextParams.set("sortBy", `${nextSortBy}${isSortAscending ? ".asc" : ".desc"}`);
-            return nextParams;
-        });
+        navigate({ search: previous => ({ ...previous, sortBy: `${nextSortBy}${isSortAscending ? ".asc" : ".desc"}` }) });
     };
     const onAscChange = (nextIsAscending: boolean) => {
-        setQueryParams(previousParams => {
-            const nextParams = new URLSearchParams(previousParams);
-            nextParams.set("sortBy", `${sortBy}${nextIsAscending ? ".asc" : ".desc"}`);
-            return nextParams;
-        });
+        navigate({ search: previous => ({ ...previous, sortBy: `${sortBy}${nextIsAscending ? ".asc" : ".desc"}` }) });
     };
 
     return (

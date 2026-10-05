@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { useMovieCredits } from "../../hooks/tmdb/use_credits";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
@@ -9,7 +9,7 @@ import { ArrowCircleRightIcon } from "../../components/ui/icons/Icons";
 export function CrewPage() {
     const navigate = useNavigate();
 
-    const { id } = useParams();
+    const { id } = useParams({ from: "/movie/$id/crew" });
 
     const movieId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
 
@@ -44,7 +44,7 @@ export function CrewPage() {
     const crew = creditsQuery.data.crew;
 
     const backToMovie = () => {
-        navigate(`/movie/${movieDetails.id}`);
+        navigate({ to: "/movie/$id", params: { id: String(movieDetails.id) } });
     }
 
     return (

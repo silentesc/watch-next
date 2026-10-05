@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { useTvSeriesDetails } from "../../hooks/tmdb/use_tv_series_details";
@@ -9,7 +9,7 @@ import { ArrowCircleRightIcon } from "../../components/ui/icons/Icons";
 export function TvSeriesRecommendationsPage() {
     const navigate = useNavigate();
 
-    const { id } = useParams();
+    const { id } = useParams({ from: "/tv/$id/recommendations" });
 
     const tvSeriesId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
 
@@ -33,7 +33,7 @@ export function TvSeriesRecommendationsPage() {
     const tvSeriesDetails = tvSeriesDetailsQuery.data;
 
     const backToTvSeries = () => {
-        navigate(`/tv/${tvSeriesDetails.id}`);
+        navigate({ to: "/tv/$id", params: { id: String(tvSeriesDetails.id) } });
     }
 
     return (

@@ -1,18 +1,18 @@
 import { MovieGrid } from "../../components/ui/lists/MovieGrid";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { useTrendingMovies } from "../../hooks/tmdb/use_trending_movies";
 import { Dropdown } from "../../components/ui/Dropdown";
 import { Error } from "../../components/ui/Error";
 
 export function TrendingMoviePage() {
-    const navigate = useNavigate();
+    const navigate = useNavigate({ from: "/discover/trending/movie/$timeWindow" });
 
     const timeWindowValues = new Map([
         ["day", "Day"],
         ["week", "Week"],
     ]);
 
-    const { timeWindow } = useParams();
+    const { timeWindow } = useParams({ from: "/discover/trending/movie/$timeWindow" });
 
     if (!timeWindow) {
         return <Error message="Unspecified time window" />
@@ -24,7 +24,9 @@ export function TrendingMoviePage() {
     const trendingMovieInfiniteQuery = useTrendingMovies((timeWindow));
 
     const onTimeWindowSelect = (key: string) => {
-        navigate(`/discover/trending/movie/${key}`);
+        if (key === "day" || key === "week") {
+            navigate({ to: "/discover/trending/movie/$timeWindow", params: { timeWindow: key } });
+        }
     }
 
     return (

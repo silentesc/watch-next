@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import { Error } from "../../../components/ui/Error";
 import { Loading } from "../../../components/ui/Loading";
 import { type PersonProps } from "../../../components/ui/Person";
@@ -11,8 +10,6 @@ interface CrewProps {
 }
 
 export function Crew({ movieId }: CrewProps) {
-    const navigate = useNavigate();
-
     const movieCreditsQuery = useMovieCredits(movieId);
 
     if (movieCreditsQuery.error) {
@@ -34,7 +31,7 @@ export function Crew({ movieId }: CrewProps) {
     return (
         <div className="my-5 flex flex-col gap-3">
             <h2 className="text-2xl font-bold">Crew</h2>
-            <PersonHorizontalList people={crew} maxPeopleDisplayed={isScreenBig() ? 10 : 5} seeMoreLinkHint={`/movie/${movieId}/crew`} onSeeMoreClick={() => navigate(`/movie/${movieId}/crew`)} />
+            <PersonHorizontalList people={crew} maxPeopleDisplayed={isScreenBig() ? 10 : 5} seeMoreLinkOptions={{ to: "/movie/$id/crew", params: { id: String(movieId) } }} />
         </div>
     );
 }
