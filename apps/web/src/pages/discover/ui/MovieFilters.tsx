@@ -89,8 +89,8 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
             tmdbRatingTo,
             tmdbVoteCountFrom,
             tmdbVoteCountTo,
-            withGenres: withGenres.join(","),
-            withoutGenres: withoutGenres.join(","),
+            withGenres: withGenres.join(",") || undefined,
+            withoutGenres: withoutGenres.join(",") || undefined,
             originalLanguage,
         };
 
@@ -127,7 +127,7 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
                     <div className="m-auto">
                     </div>
                     {/* x button */}
-                        <CloseIcon onClick={() => onClose()} className="w-6 h-6 cursor-pointer" />
+                    <CloseIcon onClick={() => onClose()} className="w-6 h-6 cursor-pointer" />
                 </div>
                 <div className="flex gap-1">
                     <Button value="Apply Filters" onClick={applyFilters} />
