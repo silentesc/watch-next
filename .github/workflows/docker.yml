@@ -22,6 +22,6 @@ jobs:
           context: .
           file: apps/server/Dockerfile
           tags: watch-next:test
+          push: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          push: false
