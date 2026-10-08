@@ -68,7 +68,7 @@ const UPDATE_CUSTOM_LIST_QUERY: &str = r#"
 const DELETE_CUSTOM_LIST_QUERY: &str = "DELETE FROM custom_lists WHERE id = $1 AND user_id = $2";
 
 const GET_MEDIA_ITEMS_IN_LIST_QUERY: &str = r#"
-    SELECT kind, title, poster_path, release_date, external_source, external_id
+    SELECT kind, title, poster_path, release_date, external_source, external_id, parent_id, season_number, episode_number
     FROM media_items
     INNER JOIN custom_list_items
         ON custom_list_items.media_item_id = media_items.id
@@ -303,6 +303,13 @@ pub async fn add_media_item_to_list(
     list_id: i64,
     media_item: MediaItem,
 ) -> Result<(), AppError> {
+    if !matches!(media_item.kind.as_str(), "collection" | "movie" | "tv_series") {
+        return Err(AppError::new(
+            StatusCode::BAD_REQUEST,
+            String::from("Invalid media item kind."),
+        ));
+    }
+
     let media_item_id = media_items::upsert_media_item(pool, media_item).await?;
 
     let result = sqlx::query(ADD_MEDIA_ITEM_TO_LIST_QUERY)
@@ -377,7 +384,34 @@ pub async fn delete_media_item_from_list(
 
 #[cfg(test)]
 mod tests {
+    use sqlx::postgres::PgPoolOptions;
+
     use super::*;
+
+    #[tokio::test]
+    async fn rejects_unsupported_media_item_kind_before_database_access() {
+        let pool = PgPoolOptions::new()
+            .connect_lazy("postgres://test:test@localhost/test")
+            .expect("test pool should be constructible");
+        let media_item = MediaItem {
+            kind: String::from("tv_season"),
+            title: None,
+            poster_path: None,
+            release_date: None,
+            external_source: String::from("tmdb"),
+            external_id: 1,
+            parent_id: None,
+            season_number: None,
+            episode_number: None,
+        };
+
+        let error = add_media_item_to_list(&pool, 1, 1, media_item)
+            .await
+            .expect_err("unsupported media item kind should be rejected");
+
+        assert_eq!(error.status_code, StatusCode::BAD_REQUEST);
+        assert_eq!(error.message, "Invalid media item kind.");
+    }
 
     #[test]
     fn every_custom_list_query_scopes_access_to_the_requesting_user() {

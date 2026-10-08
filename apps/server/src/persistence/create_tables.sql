@@ -26,13 +26,40 @@ CREATE TABLE IF NOT EXISTS cache (
 
 CREATE TABLE IF NOT EXISTS media_items (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    kind TEXT NOT NULL CHECK (kind IN ('collection', 'movie', 'tv_series')),
+    kind TEXT NOT NULL CHECK (kind IN ('collection', 'movie', 'tv_series', 'tv_season', 'tv_episode')),
     title TEXT,
     poster_path TEXT,
     release_date TEXT,
     external_source TEXT NOT NULL CHECK (external_source IN ('tmdb')),
     external_id INTEGER NOT NULL,
-    UNIQUE (kind, external_source, external_id)
+    parent_id BIGINT
+        REFERENCES media_items(id)
+        ON DELETE CASCADE,
+    season_number INT,
+    episode_number INT,
+    UNIQUE NULLS NOT DISTINCT (kind, external_source, external_id, season_number, episode_number),
+    CHECK (
+        (
+            kind IN ('collection', 'movie', 'tv_series')
+            AND parent_id IS NULL
+            AND season_number IS NULL
+            AND episode_number IS NULL
+        )
+        OR
+        (
+            kind = 'tv_season'
+            AND parent_id IS NOT NULL
+            AND season_number IS NOT NULL
+            AND episode_number IS NULL
+        )
+        OR
+        (
+            kind = 'tv_episode'
+            AND parent_id IS NOT NULL
+            AND season_number IS NULL
+            AND episode_number IS NOT NULL
+        )
+    )
 );
 
 CREATE TABLE IF NOT EXISTS custom_lists (

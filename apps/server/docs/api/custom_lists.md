@@ -68,7 +68,7 @@ Returns the current user's lists.
 `GET /custom-lists/:list_id/items`
 
 - **Success:** `200 OK`
-- **Response:** `MediaItem[]`
+- **Response:** `MediaItemResponse[]`
 - **Errors:** `404 Not Found` if the list does not belong to the user
 
 ### Add an item to a custom list
@@ -90,8 +90,7 @@ Returns the current user's lists.
 
 `DELETE /custom-lists/:list_id/items`
 
-The list ID is taken from the path. The media item is identified by these query
-parameters:
+The list ID is taken from the path. The media item is identified by these query parameters:
 
 `?kind=movie&external_source=tmdb&external_id=603`
 
@@ -110,7 +109,7 @@ parameters:
 | `updated_at` | `String` | Last update timestamp in RFC3339 format |
 | `preview_posters` | `Vec<String>` | List of the first 4 media items poster paths |
 
-### MediaItem
+### MediaItemResponse
 
 | Field | Type | Description |
 | --- | --- | --- |

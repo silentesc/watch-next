@@ -37,4 +37,7 @@ pub struct MediaItem {
     pub release_date: Option<String>,
     pub external_source: String,
     pub external_id: i32,
+    pub parent_id: Option<i64>,
+    pub season_number: Option<i32>,
+    pub episode_number: Option<i32>,
 }

@@ -74,7 +74,10 @@ pub async fn get_media_item_custom_lists(
  * Create or update a media item and get its id
  */
 pub async fn upsert_media_item(pool: &PgPool, media_item: MediaItem) -> Result<i64, AppError> {
-    if !matches!(media_item.kind.as_str(), "collection" | "movie" | "tv_series") {
+    if !matches!(
+        media_item.kind.as_str(),
+        "collection" | "movie" | "tv_series" | "tv_season" | "tv_episode"
+    ) {
         return Err(AppError::new(
             StatusCode::BAD_REQUEST,
             String::from("Invalid media item kind."),
@@ -90,13 +93,15 @@ pub async fn upsert_media_item(pool: &PgPool, media_item: MediaItem) -> Result<i
 
     sqlx::query_scalar(
         r#"
-        INSERT INTO media_items (kind, title, poster_path, release_date, external_source, external_id)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        ON CONFLICT (kind, external_source, external_id)
+        INSERT INTO media_items
+            (kind, title, poster_path, release_date, external_source, external_id, parent_id, season_number, episode_number)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ON CONFLICT (kind, external_source, external_id, season_number, episode_number)
         DO UPDATE SET
             title = EXCLUDED.title,
             poster_path = EXCLUDED.poster_path,
-            release_date = EXCLUDED.release_date
+            release_date = EXCLUDED.release_date,
+            parent_id = EXCLUDED.parent_id
         RETURNING id
         "#,
     )
@@ -106,6 +111,9 @@ pub async fn upsert_media_item(pool: &PgPool, media_item: MediaItem) -> Result<i
     .bind(media_item.release_date)
     .bind(media_item.external_source)
     .bind(media_item.external_id)
+    .bind(media_item.parent_id)
+    .bind(media_item.season_number)
+    .bind(media_item.episode_number)
     .fetch_one(pool)
     .await
     .map_err(|err| {

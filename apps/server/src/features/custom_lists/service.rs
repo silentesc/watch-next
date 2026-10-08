@@ -107,6 +107,9 @@ pub async fn add_media_item_to_list(
         release_date,
         external_source: external_source.to_string(),
         external_id,
+        parent_id: None,
+        season_number: None,
+        episode_number: None,
     };
 
     custom_lists::add_media_item_to_list(pool, user_id, list_id, media_item).await
