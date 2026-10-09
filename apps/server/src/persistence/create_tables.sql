@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS media_items (
         ON DELETE CASCADE,
     season_number INT,
     episode_number INT,
-    UNIQUE NULLS NOT DISTINCT (kind, external_source, external_id, season_number, episode_number),
+    UNIQUE NULLS NOT DISTINCT (kind, external_source, external_id, parent_id, season_number, episode_number),
     CHECK (
         (
             kind IN ('collection', 'movie', 'tv_series')
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS media_items (
         (
             kind = 'tv_episode'
             AND parent_id IS NOT NULL
-            AND season_number IS NULL
+            AND season_number IS NOT NULL
             AND episode_number IS NOT NULL
         )
     )
@@ -82,4 +82,26 @@ CREATE TABLE IF NOT EXISTS custom_list_items (
         ON DELETE CASCADE,
     added_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (list_id, media_item_id)
+);
+
+CREATE TABLE IF NOT EXISTS tags (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL CHECK (length(trim(name)) > 0 AND length(trim(name)) <= 30),
+    user_id BIGINT NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE (user_id, name)
+);
+
+CREATE TABLE IF NOT EXISTS tags_items (
+    tag_id BIGINT NOT NULL
+        REFERENCES tags(id)
+        ON DELETE CASCADE,
+    media_item_id BIGINT NOT NULL
+        REFERENCES media_items(id)
+        ON DELETE CASCADE,
+    tagged_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (tag_id, media_item_id)
 );

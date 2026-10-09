@@ -9,5 +9,6 @@ pub mod movies;
 pub mod people;
 pub mod root;
 pub mod search;
+pub mod tags;
 pub mod tv_seasons;
 pub mod tv_series;

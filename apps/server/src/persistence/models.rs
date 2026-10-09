@@ -30,6 +30,15 @@ pub struct CustomList {
 }
 
 #[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct Tag {
+    pub id: i64,
+    pub name: String,
+    pub user_id: i64,
+    pub created_at: OffsetDateTime,
+    pub updated_at: OffsetDateTime,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct MediaItem {
     pub kind: String,
     pub title: Option<String>,
@@ -38,6 +47,19 @@ pub struct MediaItem {
     pub external_source: String,
     pub external_id: i32,
     pub parent_id: Option<i64>,
+    pub season_number: Option<i32>,
+    pub episode_number: Option<i32>,
+}
+
+#[derive(Serialize)]
+pub struct MediaItemTree {
+    pub kind: String,
+    pub title: Option<String>,
+    pub poster_path: Option<String>,
+    pub release_date: Option<String>,
+    pub external_source: String,
+    pub external_id: i32,
+    pub parent: Option<Box<MediaItemTree>>,
     pub season_number: Option<i32>,
     pub episode_number: Option<i32>,
 }

@@ -78,8 +78,7 @@ Broad plan of features, might change at any time.
   - [x] User accounts
   - [x] TMDB integration
   - [x] Custom lists for movies/shows
-  - [ ] Custom tags for movies/shows
-  - [ ] Mark movies/shows/seasons/episodes as watched
+  - [ ] Tags for movies/shows/seasons/episodes
 
 ### **v1.1** (next)
 

@@ -11,7 +11,7 @@ use crate::{
         },
     },
     persistence::{
-        models::{CustomList, MediaItem},
+        models::{CustomList, MediaItem, MediaItemTree},
         table_utils::custom_lists,
     },
 };
@@ -100,19 +100,19 @@ pub async fn add_media_item_to_list(
         }
     };
 
-    let media_item = MediaItem {
+    let media_item_tree = MediaItemTree {
         kind: kind.to_string(),
         title,
         poster_path,
         release_date,
         external_source: external_source.to_string(),
         external_id,
-        parent_id: None,
+        parent: None,
         season_number: None,
         episode_number: None,
     };
 
-    custom_lists::add_media_item_to_list(pool, user_id, list_id, media_item).await
+    custom_lists::add_media_item_to_list(pool, user_id, list_id, media_item_tree).await
 }
 
 pub async fn delete_media_item_from_list(

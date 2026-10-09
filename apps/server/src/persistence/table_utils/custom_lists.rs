@@ -6,7 +6,7 @@ use crate::{
     error,
     logger::enums::category::Category,
     persistence::{
-        models::{CustomList, MediaItem},
+        models::{CustomList, MediaItem, MediaItemTree},
         table_utils::media_items,
     },
 };
@@ -301,16 +301,16 @@ pub async fn add_media_item_to_list(
     pool: &PgPool,
     user_id: i64,
     list_id: i64,
-    media_item: MediaItem,
+    media_item_tree: MediaItemTree,
 ) -> Result<(), AppError> {
-    if !matches!(media_item.kind.as_str(), "collection" | "movie" | "tv_series") {
+    if !matches!(media_item_tree.kind.as_str(), "collection" | "movie" | "tv_series") {
         return Err(AppError::new(
             StatusCode::BAD_REQUEST,
             String::from("Invalid media item kind."),
         ));
     }
 
-    let media_item_id = media_items::upsert_media_item(pool, media_item).await?;
+    let media_item_id = media_items::upsert_media_item(pool, media_item_tree).await?;
 
     let result = sqlx::query(ADD_MEDIA_ITEM_TO_LIST_QUERY)
         .bind(list_id)
@@ -393,19 +393,19 @@ mod tests {
         let pool = PgPoolOptions::new()
             .connect_lazy("postgres://test:test@localhost/test")
             .expect("test pool should be constructible");
-        let media_item = MediaItem {
+        let media_item_tree = MediaItemTree {
             kind: String::from("tv_season"),
             title: None,
             poster_path: None,
             release_date: None,
             external_source: String::from("tmdb"),
             external_id: 1,
-            parent_id: None,
+            parent: None,
             season_number: None,
             episode_number: None,
         };
 
-        let error = add_media_item_to_list(&pool, 1, 1, media_item)
+        let error = add_media_item_to_list(&pool, 1, 1, media_item_tree)
             .await
             .expect_err("unsupported media item kind should be rejected");
 
