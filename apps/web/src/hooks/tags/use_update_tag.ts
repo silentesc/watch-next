@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTag } from "../../api/tags/updateTag";
 import { tagsQueryKey } from "./use_tags";
+import { mediaItemTagsQueryKeyPrefix } from "../mediaItems/use_media_item_tags";
 
 interface UpdateTagVariables {
     tagId: number;
@@ -12,6 +13,11 @@ export function useUpdateTag() {
 
     return useMutation({
         mutationFn: ({ tagId, name }: UpdateTagVariables) => updateTag(tagId, name),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: tagsQueryKey }),
+        onSuccess: () => {
+            return Promise.all([
+                queryClient.invalidateQueries({ queryKey: tagsQueryKey }),
+                queryClient.invalidateQueries({ queryKey: mediaItemTagsQueryKeyPrefix }),
+            ]);
+        },
     });
 }
