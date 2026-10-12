@@ -24,6 +24,8 @@ import { CustomListsOverviewPage } from "../pages/custom-lists/CustomListsOvervi
 import { CustomListPage } from "../pages/custom-lists/CustomListPage";
 import { PersonPage } from "../pages/people/PersonPage";
 import { validateStringSearch, type DiscoverMovieSearch, type DiscoverTvSearch, type PersonPageSearch, type SearchPageSearch } from "./search";
+import { TagsOverviewPage } from "../pages/tags/TagsOverviewPage";
+import { TagPage } from "../pages/tags/TagPage";
 
 const rootRoute = createRootRoute({ component: App });
 
@@ -33,6 +35,8 @@ const routes = [
     createRoute({ getParentRoute: () => rootRoute, path: "/register", component: RegisterPage }),
     createRoute({ getParentRoute: () => rootRoute, path: "/custom-lists", component: CustomListsOverviewPage }),
     createRoute({ getParentRoute: () => rootRoute, path: "/custom-lists/$id", component: CustomListPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/tags", component: TagsOverviewPage }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/tags/$id", component: TagPage }),
     createRoute({ getParentRoute: () => rootRoute, path: "/discover", component: DiscoverPage }),
     createRoute({ getParentRoute: () => rootRoute, path: "/discover/movie", validateSearch: (search) => validateStringSearch<DiscoverMovieSearch>(search), component: DiscoverMoviePage }),
     createRoute({ getParentRoute: () => rootRoute, path: "/discover/tv", validateSearch: (search) => validateStringSearch<DiscoverTvSearch>(search), component: DiscoverTvSeriesPage }),

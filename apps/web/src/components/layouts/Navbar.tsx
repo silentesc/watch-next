@@ -27,6 +27,7 @@ export function Navbar() {
                 <h2 className="font-semibold text-foreground-secondary">Library</h2>
                 <div className="flex flex-col gap-1">
                     <Link className="ml-1 text-2xl" to="/custom-lists">Lists</Link>
+                    <Link className="ml-1 text-2xl" to="/tags">Tags</Link>
                 </div>
             </section>
             {/* Auth & Account */}
