@@ -33,6 +33,33 @@ The media item is identified by these query parameters:
 ]
 ```
 
+### Get tags of media item
+
+`GET /media-items/tags`
+
+Returns all tags the media item is tagged with.
+
+The media item is identified by these query parameters:
+
+`?kind=movie&external_source=tmdb&external_id=603&season_number=1&episode_number=1`
+
+> [!NOTE]
+> `season_number` and `episode_number` are optional
+
+- **Success:** `200 OK`
+- **Response:** `TagResponse[]`
+
+```json
+[
+	{
+		"id": 1,
+		"name": "Favorite",
+		"created_at": "2026-01-01T12:00:00Z",
+		"updated_at": "2026-01-01T12:00:00Z"
+	}
+]
+```
+
 ## Response models
 
 ### CustomListResponse
@@ -44,3 +71,12 @@ The media item is identified by these query parameters:
 | `created_at` | `String` | Creation timestamp in RFC3339 format |
 | `updated_at` | `String` | Last update timestamp in RFC3339 format |
 | `preview_posters` | `Vec<String>` | List of the first 4 media items poster paths |
+
+### TagResponse
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `i64` | Unique tag identifier |
+| `name` | `String` | Tag name |
+| `created_at` | `String` | Creation timestamp in RFC3339 format |
+| `updated_at` | `String` | Last update timestamp in RFC3339 format |
