@@ -48,10 +48,9 @@ export function CustomListPicker({ item }: CustomListPickerProps) {
     const mutationError = addCustomListItem.error || deleteCustomListItem.error;
 
     return (
-        <div className="mt-1 w-fit flex flex-col gap-2 items-start">
-            <span className="text-lg font-medium">Custom lists</span>
+        <div className="w-fit flex flex-col gap-2 items-start">
             <MultiSelectDropdown
-                placeholder="Add to custom list"
+                placeholder="Lists"
                 selectedKeys={selectedKeys}
                 values={values}
                 onSelect={toggleList}

@@ -201,7 +201,7 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
                 <div className="flex flex-col gap-2">
                     <span className="text-2xl font-medium">With Status</span>
                     <MultiSelectDropdown
-                        placeholder="Select statuses..."
+                        placeholder="Statuses"
                         selectedKeys={withStatus}
                         values={statusesValues}
                         onSelect={(key: string) => setWithStatus(prev => [...prev, key])}
@@ -211,7 +211,7 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
                 <div className="flex flex-col gap-2">
                     <span className="text-2xl font-medium">With Genres</span>
                     <MultiSelectDropdown
-                        placeholder="Select genres..."
+                        placeholder="Genres"
                         selectedKeys={withGenres}
                         values={genresValues}
                         onSelect={(key: string) => setWithGenres(prev => [...prev, key])}
@@ -221,7 +221,7 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
                 <div className="flex flex-col gap-2">
                     <span className="text-2xl font-medium">Without Genres</span>
                     <MultiSelectDropdown
-                        placeholder="Select genres..."
+                        placeholder="Genres"
                         selectedKeys={withoutGenres}
                         values={genresValues}
                         onSelect={(key: string) => setWithoutGenres(prev => [...prev, key])}
