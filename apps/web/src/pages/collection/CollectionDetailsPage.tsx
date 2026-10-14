@@ -7,6 +7,7 @@ import { Overview } from "./Overview";
 import { QuickInfo } from "./QuickInfo";
 import { CustomListPicker } from "../../components/ui/CustomListPicker";
 import { Poster } from "../../components/ui/Poster";
+import { TagPicker } from "../../components/ui/TagPicker";
 
 export function CollectionDetailsPage() {
     const { id } = useParams({ from: "/collection/$id" });
@@ -66,8 +67,9 @@ export function CollectionDetailsPage() {
                     </div>
                 </div>
 
-                <div className="sm:my-5">
+                <div className="sm:my-5 flex sm:justify-start justify-center flex-wrap gap-2">
                     <CustomListPicker item={{ kind: "collection", external_source: "tmdb", external_id: collectionId }} />
+                    <TagPicker item={{ kind: "collection", external_source: "tmdb", external_id: collectionId }} />
                 </div>
 
                 <div className="my-5">

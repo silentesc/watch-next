@@ -1,14 +1,19 @@
 import type { TvEpisodeDetails } from "../../api/tmdb/models";
 import { formatDate } from "../../shared/dateFormatter";
 import { getRatingColor, getRatingString } from "../../shared/ratingUtils";
+import { TagPicker } from "./TagPicker";
 
 interface TvEpisodeProps {
     episode: TvEpisodeDetails,
 }
 
 export function TvEpisode({ episode }: TvEpisodeProps) {
+    const canTagEpisode = episode.show_id != null
+        && episode.season_number != null
+        && episode.episode_number != null;
+
     return (
-        <li className="flex flex-col gap-3 py-4 first:pt-3 last:pb-3 sm:flex-row">
+        <li className="relative flex flex-col gap-3 py-4 first:pt-3 last:pb-3 sm:flex-row">
             <div className="aspect-video w-35">
                 {episode.still_path ? (
                     <div className="flex w-full h-full items-center justify-center">
@@ -26,7 +31,7 @@ export function TvEpisode({ episode }: TvEpisodeProps) {
                 }
             </div>
             <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <div className={`flex flex-wrap items-baseline gap-x-2 gap-y-1 ${canTagEpisode ? "pr-10" : ""}`}>
                     <span className="text-lg">
                         {episode.episode_number + ". "}
                         {episode.name}
@@ -59,6 +64,24 @@ export function TvEpisode({ episode }: TvEpisodeProps) {
                     <p className="mt-3 opacity-75">{episode.overview}</p>
                 ) : null}
             </div>
+
+            {canTagEpisode ? (
+                <div
+                    className="absolute right-1 top-3"
+                    onClick={e => e.stopPropagation()}
+                >
+                    <TagPicker
+                        item={{
+                            kind: "tv_episode",
+                            external_source: "tmdb",
+                            external_id: episode.show_id!,
+                            season_number: episode.season_number!,
+                            episode_number: episode.episode_number!,
+                        }}
+                        mode="popup"
+                    />
+                </div>
+            ) : null}
         </li>
     );
 }

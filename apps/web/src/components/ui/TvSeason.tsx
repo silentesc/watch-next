@@ -5,6 +5,7 @@ import { Error } from "./Error";
 import { Loading } from "./Loading";
 import { TvEpisode } from "./TvEpisode";
 import { getRatingColor, getRatingString } from "../../shared/ratingUtils";
+import { TagPicker } from "./TagPicker";
 
 interface TvSeasonProps {
     tvSeriesId: number,
@@ -82,6 +83,15 @@ export function TvSeason({ tvSeriesId, tvSeason, canExpandEpisodes }: TvSeasonPr
                     </div>
                 ) : null}
             </div>
+
+            {canExpandEpisodes && tvSeason.season_number !== undefined ? (
+                <div
+                    className="absolute right-1 top-1"
+                    onClick={e => e.stopPropagation()}
+                >
+                    <TagPicker item={{ kind: "tv_season", external_source: "tmdb", external_id: tvSeriesId, season_number: tvSeason.season_number }} mode="popup" />
+                </div>
+            ) : null}
 
             {isExpanded ? (
                 <div id={`season-${tvSeason.id}-episodes`} className="border-t border-background-tertiary px-4">
