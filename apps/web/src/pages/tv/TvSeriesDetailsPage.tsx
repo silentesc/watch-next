@@ -12,6 +12,7 @@ import { AggregateCast } from "./ui/AggregateCast";
 import { AggregateCrew } from "./ui/AggregateCrew";
 import { CustomListPicker } from "../../components/ui/CustomListPicker";
 import { Poster } from "../../components/ui/Poster";
+import { TagPicker } from "../../components/ui/TagPicker";
 
 export function TvSeriesDetailsPage() {
     const { id } = useParams({ from: "/tv/$id" });
@@ -65,8 +66,9 @@ export function TvSeriesDetailsPage() {
                             </div>
                         </div>
 
-                        <div className="sm:my-5">
+                        <div className="sm:my-5 flex sm:justify-start justify-center flex-wrap gap-2">
                             <CustomListPicker item={{ kind: "tv_series", external_source: "tmdb", external_id: tvSeriesId }} />
+                            <TagPicker item={{ kind: "tv_series", external_source: "tmdb", external_id: tvSeriesId }} mode="dropdown" />
                         </div>
 
                         <div className="my-5">

@@ -70,6 +70,10 @@ export function BoxIcon(props: IconProps) {
     return <BaseIcon {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73L13 3a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73L11 21a2 2 0 0 0 2 0l7-3.27A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 11 20.73 6.96" /></BaseIcon>;
 }
 
+export function TagIcon(props: IconProps) {
+    return <BaseIcon {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.58a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83Z" /><circle cx="7.5" cy="7.5" r=".5" /></BaseIcon>;
+}
+
 export function TicketIcon(props: IconProps) {
     return <BaseIcon {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" /><polyline points="17 2 12 7 7 2" /><line x1="8" y1="21" x2="16" y2="21" /></BaseIcon>;
 }

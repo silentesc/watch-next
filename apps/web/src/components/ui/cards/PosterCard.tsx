@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
 type PosterLink = {
     to: "/collection/$id" | "/movie/$id" | "/person/$id" | "/tv/$id";
@@ -12,9 +13,10 @@ interface PosterCardProps {
     link?: PosterLink;
     label: string;
     labelClassName: string;
+    children?: ReactNode;
 }
 
-export function PosterCard({ title = "", description, posterPath, link, label, labelClassName }: PosterCardProps) {
+export function PosterCard({ title = "", description, posterPath, link, label, labelClassName, children }: PosterCardProps) {
     const displayTitle = title.length > 30 ? `${title.substring(0, 30)}...` : title;
     const poster = posterPath ? (
         <img className="rounded-t-md w-full h-full object-cover" src={`https://image.tmdb.org/t/p/w300${posterPath}`} alt={title} />
@@ -29,8 +31,9 @@ export function PosterCard({ title = "", description, posterPath, link, label, l
             <div className={`absolute top-1 left-1 px-2 py-1 rounded text-xs font-semibold z-10 ${labelClassName}`}>
                 {label}
             </div>
-            <div className="aspect-2/3 cursor-pointer">
+            <div className="relative aspect-2/3 cursor-pointer">
                 {link ? <Link to={link.to} params={link.params}>{poster}</Link> : poster}
+                {children ? <div className="pointer-events-none absolute inset-0 z-10">{children}</div> : null}
             </div>
             <div className="flex flex-col text-center p-1">
                 <span title={displayTitle}>{displayTitle}</span>

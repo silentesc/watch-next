@@ -12,6 +12,7 @@ import { Similar } from "./ui/Similar";
 import { useMovieDetails } from "../../hooks/tmdb/use_movie_details";
 import { CustomListPicker } from "../../components/ui/CustomListPicker";
 import { Poster } from "../../components/ui/Poster";
+import { TagPicker } from "../../components/ui/TagPicker";
 
 export function MovieDetailsPage() {
     const { id } = useParams({ from: "/movie/$id" });
@@ -65,8 +66,9 @@ export function MovieDetailsPage() {
                             </div>
                         </div>
 
-                        <div className="sm:my-5">
+                        <div className="sm:my-5 flex sm:justify-start justify-center flex-wrap gap-2">
                             <CustomListPicker item={{ kind: "movie", external_source: "tmdb", external_id: movieId }} />
+                            <TagPicker item={{ kind: "movie", external_source: "tmdb", external_id: movieId }} />
                         </div>
 
                         <div className="my-5">

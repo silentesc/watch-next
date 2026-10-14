@@ -1,57 +1,95 @@
-import { useMemo } from "react";
-import { Dropdown } from "./Dropdown";
-import { CloseIcon } from "./icons/Icons";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronDownIcon } from "./icons/Icons";
+import { Button } from "./Button";
+import { Checkbox } from "./Checkbox";
 
-interface MultiSelectDropdownProps {
+interface MultiSelectDropdown2Props {
     placeholder: string;
     selectedKeys: Array<string>;
     values: Map<string, string>;
     onSelect: (key: string) => void;
     onDeselect: (key: string) => void;
-    alignedRight?: boolean;
+    closeOnSelect?: boolean;
 }
 
-export function MultiSelectDropdown({ placeholder, selectedKeys, values, onSelect, onDeselect, alignedRight = false }: MultiSelectDropdownProps) {
-    const renderTitle = (keys: string[]) => {
-        if (keys.length === 0) {
-            return <span className="opacity-50">{placeholder}</span>
-        }
+export function MultiSelectDropdown({ placeholder, selectedKeys, values, onSelect, onDeselect, closeOnSelect = false }: MultiSelectDropdown2Props) {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const onValueElementClick = (key: string) => {
+        selectedKeys.includes(key) ? onDeselect(key) : onSelect(key);
+        if (closeOnSelect) {
+            setIsOpen(false);
+        }
+    }
+
+    const valueElements = Array.from(values.entries()).map(([key, value]) => {
         return (
-            <div className="flex flex-wrap gap-1 w-fit" onClick={e => e.stopPropagation()}>
-                {
-                    [...keys].map(key => (
-                        <div key={key} className="flex items-center gap-2 px-2 py-1 bg-background-primary rounded-md border-2 border-background-tertiary">
-                            <span className="text-sm">{values.get(key)}</span>
-                            <span onClick={() => removeSelected(key)} className="p-1 text-gray-300 hover:text-error hover:bg-error/30 rounded transition-colors">
-                                <CloseIcon className="w-4 h-4" />
-                            </span>
-                        </div>
-                    ))
-                }
+            <div key={key} className="flex gap-3 px-4 py-2 text-left font-medium items-center select-none transition-colors cursor-pointer hover:bg-background-tertiary" onClick={() => onValueElementClick(key)}>
+                <span onClick={event => event.stopPropagation()}>
+                    <Checkbox
+                        isSelected={selectedKeys.includes(key)}
+                        onSelect={() => onSelect(key)}
+                        onDeselect={() => onDeselect(key)}
+                    />
+                </span>
+                <span className="wrap-anywhere">{value}</span>
             </div>
         );
-    }
+    });
 
-    const title = useMemo(() => {
-        return renderTitle(selectedKeys);
-    }, [selectedKeys, values]);
+    // Close dropdown when clicking outside
+    const handleClickOutside = useCallback((event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    }, []);
 
-    const innerValues = useMemo(() => {
-        const map = new Map(values);
-        selectedKeys.forEach(k => map.delete(k));
-        return map;
-    }, [values, selectedKeys]);
+    useEffect(() => {
+        if (!isOpen) return;
 
-    const onDropdownValueSelect = (key: string) => {
-        onSelect(key);
-    }
-
-    const removeSelected = (key: string) => {
-        onDeselect(key)
-    }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen, handleClickOutside]);
 
     return (
-        <Dropdown title={title} values={innerValues} onSelect={onDropdownValueSelect} alignedRight={alignedRight} />
+        <div className="relative inline-block text-left" ref={dropdownRef}>
+            {/* Trigger Button */}
+            <div>
+                <Button
+                    value={
+                        (
+                            <>
+                                <div className="flex justify-between items-center">
+                                    <div className="flex gap-2">
+                                        <span className="whitespace-nowrap opacity-50">{placeholder}</span>
+                                        <span className="whitespace-nowrap font-medium">{selectedKeys.length} selected</span>
+                                    </div>
+                                    <ChevronDownIcon className={`w-4 h-4 ml-2 -mr-1  ${isOpen ? "rotate-180" : ""}`} />
+                                </div>
+                            </>
+                        )
+                    }
+                    onClick={toggleDropdown}
+                />
+            </div>
+
+            {/* Dropdown Menu */}
+            {
+                isOpen ? (
+                    <div className="left-1/2 -translate-x-1/2 z-1000 absolute w-full max-h-100 overflow-scroll mt-2 origin-top-right bg-background-secondary border border-background-tertiary divide-y divide-background-tertiary rounded-md shadow-lg outline-none">
+                        <>
+                            {valueElements}
+                        </>
+                    </div>
+                ) : null
+            }
+        </div >
     );
 };

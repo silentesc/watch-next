@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 
-use crate::persistence::models::CustomList;
+use crate::persistence::models::{CustomList, MediaItem};
 
 #[derive(Serialize)]
 pub struct CustomListResponse {
@@ -22,6 +22,29 @@ impl From<CustomList> for CustomListResponse {
             created_at: list.created_at,
             updated_at: list.updated_at,
             preview_posters: list.preview_posters,
+        }
+    }
+}
+
+#[derive(Serialize)]
+pub struct MediaItemResponse {
+    pub kind: String,
+    pub title: Option<String>,
+    pub poster_path: Option<String>,
+    pub release_date: Option<String>,
+    pub external_source: String,
+    pub external_id: i32,
+}
+
+impl From<MediaItem> for MediaItemResponse {
+    fn from(item: MediaItem) -> Self {
+        Self {
+            kind: item.kind,
+            title: item.title,
+            poster_path: item.poster_path,
+            release_date: item.release_date,
+            external_source: item.external_source,
+            external_id: item.external_id,
         }
     }
 }
