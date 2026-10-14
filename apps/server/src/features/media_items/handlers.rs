@@ -2,9 +2,16 @@ use axum::{Extension, Json, extract::Query};
 use reqwest::StatusCode;
 
 use crate::{
-    app::{errors::AppError, state::AppState}, features::{
-        custom_lists::dto::CustomListResponse, media_items::{dto::{GetMediaItemListsRequest, GetMediaItemTagsRequest}, service}, tags::dto::TagResponse,
-    }, persistence::models::Session,
+    app::{errors::AppError, state::AppState},
+    features::{
+        custom_lists::dto::CustomListResponse,
+        media_items::{
+            dto::{GetMediaItemListsRequest, GetMediaItemTagsRequest},
+            service,
+        },
+        tags::dto::TagResponse,
+    },
+    persistence::models::Session,
 };
 
 #[axum::debug_handler]
@@ -36,17 +43,8 @@ pub async fn get_media_item_tags(
     Extension(session): Extension<Session>,
     Query(params): Query<GetMediaItemTagsRequest>,
 ) -> Result<(StatusCode, Json<Vec<TagResponse>>), AppError> {
-    match service::get_media_item_tags(
-        &app_state.pool,
-        session.user_id,
-        params,
-    )
-    .await
-    {
-        Ok(tags) => Ok((
-            StatusCode::OK,
-            Json(tags.into_iter().map(TagResponse::from).collect()),
-        )),
+    match service::get_media_item_tags(&app_state.pool, session.user_id, params).await {
+        Ok(tags) => Ok((StatusCode::OK, Json(tags.into_iter().map(TagResponse::from).collect()))),
         Err(err) => Err(err),
     }
 }
