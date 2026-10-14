@@ -68,7 +68,7 @@ export function MovieDetailsPage() {
 
                         <div className="sm:my-5 flex sm:justify-start justify-center flex-wrap gap-2">
                             <CustomListPicker item={{ kind: "movie", external_source: "tmdb", external_id: movieId }} />
-                            <TagPicker item={{ kind: "movie", external_source: "tmdb", external_id: movieId }} />
+                            <TagPicker item={{ kind: "movie", external_source: "tmdb", external_id: movieId }} mode="dropdown" />
                         </div>
 
                         <div className="my-5">

@@ -69,7 +69,7 @@ export function CollectionDetailsPage() {
 
                 <div className="sm:my-5 flex sm:justify-start justify-center flex-wrap gap-2">
                     <CustomListPicker item={{ kind: "collection", external_source: "tmdb", external_id: collectionId }} />
-                    <TagPicker item={{ kind: "collection", external_source: "tmdb", external_id: collectionId }} />
+                    <TagPicker item={{ kind: "collection", external_source: "tmdb", external_id: collectionId }} mode="dropdown" />
                 </div>
 
                 <div className="my-5">
