@@ -12,6 +12,7 @@ use sqlx::PgPool;
 
 pub async fn register(pool: &PgPool, username: String, password: String) -> Result<(), AppError> {
     validate_username(&username)?;
+    validate_password(&password)?;
 
     // Check if username is already used
     match users::get_user_by_username(pool, &username).await {
@@ -62,6 +63,17 @@ fn validate_username(username: &str) -> Result<(), AppError> {
         return Err(AppError::new(
             StatusCode::BAD_REQUEST,
             String::from("Username must only contain alphanumeric characters"),
+        ));
+    }
+
+    Ok(())
+}
+
+fn validate_password(password: &str) -> Result<(), AppError> {
+    if password.len() < 8 || password.len() > 80 {
+        return Err(AppError::new(
+            StatusCode::BAD_REQUEST,
+            String::from("Password length must be between 8 and 80"),
         ));
     }
 
@@ -139,6 +151,8 @@ pub async fn logout(pool: &PgPool, jar: SignedCookieJar, cookie_secure: bool) ->
 
 #[cfg(test)]
 mod tests {
+    use crate::features::auth::service::validate_password;
+
     use super::validate_username;
     use axum::http::StatusCode;
 
@@ -165,5 +179,22 @@ mod tests {
 
         assert_eq!(error.status_code, StatusCode::BAD_REQUEST);
         assert_eq!(error.message, "Username must only contain alphanumeric characters");
+    }
+
+    #[test]
+    fn accepts_passwords_in_the_supported_format() {
+        assert!(validate_password("watch_next").is_ok());
+        assert!(validate_password("a".repeat(80).as_str()).is_ok());
+    }
+
+    #[test]
+    fn rejects_password_outside_the_supported_length() {
+        let too_short = validate_password("abc").unwrap_err();
+        let too_long = validate_password("a".repeat(81).as_str()).unwrap_err();
+
+        assert_eq!(too_short.status_code, StatusCode::BAD_REQUEST);
+        assert_eq!(too_short.message, "Password length must be between 8 and 80");
+        assert_eq!(too_long.status_code, StatusCode::BAD_REQUEST);
+        assert_eq!(too_long.message, "Password length must be between 8 and 80");
     }
 }
