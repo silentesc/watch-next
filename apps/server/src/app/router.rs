@@ -97,7 +97,6 @@ mod tests {
             tmdb: TmdbApi::new(tmdb_client),
             key: Key::generate(),
             allow_registration: true,
-            cookie_secure: true,
         }
     }
 

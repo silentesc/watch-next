@@ -56,7 +56,6 @@ services:
 | `TMDB_BASE_URL` | `https://api.themoviedb.org/3` | URL of the TMDB API |
 | `TMDB_CACHE_TTL_MINUTES` | `60` | How many minutes to keep stuff retrieved from TMDB in cache |
 | `ALLOW_REGISTRATION` | `true` | Whether to allow registrations of new users |
-| `COOKIE_SECURE` | `false` | Enable when exposing to the internet and using https |
 | `POSTGRES_URI` | `postgres://watch_next:watch_next@watch-next-postgres:5432/watch_next` | URI to the postgres database |
 | `DATA_DIR` | `/app/data` | Directory where app data (like secret keys generated on first startup) is stored |
 
@@ -77,8 +76,8 @@ Broad plan of features, might change at any time.
 
   - [x] User accounts
   - [x] TMDB integration
-  - [x] Custom lists for movies/shows
-  - [ ] Tags for movies/shows/seasons/episodes
+  - [x] Custom lists for collections/movies/shows
+  - [x] Tags for collections/movies/shows/seasons/episodes
 
 ### **v1.1** (next)
 
