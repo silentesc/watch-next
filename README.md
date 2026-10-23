@@ -68,6 +68,16 @@ services:
 | `v1.0` | Minor version pinned, only updates on bugfixes |
 | `v1` | Major version pinned, always updates until major version changes |
 
+### Exposing your instance to the internet
+
+In general, this app is developed to be exposed to the internet. However, there are multiple things to take care of before exposing your instance:
+
+- It is highly recommended to setup a reverse proxy ([example config here](deploy/nginx/watch-next.conf)) and something like [fail2ban](https://github.com/fail2ban/fail2ban) or [Crowdsec](https://github.com/crowdsecurity/crowdsec).
+- If your instance is only for your friends and family, consider setting `ALLOW_REGISTRATION` to `false` to prevent people from registering.
+- Follow general advice like choosing a secure password and updating the app and your system regularly.
+
+In the future, more security focused features like 2FA will be added.
+
 ## Roadmap
 
 Broad plan of features, might change at any time.
