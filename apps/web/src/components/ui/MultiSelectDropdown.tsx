@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "./icons/Icons";
 import { Button } from "./Button";
 import { Checkbox } from "./Checkbox";
+import { Loading } from "./Loading";
 
 interface MultiSelectDropdown2Props {
     placeholder: string;
@@ -34,7 +35,7 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, loadingKeys = n
             <div key={key} className="flex gap-3 px-4 py-2 text-left font-medium items-center select-none transition-colors cursor-pointer hover:bg-background-tertiary" onClick={() => onValueElementClick(key)}>
                 <span onClick={event => event.stopPropagation()}>
                     {loadingKeys.has(key) ? (
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-l-primary"></div>
+                        <Loading size="small" />
                     ) : (
                         <Checkbox
                             isSelected={selectedKeys.includes(key)}

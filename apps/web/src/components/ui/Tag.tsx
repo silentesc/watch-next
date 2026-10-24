@@ -1,3 +1,5 @@
+import { Loading } from "./Loading";
+
 interface TagProps {
     name: string;
     variant?: "default" | "primary" | "danger";
@@ -21,7 +23,7 @@ export function Tag({ name, variant = "default", isLoading = false, onClick }: T
             onClick={onClick}
         >
             {isLoading ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-l-primary"></div>
+                <Loading size="small" />
             ) : (
                 <span className="shrink-0 opacity-50">
                     #
