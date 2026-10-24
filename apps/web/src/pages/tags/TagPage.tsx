@@ -110,6 +110,7 @@ export function TagPage() {
                             isEditing ? (
                                 <div className="flex flex-wrap sm:flex-nowrap gap-2">
                                     <Input type="text" value={name} onChange={(event) => setName(event.target.value)} />
+                                    {updateTag.isPending ? <Loading size="medium" /> : null}
                                     <Button value={"Save"} type="button" fullWidth={false} variant="primary" onClick={saveChanges} disabled={!name.trim() || updateTag.isPending} />
                                     <Button value={"Cancel"} type="button" fullWidth={false} onClick={() => setIsEditing(false)} disabled={!name.trim() || updateTag.isPending} />
                                     <Button value={<span className="flex items-center gap-2"><TrashIcon className="w-5" /> Delete tag</span>} fullWidth={false} onClick={removeTag} variant="danger" disabled={deleteTag.isPending} />
@@ -188,6 +189,7 @@ export function TagPage() {
             {isDeleteConfirmationOpen ? (
                 <Popup onClose={() => setIsDeleteConfirmationOpen(false)} value={
                     <div className="flex flex-col gap-4">
+                        {deleteTag.isPending ? <Loading /> : null}
                         <h2 className="text-2xl font-semibold">Delete tag?</h2>
                         <p>Are you sure you want to delete &quot;{tag.name}&quot;?</p>
                         {deleteTag.error ? <Error message={deleteTag.error.message} /> : null}

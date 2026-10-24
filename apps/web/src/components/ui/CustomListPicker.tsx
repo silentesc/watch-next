@@ -11,6 +11,8 @@ interface CustomListPickerProps {
     item: AddCustomListItemRequest;
 }
 
+const loadingKeys: Set<string> = new Set();
+
 export function CustomListPicker({ item }: CustomListPickerProps) {
     const customListsQuery = useCustomLists();
     const mediaItemCustomListsQuery = useMediaItemCustomLists(item.kind, item.external_source, item.external_id);
@@ -34,15 +36,19 @@ export function CustomListPicker({ item }: CustomListPickerProps) {
     const selectedKeys = Array.from(mediaItemCustomListIds, (id) => String(id));
     const values = new Map(customListsQuery.data.map((customList) => [String(customList.id), customList.name]));
 
-    const toggleList = (listIdString: string) => {
+    const toggleList = async (listIdString: string) => {
         const listId = Number(listIdString);
         const isInList = mediaItemCustomListIds.has(listId);
 
+        loadingKeys.add(listIdString);
+
         if (isInList) {
-            deleteCustomListItem.mutate({ listId, item });
+            await deleteCustomListItem.mutateAsync({ listId, item });
         } else {
-            addCustomListItem.mutate({ listId, item });
+            await addCustomListItem.mutateAsync({ listId, item });
         }
+
+        loadingKeys.delete(listIdString);
     };
 
     const mutationError = addCustomListItem.error || deleteCustomListItem.error;
@@ -52,6 +58,7 @@ export function CustomListPicker({ item }: CustomListPickerProps) {
             <MultiSelectDropdown
                 placeholder="Lists"
                 selectedKeys={selectedKeys}
+                loadingKeys={loadingKeys}
                 values={values}
                 onSelect={toggleList}
                 onDeselect={toggleList}

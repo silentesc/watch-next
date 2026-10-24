@@ -64,6 +64,7 @@ export function CustomListsOverviewPage() {
             {isCreating ? (
                 <Popup onClose={() => setIsCreating(false)} value={
                     <form className="flex flex-col gap-4" onSubmit={submitNewList}>
+                        {createCustomList.isPending ? <Loading /> : null}
                         <h2 className="text-2xl font-semibold">New list</h2>
                         <Input
                             autoFocus

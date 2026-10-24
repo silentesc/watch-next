@@ -19,16 +19,18 @@ interface TagPickerProps {
 
 interface TagPickerModeProps {
     selectedKeys: Array<string>,
+    loadingKeys: Set<string>,
     values: Map<string, string>,
     onTag: (tagIdString: string) => void,
     onUntag: (tagIdString: string) => void,
 }
 
-function TagPickerDropdown({ selectedKeys, values, onTag, onUntag }: TagPickerModeProps) {
+function TagPickerDropdown({ selectedKeys, loadingKeys, values, onTag, onUntag }: TagPickerModeProps) {
     return (
         <MultiSelectDropdown
             placeholder="Tags"
             selectedKeys={selectedKeys}
+            loadingKeys={loadingKeys}
             values={values}
             onSelect={onTag}
             onDeselect={onUntag}
@@ -36,10 +38,11 @@ function TagPickerDropdown({ selectedKeys, values, onTag, onUntag }: TagPickerMo
     );
 }
 
-function TagPickerPopup({ selectedKeys, values, onTag, onUntag }: TagPickerModeProps) {
+function TagPickerPopup({ selectedKeys, loadingKeys, values, onTag, onUntag }: TagPickerModeProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const onTagClick = (tagId: string) => {
+        if (loadingKeys.has(tagId)) return;
         selectedKeys.includes(tagId) ? onUntag(tagId) : onTag(tagId);
     };
 
@@ -61,7 +64,7 @@ function TagPickerPopup({ selectedKeys, values, onTag, onUntag }: TagPickerModeP
                                     ([id, name]) => {
                                         const variant = selectedKeys.includes(id) ? "primary" : "default";
                                         return (
-                                            <Tag key={id} name={name} variant={variant} onClick={() => onTagClick(id)} />
+                                            <Tag key={id} name={name} variant={variant} isLoading={loadingKeys.has(id)} onClick={() => onTagClick(id)} />
                                         );
                                     }
                                 )}
@@ -73,6 +76,8 @@ function TagPickerPopup({ selectedKeys, values, onTag, onUntag }: TagPickerModeP
         </>
     );
 }
+
+const loadingKeys: Set<string> = new Set();
 
 export function TagPicker({ item, mode }: TagPickerProps) {
     const tagsQuery = useTags();
@@ -97,14 +102,16 @@ export function TagPicker({ item, mode }: TagPickerProps) {
     const selectedKeys = Array.from(mediaItemTagIds, (id) => String(id));
     const values = new Map(tagsQuery.data.map((tag) => [String(tag.id), tag.name]));
 
-    const tag = (tagIdString: string) => {
-        const tagId = Number(tagIdString);
-        tagMediaItem.mutate({ tagId, item });
+    const tag = async (tagIdString: string) => {
+        loadingKeys.add(tagIdString);
+        await tagMediaItem.mutateAsync({ tagId: Number(tagIdString), item });
+        loadingKeys.delete(tagIdString);
     };
 
-    const untag = (tagIdString: string) => {
-        const tagId = Number(tagIdString);
-        untagMediaItem.mutate({ tagId, item });
+    const untag = async (tagIdString: string) => {
+        loadingKeys.add(tagIdString);
+        await untagMediaItem.mutateAsync({ tagId: Number(tagIdString), item });
+        loadingKeys.delete(tagIdString);
     };
 
     const mutationError = tagMediaItem.error || untagMediaItem.error;
@@ -115,6 +122,7 @@ export function TagPicker({ item, mode }: TagPickerProps) {
                 mode === "dropdown" ? (
                     <TagPickerDropdown
                         selectedKeys={selectedKeys}
+                        loadingKeys={loadingKeys}
                         values={values}
                         onTag={tag}
                         onUntag={untag}
@@ -122,6 +130,7 @@ export function TagPicker({ item, mode }: TagPickerProps) {
                 ) : mode === "popup" ? (
                     <TagPickerPopup
                         selectedKeys={selectedKeys}
+                        loadingKeys={loadingKeys}
                         values={values}
                         onTag={tag}
                         onUntag={untag}

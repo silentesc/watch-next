@@ -75,6 +75,7 @@ export function CustomListPage() {
                             isEditing ? (
                                 <div className="flex flex-wrap sm:flex-nowrap gap-2">
                                     <Input type="text" value={name} onChange={(event) => setName(event.target.value)} />
+                                    {updateCustomList.isPending ? <Loading size="medium" /> : null}
                                     <Button value={"Save"} type="button" fullWidth={false} variant="primary" onClick={saveChanges} disabled={!name.trim() || updateCustomList.isPending} />
                                     <Button value={"Cancel"} type="button" fullWidth={false} onClick={() => setIsEditing(false)} disabled={!name.trim() || updateCustomList.isPending} />
                                     <Button value={<span className="flex items-center gap-2"><TrashIcon className="w-5" /> Delete list</span>} fullWidth={false} onClick={removeList} variant="danger" disabled={deleteCustomList.isPending} />
@@ -139,6 +140,7 @@ export function CustomListPage() {
             {isDeleteConfirmationOpen ? (
                 <Popup onClose={() => setIsDeleteConfirmationOpen(false)} value={
                     <div className="flex flex-col gap-4">
+                        {deleteCustomList.isPending ? <Loading /> : null}
                         <h2 className="text-2xl font-semibold">Delete list?</h2>
                         <p>Are you sure you want to delete &quot;{customList.name}&quot;?</p>
                         {deleteCustomList.error ? <Error message={deleteCustomList.error.message} /> : null}

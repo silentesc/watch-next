@@ -64,6 +64,7 @@ export function TagsOverviewPage() {
             {isCreating ? (
                 <Popup onClose={() => setIsCreating(false)} value={
                     <form className="flex flex-col gap-4" onSubmit={submitNewTag}>
+                        {createTag.isPending ? <Loading /> : null}
                         <h2 className="text-2xl font-semibold">New tag</h2>
                         <Input
                             autoFocus

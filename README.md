@@ -80,28 +80,20 @@ In the future, more security focused features like 2FA will be added.
 
 ## Roadmap
 
-Broad plan of features, might change at any time.
+Broad plan of features. No particular order. Might change at any time.
 
-### **v1.0** (current)
-
-  - [x] User accounts
-  - [x] TMDB integration
-  - [x] Custom lists for collections/movies/shows
-  - [x] Tags for collections/movies/shows/seasons/episodes
-
-### **v1.1** (next)
-
+- [x] User accounts
+- [x] TMDB integration
+- [x] Custom lists for collections/movies/shows
+- [x] Tags for collections/movies/shows/seasons/episodes
 - [ ] Notifications / Reminders
-- [ ] Personal configurable region, language, etc.
 - [ ] Refresh token so sessions don't expire after 7 days
-
-### v?.? (future)
-
+- [ ] Admin Dashboard
+- [ ] Two Factor Authentication
 - [ ] Personal analytics dashboard
 - [ ] Personal recommendations based on analytics
 - [ ] Seasonal recommendations
 - [ ] Achievements / leveling system
 - [ ] Ratings from IMDB
 - [ ] TVDB integration
-- [ ] Two Factor Authentication
-- [ ] Admin Dashboard
+- [ ] Personal configurable region, language, etc.
