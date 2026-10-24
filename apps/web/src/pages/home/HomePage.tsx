@@ -12,6 +12,8 @@ import { useTrendingTvSeries } from "../../hooks/tmdb/use_trending_tv_series";
 import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
 import { ArrowCircleRightIcon } from "../../components/ui/icons/Icons";
+import { useTags } from "../../hooks/tags/use_tags";
+import { TagCard } from "../../components/ui/cards/TagCard";
 
 export function HomePage() {
     const navigate = useNavigate();
@@ -20,6 +22,7 @@ export function HomePage() {
     const trendingTvSeriesQuery = useTrendingTvSeries("day");
 
     const customListsQuery = useCustomLists();
+    const tagsQuery = useTags();
 
     const submitSearch = (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -95,6 +98,41 @@ export function HomePage() {
                                             <div className="absolute top-1/2 left-1/2 -translate-1/2 cursor-pointer flex flex-col gap-1 items-center">
                                                 <span className="font-semibold text-nowrap">See more</span>
                                                 <ArrowCircleRightIcon className="w-7" />
+                                            </div>
+                                        </Link>
+                                    </div>
+                                ) : null}
+                            </div>
+                        )
+                    ) : <Error message="No data returned" />
+                }
+            </section>
+
+            <section className="border-background-tertiary pt-8">
+                <Link to="/tags" className="my-4 flex gap-1 items-center cursor-pointer w-max">
+                    <span className="text-2xl font-bold">Your tags</span>
+                    <ArrowCircleRightIcon className="w-7" />
+                </Link>
+                {
+                    tagsQuery.error ? (
+                        <Error message={tagsQuery.error.message} />
+                    ) : tagsQuery.isLoading ? (
+                        <Loading />
+                    ) : tagsQuery.data ? (
+                        tagsQuery.data.length === 0 ? (
+                            <p className="text-foreground-secondary">You haven't created any tags yet.</p>
+                        ) : (
+                            <div className="flex flex-wrap gap-3">
+                                {tagsQuery.data.slice(0, 10).map(tag => <TagCard key={tag.id} tag={tag} />)}
+                                {tagsQuery.data.length >= 11 ? (
+                                    <div className="relative">
+                                        <div className="blur-sm pointer-events-none">
+                                            <TagCard tag={tagsQuery.data[2]} />
+                                        </div>
+                                        <Link to="/tags">
+                                            <div className="absolute top-1/2 left-1/2 -translate-1/2 cursor-pointer flex gap-1 items-center">
+                                                <span className="font-semibold text-nowrap">See more</span>
+                                                <ArrowCircleRightIcon className="w-4" />
                                             </div>
                                         </Link>
                                     </div>
