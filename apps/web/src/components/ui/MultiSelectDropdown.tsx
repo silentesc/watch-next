@@ -6,13 +6,14 @@ import { Checkbox } from "./Checkbox";
 interface MultiSelectDropdown2Props {
     placeholder: string;
     selectedKeys: Array<string>;
+    loadingKeys?: Set<string>;
     values: Map<string, string>;
     onSelect: (key: string) => void;
     onDeselect: (key: string) => void;
     closeOnSelect?: boolean;
 }
 
-export function MultiSelectDropdown({ placeholder, selectedKeys, values, onSelect, onDeselect, closeOnSelect = false }: MultiSelectDropdown2Props) {
+export function MultiSelectDropdown({ placeholder, selectedKeys, loadingKeys = new Set(), values, onSelect, onDeselect, closeOnSelect = false }: MultiSelectDropdown2Props) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -21,6 +22,7 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, values, onSelec
     };
 
     const onValueElementClick = (key: string) => {
+        if (loadingKeys.has(key)) return;
         selectedKeys.includes(key) ? onDeselect(key) : onSelect(key);
         if (closeOnSelect) {
             setIsOpen(false);
@@ -31,11 +33,15 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, values, onSelec
         return (
             <div key={key} className="flex gap-3 px-4 py-2 text-left font-medium items-center select-none transition-colors cursor-pointer hover:bg-background-tertiary" onClick={() => onValueElementClick(key)}>
                 <span onClick={event => event.stopPropagation()}>
-                    <Checkbox
-                        isSelected={selectedKeys.includes(key)}
-                        onSelect={() => onSelect(key)}
-                        onDeselect={() => onDeselect(key)}
-                    />
+                    {loadingKeys.has(key) ? (
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-l-primary"></div>
+                    ) : (
+                        <Checkbox
+                            isSelected={selectedKeys.includes(key)}
+                            onSelect={() => onSelect(key)}
+                            onDeselect={() => onDeselect(key)}
+                        />
+                    )}
                 </span>
                 <span className="wrap-anywhere">{value}</span>
             </div>

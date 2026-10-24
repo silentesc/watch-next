@@ -1,10 +1,11 @@
 interface TagProps {
     name: string;
     variant?: "default" | "primary" | "danger";
+    isLoading?: boolean;
     onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-export function Tag({ name, variant = "default", onClick }: TagProps) {
+export function Tag({ name, variant = "default", isLoading = false, onClick }: TagProps) {
     let variantClassName = "";
     switch (variant) {
         case "default":
@@ -19,9 +20,13 @@ export function Tag({ name, variant = "default", onClick }: TagProps) {
             className={`inline-flex max-w-full items-center gap-2 rounded-full border ${variantClassName} px-4 py-1.5 text-sm shadow-sm cursor-pointer`}
             onClick={onClick}
         >
-            <span className="shrink-0 opacity-50">
-                #
-            </span>
+            {isLoading ? (
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-l-primary"></div>
+            ) : (
+                <span className="shrink-0 opacity-50">
+                    #
+                </span>
+            )}
             <span className="min-w-0 truncate" title={name}>
                 {name}
             </span>
