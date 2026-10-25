@@ -33,7 +33,7 @@ export function CustomListPicker({ item }: CustomListPickerProps) {
 
     const mediaItemCustomListIds = new Set((mediaItemCustomListsQuery.data ?? []).map((customList) => customList.id));
 
-    const selectedKeys = Array.from(mediaItemCustomListIds, (id) => String(id));
+    const selectedKeys = new Set(Array.from(mediaItemCustomListIds, (id) => String(id)));
     const values = new Map(customListsQuery.data.map((customList) => [String(customList.id), customList.name]));
 
     const toggleList = async (listIdString: string) => {

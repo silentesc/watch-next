@@ -189,7 +189,7 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
                     <span className="text-2xl font-medium">With Genres</span>
                     <MultiSelectDropdown
                         placeholder="Genres"
-                        selectedKeys={withGenres}
+                        selectedKeys={new Set(withGenres)}
                         values={genresValues}
                         onSelect={(key: string) => setWithGenres(prev => [...prev, key])}
                         onDeselect={(key: string) => setWithGenres(prev => prev.filter(k => k !== key))}
@@ -199,7 +199,7 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
                     <span className="text-2xl font-medium">Without Genres</span>
                     <MultiSelectDropdown
                         placeholder="Genres"
-                        selectedKeys={withoutGenres}
+                        selectedKeys={new Set(withoutGenres)}
                         values={genresValues}
                         onSelect={(key: string) => setWithoutGenres(prev => [...prev, key])}
                         onDeselect={(key: string) => setWithoutGenres(prev => prev.filter(k => k !== key))}

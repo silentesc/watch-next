@@ -6,7 +6,7 @@ import { Loading } from "./Loading";
 
 interface MultiSelectDropdown2Props {
     placeholder: string;
-    selectedKeys: Array<string>;
+    selectedKeys: Set<string>;
     loadingKeys?: Set<string>;
     values: Map<string, string>;
     onSelect: (key: string) => void;
@@ -24,7 +24,7 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, loadingKeys = n
 
     const onValueElementClick = (key: string) => {
         if (loadingKeys.has(key)) return;
-        selectedKeys.includes(key) ? onDeselect(key) : onSelect(key);
+        selectedKeys.has(key) ? onDeselect(key) : onSelect(key);
         if (closeOnSelect) {
             setIsOpen(false);
         }
@@ -38,7 +38,7 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, loadingKeys = n
                         <Loading size="small" />
                     ) : (
                         <Checkbox
-                            isSelected={selectedKeys.includes(key)}
+                            isSelected={selectedKeys.has(key)}
                             onSelect={() => onSelect(key)}
                             onDeselect={() => onDeselect(key)}
                         />
@@ -76,7 +76,7 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, loadingKeys = n
                                 <div className="flex justify-between items-center">
                                     <div className="flex gap-2">
                                         <span className="whitespace-nowrap opacity-50">{placeholder}</span>
-                                        <span className="whitespace-nowrap font-medium">{selectedKeys.length} selected</span>
+                                        <span className="whitespace-nowrap font-medium">{selectedKeys.size} selected</span>
                                     </div>
                                     <ChevronDownIcon className={`w-4 h-4 ml-2 -mr-1  ${isOpen ? "rotate-180" : ""}`} />
                                 </div>
