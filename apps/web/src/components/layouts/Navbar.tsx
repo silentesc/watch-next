@@ -30,6 +30,13 @@ export function Navbar() {
                     <Link className="ml-1 text-2xl" to="/tags">Tags</Link>
                 </div>
             </section>
+            {/* Util */}
+            <section className="flex flex-col gap-3">
+                <h2 className="font-semibold text-foreground-secondary">Util</h2>
+                <div className="flex flex-col gap-1">
+                    <Link className="ml-1 text-2xl" to="/import">Import</Link>
+                </div>
+            </section>
             {/* Auth & Account */}
             <section className="mt-auto flex flex-col items-center justify-center">
                 {
