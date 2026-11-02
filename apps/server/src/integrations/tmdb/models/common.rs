@@ -3,6 +3,12 @@ use serde::{Deserialize, Serialize};
 use crate::integrations::tmdb::models::search::MultiSearchResult;
 
 #[derive(Serialize, Deserialize)]
+pub struct Keyword {
+    pub id: Option<i64>,
+    pub name: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct Language {
     pub iso_639_1: Option<String>,
     pub english_name: Option<String>,

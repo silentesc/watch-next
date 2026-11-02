@@ -1,8 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::integrations::tmdb::models::{
-    common::{Cast, Crew, Video},
-    movies::{MovieOverview, MovieReleaseDates},
+    common::{Cast, Crew, Keyword, Video}, movies::{MovieOverview, MovieReleaseDates},
 };
 
 #[derive(Serialize, Deserialize)]
@@ -229,6 +228,12 @@ pub struct MovieReleaseDatesResponse {
 pub struct MovieVideosResponse {
     pub id: i64,
     pub results: Vec<Video>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct MovieKeywordsResponse {
+    pub id: i64,
+    pub keywords: Vec<Keyword>,
 }
 
 #[derive(Serialize, Deserialize)]

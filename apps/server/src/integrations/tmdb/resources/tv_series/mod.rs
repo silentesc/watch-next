@@ -6,7 +6,8 @@ use crate::integrations::tmdb::{
         DiscoverTvSeriesParams, DiscoverTvSeriesResponse, SearchTvSeriesParams, SearchTvSeriesResponse,
         SimilarTvSeriesParams, SimilarTvSeriesResponse, TrendingTvSeriesParams, TrendingTvSeriesResponse,
         TvSeriesAggregateCreditsParams, TvSeriesAggregateCreditsResponse, TvSeriesDetailsParams,
-        TvSeriesRecommendationsParams, TvSeriesRecommendationsResponse, TvSeriesVideosParams, TvSeriesVideosResponse,
+        TvSeriesKeywordsResponse, TvSeriesRecommendationsParams, TvSeriesRecommendationsResponse, TvSeriesVideosParams,
+        TvSeriesVideosResponse,
     },
 };
 
@@ -70,6 +71,12 @@ impl<'a> TvSeriesApi<'a> {
     ) -> Result<TvSeriesVideosResponse, TmdbError> {
         self.tmdb_client
             .get(format!("/tv/{series_id}/videos").as_str(), &params)
+            .await
+    }
+
+    pub async fn keywords(&self, series_id: i32) -> Result<TvSeriesKeywordsResponse, TmdbError> {
+        self.tmdb_client
+            .get(format!("/tv/{series_id}/keywords").as_str(), &())
             .await
     }
 
