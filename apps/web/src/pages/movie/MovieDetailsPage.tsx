@@ -13,6 +13,7 @@ import { useMovieDetails } from "../../hooks/tmdb/use_movie_details";
 import { CustomListPicker } from "../../components/ui/CustomListPicker";
 import { Poster } from "../../components/ui/Poster";
 import { TagPicker } from "../../components/ui/TagPicker";
+import { useMovieKeywords } from "../../hooks/tmdb/use_movie_keywords";
 
 export function MovieDetailsPage() {
     const { id } = useParams({ from: "/movie/$id" });
@@ -20,6 +21,7 @@ export function MovieDetailsPage() {
     const movieId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
 
     const movieDetailsQuery = useMovieDetails(movieId);
+    const movieKeywordsQuery = useMovieKeywords(movieId);
 
     if (!movieId) {
         return <Error message="Unknown movie" />
@@ -74,6 +76,22 @@ export function MovieDetailsPage() {
                         <div className="my-5">
                             <Overview movieDetails={movieDetailsQuery.data} />
                         </div>
+
+                        {movieKeywordsQuery.data?.keywords.some(keyword => keyword.name) ? (
+                            <section className="my-5 flex flex-col gap-3">
+                                <h2 className="text-2xl font-bold">Keywords</h2>
+                                <div className="flex flex-wrap gap-2">
+                                    {movieKeywordsQuery.data.keywords.filter(keyword => keyword.name).map((keyword, index) => (
+                                        <span
+                                            key={keyword.id ?? `${keyword.name}-${index}`}
+                                            className="max-w-full rounded-md border border-background-tertiary bg-background-secondary/50 px-3 py-1 text-sm"
+                                        >
+                                            {keyword.name}
+                                        </span>
+                                    ))}
+                                </div>
+                            </section>
+                        ) : null}
 
                         {/* Side info as normal page content on small screens */}
                         <div className="lg:hidden">
