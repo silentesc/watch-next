@@ -6,9 +6,10 @@ use crate::{
         models::movies::MovieDetails,
         resources::movies::dto::{
             DiscoverMovieParams, DiscoverMovieResponse, MovieCreditsParams, MovieCreditsResponse, MovieDetailsParams,
-            MovieRecommendationsParams, MovieRecommendationsResponse, MovieReleaseDatesResponse, MovieVideosParams,
-            MovieVideosResponse, SearchMoviesParams, SearchMoviesResponse, SimilarMoviesParams, SimilarMoviesResponse,
-            TrendingMoviesParams, TrendingMoviesResponse,
+            MovieKeywordsResponse, MovieRecommendationsParams, MovieRecommendationsResponse,
+            MovieReleaseDatesResponse, MovieVideosParams, MovieVideosResponse, SearchMoviesParams,
+            SearchMoviesResponse, SimilarMoviesParams, SimilarMoviesResponse, TrendingMoviesParams,
+            TrendingMoviesResponse,
         },
     },
 };
@@ -66,6 +67,10 @@ pub async fn get_recommendations(
 
 pub async fn get_release_dates(tmdb: TmdbApi, movie_id: i32) -> Result<MovieReleaseDatesResponse, AppError> {
     tmdb.movies().release_dates(movie_id).await.map_err(Into::into)
+}
+
+pub async fn get_keywords(tmdb: TmdbApi, movie_id: i32) -> Result<MovieKeywordsResponse, AppError> {
+    tmdb.movies().keywords(movie_id).await.map_err(Into::into)
 }
 
 pub async fn get_similar(

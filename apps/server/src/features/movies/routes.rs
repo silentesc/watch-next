@@ -12,6 +12,7 @@ pub fn router() -> Router<AppState> {
             "/movie/{movie_id}/release_dates",
             get(handlers::get_movie_release_dates),
         )
+        .route("/movie/{movie_id}/keywords", get(handlers::get_movie_keywords))
         .route("/movie/{movie_id}/credits", get(handlers::get_movie_credits))
         .route("/movie/{movie_id}/videos", get(handlers::get_movie_videos))
         .route(

@@ -13,6 +13,7 @@ pub fn router() -> Router<AppState> {
             get(handlers::get_tv_series_aggregate_credits),
         )
         .route("/tv/{series_id}/videos", get(handlers::get_tv_series_videos))
+        .route("/tv/{series_id}/keywords", get(handlers::get_tv_series_keywords))
         .route(
             "/tv/{series_id}/recommendations",
             get(handlers::get_tv_series_recommendations),
