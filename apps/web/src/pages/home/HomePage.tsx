@@ -4,22 +4,19 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { CustomListCard } from "../../components/ui/cards/CustomListCard";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
-import { MovieHorizontalList } from "../../components/ui/lists/MovieHorizontalList";
-import { TvSeriesHorizontalList } from "../../components/ui/lists/TvSeriesHorizontalList";
 import { useCustomLists } from "../../hooks/customLists/use_custom_lists";
-import { useTrendingMovies } from "../../hooks/tmdb/use_trending_movies";
-import { useTrendingTvSeries } from "../../hooks/tmdb/use_trending_tv_series";
 import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
 import { ArrowCircleRightIcon } from "../../components/ui/icons/Icons";
 import { useTags } from "../../hooks/tags/use_tags";
 import { TagCard } from "../../components/ui/cards/TagCard";
+import { useTrendingAll } from "../../hooks/tmdb/use_trending_all";
+import { MultiHorizontalList } from "../../components/ui/lists/MultiHorizontalList";
 
 export function HomePage() {
     const navigate = useNavigate();
     const [search, setSearch] = useState("");
-    const trendingMoviesQuery = useTrendingMovies("day");
-    const trendingTvSeriesQuery = useTrendingTvSeries("day");
+    const trendingAllQuery = useTrendingAll("day");
 
     const customListsQuery = useCustomLists();
     const tagsQuery = useTags();
@@ -45,31 +42,18 @@ export function HomePage() {
             </section>
 
             <section>
-                <Link to="/discover" className="my-4 flex gap-1 items-center cursor-pointer w-max">
+                <Link to="/trending/all/$timeWindow" params={{timeWindow: "day"}} className="my-4 flex gap-1 items-center cursor-pointer w-max">
                     <span className="text-2xl font-bold">Trending today</span>
                     <ArrowCircleRightIcon className="w-7" />
                 </Link>
                 <div className="flex flex-col gap-8">
-                    <div>
-                        <h2 className="mb-3 text-lg font-semibold">Movies</h2>
-                        {trendingMoviesQuery.error ? (
-                            <Error message={trendingMoviesQuery.error.message} />
-                        ) : trendingMoviesQuery.isLoading ? (
-                            <Loading />
-                        ) : trendingMoviesQuery.data ? (
-                            <MovieHorizontalList movies={trendingMoviesQuery.data.pages[0].results} seeMoreLinkOptions={{ to: "/discover/trending/movie/$timeWindow", params: { timeWindow: "day" } }} />
-                        ) : <Error message="No data returned" />}
-                    </div>
-                    <div>
-                        <h2 className="mb-3 text-lg font-semibold">TV series</h2>
-                        {trendingTvSeriesQuery.error ? (
-                            <Error message={trendingTvSeriesQuery.error.message} />
-                        ) : trendingTvSeriesQuery.isLoading ? (
-                            <Loading />
-                        ) : trendingTvSeriesQuery.data ? (
-                            <TvSeriesHorizontalList tvSeries={trendingTvSeriesQuery.data.pages[0].results} seeMoreLinkOptions={{ to: "/discover/trending/tv/$timeWindow", params: { timeWindow: "day" } }} />
-                        ) : <Error message="No data returned" />}
-                    </div>
+                    {trendingAllQuery.error ? (
+                        <Error message={trendingAllQuery.error.message} />
+                    ) : trendingAllQuery.isLoading ? (
+                        <Loading />
+                    ) : trendingAllQuery.data ? (
+                        <MultiHorizontalList results={trendingAllQuery.data.pages[0].results} seeMoreLinkOptions={{ to: "/trending/all/$timeWindow", params: { timeWindow: "day" } }} />
+                    ) : <Error message="No data returned" />}
                 </div>
             </section>
 
