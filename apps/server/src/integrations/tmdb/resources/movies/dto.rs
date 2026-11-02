@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use crate::integrations::tmdb::models::{
-    common::{Cast, Crew, Keyword, Video}, movies::{MovieOverview, MovieReleaseDates},
+    common::{Cast, Crew, Keyword, Video},
+    movies::{MovieOverview, MovieReleaseDates},
 };
 
 #[derive(Serialize, Deserialize)]

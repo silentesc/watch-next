@@ -11,10 +11,9 @@ use crate::{
         models::movies::MovieDetails,
         resources::movies::dto::{
             DiscoverMovieParams, DiscoverMovieResponse, MovieCreditsParams, MovieCreditsResponse, MovieDetailsParams,
-            MovieKeywordsResponse, MovieRecommendationsParams, MovieRecommendationsResponse,
-            MovieReleaseDatesResponse, MovieVideosParams, MovieVideosResponse, SearchMoviesParams,
-            SearchMoviesResponse, SimilarMoviesParams, SimilarMoviesResponse, TrendingMoviesParams,
-            TrendingMoviesResponse,
+            MovieKeywordsResponse, MovieRecommendationsParams, MovieRecommendationsResponse, MovieReleaseDatesResponse,
+            MovieVideosParams, MovieVideosResponse, SearchMoviesParams, SearchMoviesResponse, SimilarMoviesParams,
+            SimilarMoviesResponse, TrendingMoviesParams, TrendingMoviesResponse,
         },
     },
     persistence::models::Session,
