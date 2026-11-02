@@ -12,6 +12,7 @@ const routes = [
     createRoute({ getParentRoute: () => rootRoute, path: "/custom-lists/$id", component: lazyRouteComponent(() => import("../pages/custom-lists/CustomListPage"), "CustomListPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/tags", component: lazyRouteComponent(() => import("../pages/tags/TagsOverviewPage"), "TagsOverviewPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/tags/$id", component: lazyRouteComponent(() => import("../pages/tags/TagPage"), "TagPage") }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/import", component: lazyRouteComponent(() => import("../pages/import/ImportPage"), "ImportPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/discover", component: lazyRouteComponent(() => import("../pages/discover/DiscoverPage"), "DiscoverPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/discover/movie", validateSearch: (search) => validateStringSearch<DiscoverMovieSearch>(search), component: lazyRouteComponent(() => import("../pages/discover/DiscoverMoviePage"), "DiscoverMoviePage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/discover/tv", validateSearch: (search) => validateStringSearch<DiscoverTvSearch>(search), component: lazyRouteComponent(() => import("../pages/discover/DiscoverTvSeriesPage"), "DiscoverTvSeriesPage") }),

@@ -18,7 +18,7 @@ interface TagPickerProps {
 }
 
 interface TagPickerModeProps {
-    selectedKeys: Array<string>,
+    selectedKeys: Set<string>,
     loadingKeys: Set<string>,
     values: Map<string, string>,
     onTag: (tagIdString: string) => void,
@@ -43,7 +43,7 @@ function TagPickerPopup({ selectedKeys, loadingKeys, values, onTag, onUntag }: T
 
     const onTagClick = (tagId: string) => {
         if (loadingKeys.has(tagId)) return;
-        selectedKeys.includes(tagId) ? onUntag(tagId) : onTag(tagId);
+        selectedKeys.has(tagId) ? onUntag(tagId) : onTag(tagId);
     };
 
     return (
@@ -51,7 +51,7 @@ function TagPickerPopup({ selectedKeys, loadingKeys, values, onTag, onUntag }: T
             <Button value={
                 <div className="flex gap-1.5 items-center">
                     <TagIcon className="w-4 h-4" />
-                    <span className={`${selectedKeys.length > 0 ? "opacity-80" : "opacity-60"} text-sm leading-0 font-medium`}>{selectedKeys.length}</span>
+                    <span className={`${selectedKeys.size > 0 ? "opacity-80" : "opacity-60"} text-sm leading-0 font-medium`}>{selectedKeys.size}</span>
                 </div>
             } fullWidth={false} onClick={() => setIsOpen(true)} />
             {
@@ -62,7 +62,7 @@ function TagPickerPopup({ selectedKeys, loadingKeys, values, onTag, onUntag }: T
                             <div className="flex flex-wrap gap-3">
                                 {Array.from(values.entries()).map(
                                     ([id, name]) => {
-                                        const variant = selectedKeys.includes(id) ? "primary" : "default";
+                                        const variant = selectedKeys.has(id) ? "primary" : "default";
                                         return (
                                             <Tag key={id} name={name} variant={variant} isLoading={loadingKeys.has(id)} onClick={() => onTagClick(id)} />
                                         );
@@ -99,7 +99,7 @@ export function TagPicker({ item, mode }: TagPickerProps) {
 
     const mediaItemTagIds = new Set((mediaItemTagsQuery.data ?? []).map((tag) => tag.id));
 
-    const selectedKeys = Array.from(mediaItemTagIds, (id) => String(id));
+    const selectedKeys = new Set(Array.from(mediaItemTagIds, (id) => String(id)));
     const values = new Map(tagsQuery.data.map((tag) => [String(tag.id), tag.name]));
 
     const tag = async (tagIdString: string) => {

@@ -31,7 +31,7 @@ export function PosterCard({ title = "", description, posterPath, link, label, l
             <div className={`absolute top-1 left-1 px-2 py-1 rounded text-xs font-semibold z-10 ${labelClassName}`}>
                 {label}
             </div>
-            <div className="relative aspect-2/3 cursor-pointer">
+            <div className={`relative aspect-2/3${link ? " cursor-pointer" : ""}`}>
                 {link ? <Link to={link.to} params={link.params}>{poster}</Link> : poster}
                 {children ? <div className="pointer-events-none absolute inset-0 z-10">{children}</div> : null}
             </div>
