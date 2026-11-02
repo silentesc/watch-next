@@ -11,6 +11,11 @@ export interface Genre {
     name: string;
 }
 
+export interface Keyword {
+    id?: number;
+    name?: string;
+}
+
 export interface PersonOverview {
     adult?: boolean;
     gender?: number;
