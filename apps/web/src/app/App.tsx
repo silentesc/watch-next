@@ -75,7 +75,7 @@ export function App() {
             }
             <main
                 inert={isNavbarOpen && isLoggedIn && !isScreenBig()}
-                className={`${isNavbarOpen && isLoggedIn ? "md:ml-75" : ""} p-6 ${isLoggedIn ? "pt-22" : "pt-6"}`}
+                className={`${isNavbarOpen && isLoggedIn ? "md:ml-75" : ""} p-2 md:p-6 ${isLoggedIn ? "pt-18 md:pt-22" : "pt-2 md:pt-6"}`}
             >
                 <Outlet />
             </main>
