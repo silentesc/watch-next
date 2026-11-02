@@ -8,8 +8,8 @@ use crate::{
             DiscoverTvSeriesParams, DiscoverTvSeriesResponse, SearchTvSeriesParams, SearchTvSeriesResponse,
             SimilarTvSeriesParams, SimilarTvSeriesResponse, TrendingTvSeriesParams, TrendingTvSeriesResponse,
             TvSeriesAggregateCreditsParams, TvSeriesAggregateCreditsResponse, TvSeriesDetailsParams,
-            TvSeriesRecommendationsParams, TvSeriesRecommendationsResponse, TvSeriesVideosParams,
-            TvSeriesVideosResponse,
+            TvSeriesKeywordsResponse, TvSeriesRecommendationsParams, TvSeriesRecommendationsResponse,
+            TvSeriesVideosParams, TvSeriesVideosResponse,
         },
     },
 };
@@ -81,6 +81,10 @@ pub async fn get_tv_series_videos(
     params: TvSeriesVideosParams,
 ) -> Result<TvSeriesVideosResponse, AppError> {
     tmdb.tv_series().videos(series_id, params).await.map_err(Into::into)
+}
+
+pub async fn get_tv_series_keywords(tmdb: TmdbApi, series_id: i32) -> Result<TvSeriesKeywordsResponse, AppError> {
+    tmdb.tv_series().keywords(series_id).await.map_err(Into::into)
 }
 
 pub async fn get_tv_series_aggregate_credits(

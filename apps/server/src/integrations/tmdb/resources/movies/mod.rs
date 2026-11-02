@@ -4,9 +4,9 @@ use crate::integrations::tmdb::{
     models::{common::TimeWindow, movies::MovieDetails},
     resources::movies::dto::{
         DiscoverMovieParams, DiscoverMovieResponse, MovieCreditsParams, MovieCreditsResponse, MovieDetailsParams,
-        MovieRecommendationsParams, MovieRecommendationsResponse, MovieReleaseDatesResponse, MovieVideosParams,
-        MovieVideosResponse, SearchMoviesParams, SearchMoviesResponse, SimilarMoviesParams, SimilarMoviesResponse,
-        TrendingMoviesParams, TrendingMoviesResponse,
+        MovieKeywordsResponse, MovieRecommendationsParams, MovieRecommendationsResponse, MovieReleaseDatesResponse,
+        MovieVideosParams, MovieVideosResponse, SearchMoviesParams, SearchMoviesResponse, SimilarMoviesParams,
+        SimilarMoviesResponse, TrendingMoviesParams, TrendingMoviesResponse,
     },
 };
 
@@ -54,6 +54,12 @@ impl<'a> MoviesApi<'a> {
     pub async fn release_dates(&self, movie_id: i32) -> Result<MovieReleaseDatesResponse, TmdbError> {
         self.tmdb_client
             .get(format!("/movie/{movie_id}/release_dates").as_str(), &())
+            .await
+    }
+
+    pub async fn keywords(&self, movie_id: i32) -> Result<MovieKeywordsResponse, TmdbError> {
+        self.tmdb_client
+            .get(format!("/movie/{movie_id}/keywords").as_str(), &())
             .await
     }
 

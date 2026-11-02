@@ -11,9 +11,10 @@ use crate::{
         models::movies::MovieDetails,
         resources::movies::dto::{
             DiscoverMovieParams, DiscoverMovieResponse, MovieCreditsParams, MovieCreditsResponse, MovieDetailsParams,
-            MovieRecommendationsParams, MovieRecommendationsResponse, MovieReleaseDatesResponse, MovieVideosParams,
-            MovieVideosResponse, SearchMoviesParams, SearchMoviesResponse, SimilarMoviesParams, SimilarMoviesResponse,
-            TrendingMoviesParams, TrendingMoviesResponse,
+            MovieKeywordsResponse, MovieRecommendationsParams, MovieRecommendationsResponse,
+            MovieReleaseDatesResponse, MovieVideosParams, MovieVideosResponse, SearchMoviesParams,
+            SearchMoviesResponse, SimilarMoviesParams, SimilarMoviesResponse, TrendingMoviesParams,
+            TrendingMoviesResponse,
         },
     },
     persistence::models::Session,
@@ -104,6 +105,18 @@ pub async fn get_movie_release_dates(
     Ok((
         StatusCode::OK,
         Json(service::get_release_dates(app_state.tmdb, movie_id).await?),
+    ))
+}
+
+#[axum::debug_handler]
+pub async fn get_movie_keywords(
+    Extension(app_state): Extension<AppState>,
+    Extension(_): Extension<Session>,
+    Path(movie_id): Path<i32>,
+) -> Result<(StatusCode, Json<MovieKeywordsResponse>), AppError> {
+    Ok((
+        StatusCode::OK,
+        Json(service::get_keywords(app_state.tmdb, movie_id).await?),
     ))
 }
 
