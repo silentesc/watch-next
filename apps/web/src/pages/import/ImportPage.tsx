@@ -14,12 +14,6 @@ import { CollectionCard } from "../../components/ui/cards/CollectionCard";
 import { useAddCustomListItem } from "../../hooks/customLists/use_add_custom_list_item";
 import { useTagMediaItem } from "../../hooks/tags/use_tag_media_item";
 
-const isAlreadyAddedError = (error: unknown) =>
-    error instanceof globalThis.Error && [
-        "Media item already has this tag.",
-        "Media item is already in custom list.",
-    ].includes(error.message);
-
 interface SearchItemProps {
     searchText: string;
     onSelect: (mediaType: "tv" | "movie" | "collection", id: number) => Promise<boolean>;
@@ -40,6 +34,7 @@ const renderItem = (multi_search_result: MultiSearchResult) => {
 function SearchItem({ searchText, onSelect, onAdded }: SearchItemProps) {
     const searchMulti = useSearchMulti("multi", searchText);
     const [addedItems, setAddedItems] = useState<Set<string>>(new Set());
+    const [addingItem, setAddingItem] = useState<string>();
 
     if (searchMulti.isLoading) return <Loading />;
     if (searchMulti.error) return <Error message={searchMulti.error.message} />;
@@ -50,24 +45,39 @@ function SearchItem({ searchText, onSelect, onAdded }: SearchItemProps) {
     return (
         <div>
             <h2 className="text-2xl my-2 font-medium">{searchText}</h2>
-            <div className="flex gap-2 overflow-scroll">
-                {searchResults.map(r => (
-                    <div key={r.id} className="flex flex-col gap-1 [&>div:first-child]:flex-1">
-                        {renderItem(r)}
-                        <Button
-                            value={addedItems.has(`${r.media_type}-${r.id}`) ? "Added" : "Add"}
-                            variant={addedItems.has(`${r.media_type}-${r.id}`) ? "primary" : "default"}
-                            disabled={addedItems.has(`${r.media_type}-${r.id}`)}
-                            onClick={async () => {
-                                if (r.id !== undefined && await onSelect(r.media_type, r.id)) {
-                                    setAddedItems(current => new Set(current).add(`${r.media_type}-${r.id}`));
-                                    onAdded();
-                                }
-                            }}
-                        />
-                    </div>
-                ))}
-            </div>
+            {searchResults.length === 0 ? <p>No results</p> : (
+                <div className="flex gap-2 overflow-scroll">
+                    {searchResults.map(r => {
+                        const itemKey = `${r.media_type}-${r.id}`;
+                        const isAdded = addedItems.has(itemKey);
+                        const isAdding = addingItem === itemKey;
+
+                        return (
+                            <div key={r.id} className="flex flex-col gap-1 [&>div:first-child]:flex-1">
+                                {renderItem(r)}
+                                <Button
+                                    value={isAdding ? <span className="flex items-center justify-center gap-2"><Loading size="small" />Adding</span> : isAdded ? "Added" : "Add"}
+                                    variant={isAdded ? "primary" : "default"}
+                                    disabled={isAdded || addingItem !== undefined}
+                                    onClick={async () => {
+                                        if (r.id === undefined) return;
+
+                                        setAddingItem(itemKey);
+                                        try {
+                                            if (await onSelect(r.media_type, r.id)) {
+                                                setAddedItems(current => new Set(current).add(itemKey));
+                                                onAdded();
+                                            }
+                                        } finally {
+                                            setAddingItem(undefined);
+                                        }
+                                    }}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }
@@ -105,9 +115,7 @@ export function ImportPage() {
         if (additions.length === 0) return false;
 
         try {
-            await Promise.all(additions.map(addition => addition.catch(error => {
-                if (!isAlreadyAddedError(error)) throw error;
-            })));
+            await Promise.all(additions);
             return true;
         } catch (error) {
             setSelectionError(error instanceof globalThis.Error ? error.message : "Unable to add media item.");
@@ -160,7 +168,7 @@ export function ImportPage() {
 
             {/* Input */}
             <div className="flex flex-col gap-1">
-                <TextArea placeholder={"Cool movie\nCool Show\n..."} value={input} rows={5} onChange={e => setInput(e.target.value)} spellCheck={false} />
+                <TextArea placeholder={"Cool movie\nCool show\n..."} value={input} rows={5} onChange={e => setInput(e.target.value)} spellCheck={false} />
                 <div className="w-40">
                     <Button value={"Search"} onClick={() => search()} />
                 </div>
