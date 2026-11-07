@@ -18,7 +18,7 @@ export function useTagMediaItem() {
         onSuccess: (_data, { tagId, item }) => Promise.all([
             queryClient.invalidateQueries({ queryKey: tagItemsQueryKey(tagId) }),
             queryClient.invalidateQueries({ queryKey: tagsQueryKey }),
-            queryClient.invalidateQueries({ queryKey: mediaItemTagsQueryKey(item.kind, item.external_source, item.external_id, item.season_number, item.episode_number) }),
+            queryClient.invalidateQueries({ queryKey: mediaItemTagsQueryKey(item.kind, item.external_source, item.external_id) }),
         ]),
     });
 }

@@ -1,6 +1,6 @@
 import { api } from "../client";
 import { error2userMessage } from "../errors";
-import type { MediaItem } from "./models";
+import type { MediaItem } from "../mediaItems/models";
 
 export async function getCustomListItems(list_id: number): Promise<Array<MediaItem>> {
     try {

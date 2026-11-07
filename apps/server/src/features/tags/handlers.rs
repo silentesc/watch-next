@@ -13,7 +13,7 @@ use crate::{
         },
         service,
     },
-    persistence::models::{MediaItemTree, Session},
+    persistence::models::{MediaItem, Session},
 };
 
 #[axum::debug_handler]
@@ -69,7 +69,7 @@ pub async fn get_media_items_of_tag(
     Extension(app_state): Extension<AppState>,
     Extension(session): Extension<Session>,
     Path(tag_id): Path<i64>,
-) -> Result<(StatusCode, Json<Vec<MediaItemTree>>), AppError> {
+) -> Result<(StatusCode, Json<Vec<MediaItem>>), AppError> {
     match service::get_media_items_of_tag(&app_state.pool, session.user_id, tag_id).await {
         Ok(items) => Ok((StatusCode::OK, Json(items))),
         Err(err) => Err(err),

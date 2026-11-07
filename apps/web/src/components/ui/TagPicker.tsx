@@ -81,7 +81,7 @@ const loadingKeys: Set<string> = new Set();
 
 export function TagPicker({ item, mode }: TagPickerProps) {
     const tagsQuery = useTags();
-    const mediaItemTagsQuery = useMediaItemTags(item.kind, item.external_source, item.external_id, item.season_number, item.episode_number);
+    const mediaItemTagsQuery = useMediaItemTags(item.kind, item.external_source, item.external_id);
     const tagMediaItem = useTagMediaItem();
     const untagMediaItem = useUntagMediaItem();
     const queryError = tagsQuery.error || mediaItemTagsQuery.error;

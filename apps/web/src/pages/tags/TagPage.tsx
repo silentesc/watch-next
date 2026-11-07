@@ -15,40 +15,6 @@ import { useUpdateTag } from "../../hooks/tags/use_update_tag";
 import { useDeleteTag } from "../../hooks/tags/use_delete_tag";
 import { useTags } from "../../hooks/tags/use_tags";
 import { useTagItems } from "../../hooks/tags/use_tag_items";
-import type { MediaItemTree } from "../../api/tags/models";
-
-interface TaggedMediaItem {
-    parent: MediaItemTree,
-    tagged_children: Array<MediaItemTree>,
-}
-
-function groupedMediaItems(mediaItems: Array<MediaItemTree>) {
-    const groupedMediaItems: Map<string, TaggedMediaItem> = new Map();
-    for (const item of mediaItems) {
-        const key = `${item.kind}-${item.external_source}-${item.external_id}`;
-        if (["collection", "movie", "tv_series"].includes(item.kind)) {
-            const taggedItem = groupedMediaItems.get(key);
-            if (!taggedItem) {
-                groupedMediaItems.set(key, { parent: item, tagged_children: [] });
-            }
-            continue;
-        }
-        else if (["tv_season", "tv_episode"].includes(item.kind)) {
-            let parent = item;
-            while (parent.parent) {
-                parent = parent.parent;
-            }
-            const parentKey = `${parent.kind}-${parent.external_source}-${parent.external_id}`;
-            const taggedItem = groupedMediaItems.get(parentKey) || { parent, tagged_children: [] };
-            taggedItem.tagged_children.push(item);
-            groupedMediaItems.set(parentKey, taggedItem);
-        }
-        else {
-            console.warn(`Skipping unknown media item kind: ${item.kind}`);
-        }
-    }
-    return Array.from(groupedMediaItems.values());
-}
 
 export function TagPage() {
     const { id } = useParams({ from: "/tags/$id" });
@@ -80,7 +46,6 @@ export function TagPage() {
     }
 
     const mediaItems = tagItemsQuery.data;
-    const groupedItems = groupedMediaItems(mediaItems);
 
     const startEditing = () => {
         setName(tag.name);
@@ -123,9 +88,7 @@ export function TagPage() {
                             )
                         }
                         <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-foreground-secondary">
-                            <span>{groupedItems.length} {groupedItems.length === 1 ? "item" : "items"}</span>
-                            <span>•</span>
-                            <span>{mediaItems.length} total</span>
+                            <span>{mediaItems.length} {mediaItems.length === 1 ? "item" : "items"}</span>
                             <span>•</span>
                             <span>Created {formatDate(tag.created_at, "short")}</span>
                             <span>•</span>
@@ -149,38 +112,26 @@ export function TagPage() {
                     <p>No items with this tag</p>
                 ) : (
                     <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(9rem,2fr))] justify-items-center">
-                        {groupedItems.map(item => {
-                            const parent = item.parent;
-                            const key = `${parent.kind}${parent.external_source}${parent.external_id}`;
-                            switch (parent.kind) {
+                        {mediaItems.map(item => {
+                            const key = `${item.kind}${item.external_source}${item.external_id}`;
+                            switch (item.kind) {
                                 case "collection":
                                     const collection = {
-                                        id: parent.external_id, name: parent.title, poster_path: parent.poster_path,
+                                        id: item.external_id, name: item.title, poster_path: item.poster_path,
                                     } as CollectionOverview;
                                     return <CollectionCard key={key} collection={collection} />
                                 case "movie":
                                     const movie = {
-                                        id: parent.external_id, title: parent.title, release_date: parent.release_date, poster_path: parent.poster_path,
+                                        id: item.external_id, title: item.title, release_date: item.release_date, poster_path: item.poster_path,
                                     } as MovieOverview;
                                     return <MovieCard key={key} movie={movie} />
                                 case "tv_series":
                                     const tvSeries = {
-                                        id: parent.external_id, name: parent.title, first_air_date: parent.release_date, poster_path: parent.poster_path,
+                                        id: item.external_id, name: item.title, first_air_date: item.release_date, poster_path: item.poster_path,
                                     } as TvSeriesOverview;
-                                    const seasonCount = item.tagged_children.filter(child => child.kind === "tv_season").length;
-                                    const episodeCount = item.tagged_children.filter(child => child.kind === "tv_episode").length;
-                                    return (
-                                        <TvSeriesCard key={key} tvSeries={tvSeries}>
-                                            {item.tagged_children.length > 0 ? (
-                                                <div className="absolute inset-x-0 bottom-0 p-2 pt-3 text-sm font-medium bg-linear-to-t from-black/90 via-black/75 to-transparent">
-                                                    <p>{seasonCount} tagged {seasonCount === 1 ? "season" : "seasons"}</p>
-                                                    <p>{episodeCount} tagged {episodeCount === 1 ? "episode" : "episodes"}</p>
-                                                </div>
-                                            ) : null}
-                                        </TvSeriesCard>
-                                    )
+                                    return <TvSeriesCard key={key} tvSeries={tvSeries} />
                                 default:
-                                    return <Error key={key} message={`Media item has unknown kind: ${parent.kind}`} />
+                                    return <Error key={key} message={`Media item has unknown kind: ${item.kind}`} />
                             }
                         })}
                     </div>

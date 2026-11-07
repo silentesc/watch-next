@@ -3,15 +3,10 @@ use sqlx::PgPool;
 
 use crate::{
     app::errors::AppError,
-    integrations::tmdb::{
-        TmdbApi,
-        resources::{
-            collections::dto::CollectionDetailsParams, movies::dto::MovieDetailsParams,
-            tv_series::dto::TvSeriesDetailsParams,
-        },
-    },
+    features::media_items,
+    integrations::tmdb::TmdbApi,
     persistence::{
-        models::{CustomList, MediaItem, MediaItemTree},
+        models::{CustomList, MediaItem},
         table_utils::custom_lists,
     },
 };
@@ -47,72 +42,16 @@ pub async fn add_media_item_to_list(
 ) -> Result<(), AppError> {
     custom_lists::ensure_custom_list_id_exists(pool, list_id, user_id).await?;
 
-    let (title, poster_path, release_date) = match (kind, external_source) {
-        ("collection", "tmdb") => {
-            let details = tmdb
-                .collections()
-                .details(external_id, CollectionDetailsParams { language: None })
-                .await
-                .map_err(AppError::from)?;
+    if external_source != "tmdb" {
+        return Err(AppError::new(
+            StatusCode::BAD_REQUEST,
+            String::from("Invalid external source."),
+        ));
+    }
 
-            let release_date = details
-                .parts
-                .and_then(|parts| parts.into_iter().next())
-                .and_then(|collection_detail| collection_detail.release_date);
+    let media_item = media_items::service::get_tmdb_media_item(tmdb, kind, external_id).await?;
 
-            (details.name, details.poster_path, release_date)
-        }
-        ("movie", "tmdb") => {
-            let details = tmdb
-                .movies()
-                .details(
-                    external_id,
-                    MovieDetailsParams {
-                        append_to_response: None,
-                        language: None,
-                    },
-                )
-                .await
-                .map_err(AppError::from)?;
-
-            (details.title, details.poster_path, details.release_date)
-        }
-        ("tv_series", "tmdb") => {
-            let details = tmdb
-                .tv_series()
-                .details(
-                    external_id,
-                    TvSeriesDetailsParams {
-                        append_to_response: None,
-                        language: None,
-                    },
-                )
-                .await
-                .map_err(AppError::from)?;
-
-            (details.name, details.poster_path, details.first_air_date)
-        }
-        _ => {
-            return Err(AppError::new(
-                StatusCode::BAD_REQUEST,
-                String::from("Invalid media item kind or external source."),
-            ));
-        }
-    };
-
-    let media_item_tree = MediaItemTree {
-        kind: kind.to_string(),
-        title,
-        poster_path,
-        release_date,
-        external_source: external_source.to_string(),
-        external_id,
-        parent: None,
-        season_number: None,
-        episode_number: None,
-    };
-
-    custom_lists::add_media_item_to_list(pool, user_id, list_id, media_item_tree).await
+    custom_lists::add_media_item_to_list(pool, user_id, list_id, media_item).await
 }
 
 pub async fn delete_media_item_from_list(

@@ -7,7 +7,7 @@ use crate::{
     features::tags::dto::UntagMediaItemRequest,
     logger::enums::category::Category,
     persistence::{
-        models::{MediaItem, MediaItemTree, Tag},
+        models::{MediaItem, Tag},
         table_utils::media_items,
     },
 };
@@ -42,7 +42,7 @@ const UPDATE_TAG_QUERY: &str = r#"
 const DELETE_TAG_QUERY: &str = "DELETE FROM tags WHERE id = $1 AND user_id = $2";
 
 const GET_MEDIA_ITEMS_OF_TAG_QUERY: &str = r#"
-    SELECT kind, title, poster_path, release_date, external_source, external_id, parent_id, season_number, episode_number
+    SELECT kind, title, poster_path, release_date, external_source, external_id
     FROM media_items
     INNER JOIN tags_items
         ON tags_items.media_item_id = media_items.id
@@ -67,10 +67,8 @@ const UNTAG_MEDIA_ITEM_QUERY: &str = r#"
         AND media_items.kind = $2
         AND media_items.external_source = $3
         AND media_items.external_id = $4
-        AND media_items.season_number IS NOT DISTINCT FROM $5
-        AND media_items.episode_number IS NOT DISTINCT FROM $6
         AND tags.id = tags_items.tag_id
-        AND tags.user_id = $7
+        AND tags.user_id = $5
     "#;
 
 /**
@@ -266,23 +264,8 @@ pub async fn get_media_items_of_tag(pool: &PgPool, user_id: i64, tag_id: i64) ->
 /**
  * Add a media item to a tag
  */
-pub async fn tag_media_item(
-    pool: &PgPool,
-    user_id: i64,
-    tag_id: i64,
-    media_item_tree: MediaItemTree,
-) -> Result<(), AppError> {
-    if !matches!(
-        media_item_tree.kind.as_str(),
-        "collection" | "movie" | "tv_series" | "tv_season" | "tv_episode"
-    ) {
-        return Err(AppError::new(
-            StatusCode::BAD_REQUEST,
-            String::from("Invalid media item kind."),
-        ));
-    }
-
-    let media_item_id = media_items::upsert_media_item(pool, media_item_tree).await?;
+pub async fn tag_media_item(pool: &PgPool, user_id: i64, tag_id: i64, media_item: MediaItem) -> Result<(), AppError> {
+    let media_item_id = media_items::upsert_media_item(pool, media_item).await?;
 
     let result = sqlx::query(TAG_MEDIA_ITEM_QUERY)
         .bind(tag_id)
@@ -328,8 +311,6 @@ pub async fn untag_media_item(
         .bind(request.kind)
         .bind(request.external_source)
         .bind(request.external_id)
-        .bind(request.season_number)
-        .bind(request.episode_number)
         .bind(user_id)
         .execute(pool)
         .await
@@ -353,34 +334,7 @@ pub async fn untag_media_item(
 
 #[cfg(test)]
 mod tests {
-    use sqlx::postgres::PgPoolOptions;
-
     use super::*;
-
-    #[tokio::test]
-    async fn rejects_unsupported_media_item_kind_before_database_access() {
-        let pool = PgPoolOptions::new()
-            .connect_lazy("postgres://test:test@localhost/test")
-            .expect("test pool should be constructible");
-        let media_item_tree = MediaItemTree {
-            kind: String::from("unsupported"),
-            title: None,
-            poster_path: None,
-            release_date: None,
-            external_source: String::from("tmdb"),
-            external_id: 1,
-            parent: None,
-            season_number: None,
-            episode_number: None,
-        };
-
-        let error = tag_media_item(&pool, 1, 1, media_item_tree)
-            .await
-            .expect_err("unsupported media item kind should be rejected");
-
-        assert_eq!(error.status_code, StatusCode::BAD_REQUEST);
-        assert_eq!(error.message, "Invalid media item kind.");
-    }
 
     #[test]
     fn every_tag_query_scopes_access_to_the_requesting_user() {
