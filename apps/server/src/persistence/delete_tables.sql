@@ -1,8 +1,0 @@
-DROP TABLE IF EXISTS tags_items;
-DROP TABLE IF EXISTS tags;
-DROP TABLE IF EXISTS custom_list_items;
-DROP TABLE IF EXISTS custom_lists;
-DROP TABLE IF EXISTS media_items;
-DROP TABLE IF EXISTS cache;
-DROP TABLE IF EXISTS sessions;
-DROP TABLE IF EXISTS users;
