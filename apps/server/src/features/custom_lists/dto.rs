@@ -66,6 +66,11 @@ pub struct UpdateCustomListRequest {
 
 #[derive(Deserialize)]
 pub struct AddMediaItemToListRequest {
+    pub items: Vec<MediaItemRequest>,
+}
+
+#[derive(Deserialize)]
+pub struct MediaItemRequest {
     pub kind: String,
     pub external_source: String,
     pub external_id: i32,
@@ -73,7 +78,5 @@ pub struct AddMediaItemToListRequest {
 
 #[derive(Deserialize)]
 pub struct DeleteMediaItemFromListRequest {
-    pub kind: String,
-    pub external_source: String,
-    pub external_id: i32,
+    pub items: Vec<MediaItemRequest>,
 }

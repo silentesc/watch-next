@@ -64,24 +64,33 @@ const GET_MEDIA_ITEM_TAGS: &str = r#"
     ORDER BY t.created_at, t.id
     "#;
 
-// pub async fn get_media_item_by_id(pool: &PgPool, item_id: i64) -> Result<Option<MediaItem>, AppError> {
-//     let query = r#"
-//         SELECT kind, title, poster_path, release_date, external_source, external_id
-//         FROM media_items
-//         WHERE id = $1
-//         "#;
-//     sqlx::query_as(query)
-//         .bind(item_id)
-//         .fetch_optional(pool)
-//         .await
-//         .map_err(|err| {
-//             error!(
-//                 Category::Db,
-//                 "Getting custom lists of media item failed with error: {:#?}", err
-//             );
-//             AppError::generic_500()
-//         })
-// }
+pub async fn get_media_item(
+    pool: &PgPool,
+    kind: &str,
+    external_source: &str,
+    external_id: i32,
+) -> Result<Option<MediaItem>, AppError> {
+    let query = r#"
+        SELECT kind, title, poster_path, release_date, external_source, external_id
+        FROM media_items
+        WHERE kind = $1
+            AND external_source = $2
+            AND external_id = $3
+        "#;
+    sqlx::query_as(query)
+        .bind(kind)
+        .bind(external_source)
+        .bind(external_id)
+        .fetch_optional(pool)
+        .await
+        .map_err(|err| {
+            error!(
+                Category::Db,
+                "Getting custom lists of media item failed with error: {:#?}", err
+            );
+            AppError::generic_500()
+        })
+}
 
 pub async fn get_media_item_custom_lists(
     pool: &PgPool,
@@ -127,12 +136,27 @@ pub async fn get_media_item_tags(
 /**
  * Create or update a media item and get its id
  */
-pub async fn upsert_media_item(pool: &PgPool, media_item: MediaItem) -> Result<i64, AppError> {
-    sqlx::query_scalar(
+pub async fn upsert_media_items(pool: &PgPool, media_items: Vec<MediaItem>) -> Result<Vec<i64>, AppError> {
+    let mut kinds = Vec::with_capacity(media_items.len());
+    let mut titles = Vec::with_capacity(media_items.len());
+    let mut poster_paths = Vec::with_capacity(media_items.len());
+    let mut release_dates = Vec::with_capacity(media_items.len());
+    let mut external_sources = Vec::with_capacity(media_items.len());
+    let mut external_ids = Vec::with_capacity(media_items.len());
+
+    for item in media_items {
+        kinds.push(item.kind);
+        titles.push(item.title);
+        poster_paths.push(item.poster_path);
+        release_dates.push(item.release_date);
+        external_sources.push(item.external_source);
+        external_ids.push(item.external_id);
+    }
+
+    let ids = sqlx::query_scalar(
         r#"
-        INSERT INTO media_items
-            (kind, title, poster_path, release_date, external_source, external_id)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO media_items (kind, title, poster_path, release_date, external_source, external_id)
+        SELECT * FROM UNNEST($1::text[], $2::text[], $3::text[], $4::text[], $5::text[], $6::integer[])
         ON CONFLICT (kind, external_source, external_id)
         DO UPDATE SET
             title = EXCLUDED.title,
@@ -141,18 +165,20 @@ pub async fn upsert_media_item(pool: &PgPool, media_item: MediaItem) -> Result<i
         RETURNING id
         "#,
     )
-    .bind(media_item.kind)
-    .bind(media_item.title)
-    .bind(media_item.poster_path)
-    .bind(media_item.release_date)
-    .bind(media_item.external_source)
-    .bind(media_item.external_id)
-    .fetch_one(pool)
+    .bind(kinds)
+    .bind(titles)
+    .bind(poster_paths)
+    .bind(release_dates)
+    .bind(external_sources)
+    .bind(external_ids)
+    .fetch_all(pool)
     .await
     .map_err(|err| {
         error!(Category::Db, "Upserting media item failed with error: {:#?}", err);
         AppError::generic_500()
-    })
+    })?;
+
+    Ok(ids)
 }
 
 #[cfg(test)]

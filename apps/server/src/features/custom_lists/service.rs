@@ -3,7 +3,7 @@ use sqlx::PgPool;
 
 use crate::{
     app::errors::AppError,
-    features::media_items,
+    features::{custom_lists::dto::MediaItemRequest, media_items},
     integrations::tmdb::TmdbApi,
     persistence::{
         models::{CustomList, MediaItem},
@@ -36,31 +36,28 @@ pub async fn add_media_item_to_list(
     tmdb: &TmdbApi,
     user_id: i64,
     list_id: i64,
-    kind: &str,
-    external_source: &str,
-    external_id: i32,
+    items: Vec<MediaItemRequest>,
 ) -> Result<(), AppError> {
-    custom_lists::ensure_custom_list_id_exists(pool, list_id, user_id).await?;
-
-    if external_source != "tmdb" {
-        return Err(AppError::new(
-            StatusCode::BAD_REQUEST,
-            String::from("Invalid external source."),
-        ));
+    let mut resolved_items = Vec::with_capacity(items.len());
+    for item in items {
+        let media_item = match item.external_source.as_str() {
+            "tmdb" => media_items::service::get_tmdb_media_item(pool, tmdb, &item.kind, item.external_id).await,
+            _ => Err(AppError::new(
+                StatusCode::BAD_REQUEST,
+                String::from("Invalid external source."),
+            )),
+        }?;
+        resolved_items.push(media_item);
     }
 
-    let media_item = media_items::service::get_tmdb_media_item(tmdb, kind, external_id).await?;
-
-    custom_lists::add_media_item_to_list(pool, user_id, list_id, media_item).await
+    custom_lists::add_media_items_to_list(pool, user_id, list_id, resolved_items).await
 }
 
 pub async fn delete_media_item_from_list(
     pool: &PgPool,
     user_id: i64,
     list_id: i64,
-    kind: &str,
-    external_source: &str,
-    external_id: i32,
+    items: Vec<MediaItemRequest>,
 ) -> Result<(), AppError> {
-    custom_lists::delete_media_item_from_list(pool, user_id, list_id, kind, external_source, external_id).await
+    custom_lists::delete_media_items_from_list(pool, user_id, list_id, items).await
 }

@@ -1,7 +1,4 @@
-use axum::{
-    Extension, Json,
-    extract::{Path, Query},
-};
+use axum::{Extension, Json, extract::Path};
 use reqwest::StatusCode;
 
 use crate::{
@@ -94,9 +91,9 @@ pub async fn untag_media_item(
     Extension(app_state): Extension<AppState>,
     Extension(session): Extension<Session>,
     Path(tag_id): Path<i64>,
-    Query(params): Query<UntagMediaItemRequest>,
+    Json(payload): Json<UntagMediaItemRequest>,
 ) -> Result<StatusCode, AppError> {
-    match service::untag_media_item(&app_state.pool, session.user_id, tag_id, params).await {
+    match service::untag_media_item(&app_state.pool, session.user_id, tag_id, payload).await {
         Ok(_) => Ok(StatusCode::NO_CONTENT),
         Err(err) => Err(err),
     }

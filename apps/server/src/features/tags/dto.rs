@@ -41,6 +41,11 @@ pub struct UpdateTagRequest {
 
 #[derive(Deserialize)]
 pub struct TagMediaItemRequest {
+    pub items: Vec<MediaItemRequest>,
+}
+
+#[derive(Deserialize)]
+pub struct MediaItemRequest {
     pub kind: String,
     pub external_source: String,
     pub external_id: i32,
@@ -48,7 +53,5 @@ pub struct TagMediaItemRequest {
 
 #[derive(Deserialize)]
 pub struct UntagMediaItemRequest {
-    pub kind: String,
-    pub external_source: String,
-    pub external_id: i32,
+    pub items: Vec<MediaItemRequest>,
 }

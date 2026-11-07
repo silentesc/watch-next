@@ -7,19 +7,21 @@ import { mediaItemCustomListsQueryKey } from "../mediaItems/use_media_item_custo
 
 interface AddCustomListItemVariables {
     listId: number;
-    item: AddCustomListItemRequest;
+    items: AddCustomListItemRequest[];
 }
 
 export function useAddCustomListItem() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ listId, item }: AddCustomListItemVariables) => addCustomListItem(listId, item),
-        onSuccess: (_data, { listId, item }) => {
+        mutationFn: ({ listId, items }: AddCustomListItemVariables) => addCustomListItem(listId, items),
+        onSuccess: (_data, { listId, items }) => {
             return Promise.all([
                 queryClient.invalidateQueries({ queryKey: customListItemsQueryKey(listId) }),
                 queryClient.invalidateQueries({ queryKey: customListsQueryKey }),
-                queryClient.invalidateQueries({ queryKey: mediaItemCustomListsQueryKey(item.kind, item.external_source, item.external_id) }),
+                ...items.map(item => queryClient.invalidateQueries({
+                    queryKey: mediaItemCustomListsQueryKey(item.kind, item.external_source, item.external_id),
+                })),
             ]);
         },
     });

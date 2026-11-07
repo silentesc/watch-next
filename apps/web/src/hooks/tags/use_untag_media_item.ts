@@ -7,18 +7,20 @@ import { mediaItemTagsQueryKey } from "../mediaItems/use_media_item_tags";
 
 interface UntagMediaItemVariables {
     tagId: number;
-    item: TagMediaItemRequest;
+    items: TagMediaItemRequest[];
 }
 
 export function useUntagMediaItem() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ tagId, item }: UntagMediaItemVariables) => untagMediaItem(tagId, item),
-        onSuccess: (_data, { tagId, item }) => Promise.all([
+        mutationFn: ({ tagId, items }: UntagMediaItemVariables) => untagMediaItem(tagId, items),
+        onSuccess: (_data, { tagId, items }) => Promise.all([
             queryClient.invalidateQueries({ queryKey: tagItemsQueryKey(tagId) }),
             queryClient.invalidateQueries({ queryKey: tagsQueryKey }),
-            queryClient.invalidateQueries({ queryKey: mediaItemTagsQueryKey(item.kind, item.external_source, item.external_id) }),
+            ...items.map(item => queryClient.invalidateQueries({
+                queryKey: mediaItemTagsQueryKey(item.kind, item.external_source, item.external_id),
+            })),
         ]),
     });
 }

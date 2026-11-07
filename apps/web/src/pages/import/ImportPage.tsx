@@ -98,8 +98,8 @@ export function ImportPage() {
             external_id: id,
         };
         const additions = [
-            ...Array.from(selectedListKeys, key => addCustomListItem.mutateAsync({ listId: Number(key), item })),
-            ...Array.from(selectedTagKeys, key => tagMediaItem.mutateAsync({ tagId: Number(key), item })),
+            ...Array.from(selectedListKeys, key => addCustomListItem.mutateAsync({ listId: Number(key), items: [item] })),
+            ...Array.from(selectedTagKeys, key => tagMediaItem.mutateAsync({ tagId: Number(key), items: [item] })),
         ];
 
         if (additions.length === 0) return false;

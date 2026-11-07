@@ -41,18 +41,19 @@ pub async fn tag_media_item(
     tag_id: i64,
     request: TagMediaItemRequest,
 ) -> Result<(), AppError> {
-    tags::ensure_tag_id_exists(pool, tag_id, user_id).await?;
-
-    if request.external_source != "tmdb" {
-        return Err(AppError::new(
-            StatusCode::BAD_REQUEST,
-            String::from("Invalid external source."),
-        ));
+    let mut media_items_to_tag = Vec::with_capacity(request.items.len());
+    for item in request.items {
+        let media_item = match item.external_source.as_str() {
+            "tmdb" => media_items::service::get_tmdb_media_item(pool, tmdb, &item.kind, item.external_id).await,
+            _ => Err(AppError::new(
+                StatusCode::BAD_REQUEST,
+                String::from("Invalid external source."),
+            )),
+        }?;
+        media_items_to_tag.push(media_item);
     }
 
-    let media_item = media_items::service::get_tmdb_media_item(tmdb, &request.kind, request.external_id).await?;
-
-    tags::tag_media_item(pool, user_id, tag_id, media_item).await
+    tags::tag_media_items(pool, user_id, tag_id, media_items_to_tag).await
 }
 
 pub async fn untag_media_item(

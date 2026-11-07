@@ -71,31 +71,56 @@ Returns the current user's lists.
 - **Response:** `MediaItemResponse[]`
 - **Errors:** `404 Not Found` if the list does not belong to the user
 
-### Add an item to a custom list
+### Add items to a custom list
 
 `POST /custom-lists/:list_id/items`
 
 ```json
 {
-	"kind": "movie",
-	"external_source": "tmdb",
-	"external_id": 603
+	"items": [
+		{
+			"kind": "movie",
+			"external_source": "tmdb",
+			"external_id": 603
+		},
+		{
+			"kind": "tv_series",
+			"external_source": "tmdb",
+			"external_id": 1399
+		}
+	]
 }
 ```
 
 - **Success:** `201 Created`
-- **Errors:** `400 Bad Request` if the media item kind/source/id is invalid or the item is already in the list; `404 Not Found` if the list does not belong to the user or the item does not exist
+- Items already in the list are skipped; new items in the same batch are still added.
+- **Errors:** `400 Bad Request` if the media item kind/source/id is invalid; `404 Not Found` if the list does not belong to the user or the item does not exist
 
-### Remove an item from a custom list
+### Remove items from a custom list
 
 `DELETE /custom-lists/:list_id/items`
 
-The list ID is taken from the path. The media item is identified by these query parameters:
+The list ID is taken from the path. The request body contains the media items to remove:
 
-`?kind=movie&external_source=tmdb&external_id=603`
+```json
+{
+	"items": [
+		{
+			"kind": "movie",
+			"external_source": "tmdb",
+			"external_id": 603
+		},
+		{
+			"kind": "tv_series",
+			"external_source": "tmdb",
+			"external_id": 1399
+		}
+	]
+}
+```
 
-- **Success:** `204 No Content`
-- **Errors:** `404 Not Found` if the list or media item does not exist or media item is not found in list
+- **Success:** `204 No Content` when all requested items are removed
+- **Errors:** `404 Not Found` if the list does not belong to the user or any item is not in the list; no items are removed if the batch fails
 
 ## Response models
 

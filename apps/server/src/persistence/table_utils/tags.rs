@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use reqwest::StatusCode;
 use sqlx::PgPool;
 
@@ -54,19 +56,22 @@ const GET_MEDIA_ITEMS_OF_TAG_QUERY: &str = r#"
 
 const TAG_MEDIA_ITEM_QUERY: &str = r#"
     INSERT INTO tags_items (tag_id, media_item_id)
-    SELECT $1, $2
+    SELECT $1, requested.media_item_id
     FROM tags
+    CROSS JOIN UNNEST($2::bigint[]) AS requested(media_item_id)
     WHERE tags.id = $1 AND tags.user_id = $3
+    ON CONFLICT (tag_id, media_item_id) DO NOTHING
     "#;
 
 const UNTAG_MEDIA_ITEM_QUERY: &str = r#"
     DELETE FROM tags_items
-    USING tags, media_items
+    USING tags, media_items,
+        UNNEST($2::text[], $3::text[], $4::integer[]) AS requested(kind, external_source, external_id)
     WHERE tags_items.tag_id = $1
         AND tags_items.media_item_id = media_items.id
-        AND media_items.kind = $2
-        AND media_items.external_source = $3
-        AND media_items.external_id = $4
+        AND media_items.kind = requested.kind
+        AND media_items.external_source = requested.external_source
+        AND media_items.external_id = requested.external_id
         AND tags.id = tags_items.tag_id
         AND tags.user_id = $5
     "#;
@@ -264,35 +269,30 @@ pub async fn get_media_items_of_tag(pool: &PgPool, user_id: i64, tag_id: i64) ->
 /**
  * Add a media item to a tag
  */
-pub async fn tag_media_item(pool: &PgPool, user_id: i64, tag_id: i64, media_item: MediaItem) -> Result<(), AppError> {
-    let media_item_id = media_items::upsert_media_item(pool, media_item).await?;
+pub async fn tag_media_items(
+    pool: &PgPool,
+    user_id: i64,
+    tag_id: i64,
+    media_items: Vec<MediaItem>,
+) -> Result<(), AppError> {
+    ensure_tag_id_exists(pool, tag_id, user_id).await?;
 
-    let result = sqlx::query(TAG_MEDIA_ITEM_QUERY)
+    if media_items.is_empty() {
+        return Ok(());
+    }
+
+    let media_item_ids = media_items::upsert_media_items(pool, media_items).await?;
+
+    sqlx::query(TAG_MEDIA_ITEM_QUERY)
         .bind(tag_id)
-        .bind(media_item_id)
+        .bind(media_item_ids)
         .bind(user_id)
         .execute(pool)
         .await
         .map_err(|err| {
-            if let sqlx::Error::Database(database_error) = &err
-                && database_error.constraint() == Some("tags_items_pkey")
-            {
-                return AppError::new(
-                    StatusCode::BAD_REQUEST,
-                    String::from("Media item already has this tag."),
-                );
-            }
-
             error!(Category::Db, "Adding tag to media item failed with error: {:#?}", err);
             AppError::generic_500()
         })?;
-
-    if result.rows_affected() == 0 {
-        return Err(AppError::new(
-            StatusCode::NOT_FOUND,
-            String::from("Tag does not exist."),
-        ));
-    }
 
     Ok(())
 }
@@ -306,13 +306,37 @@ pub async fn untag_media_item(
     tag_id: i64,
     request: UntagMediaItemRequest,
 ) -> Result<(), AppError> {
+    ensure_tag_id_exists(pool, tag_id, user_id).await?;
+
+    if request.items.is_empty() {
+        return Ok(());
+    }
+
+    let mut unique_items = HashSet::with_capacity(request.items.len());
+    let mut kinds = Vec::with_capacity(request.items.len());
+    let mut external_sources = Vec::with_capacity(request.items.len());
+    let mut external_ids = Vec::with_capacity(request.items.len());
+    for item in &request.items {
+        if unique_items.insert((item.kind.as_str(), item.external_source.as_str(), item.external_id)) {
+            kinds.push(item.kind.clone());
+            external_sources.push(item.external_source.clone());
+            external_ids.push(item.external_id);
+        }
+    }
+    let expected_deletions = unique_items.len() as u64;
+
+    let mut transaction = pool.begin().await.map_err(|err| {
+        error!(Category::Db, "Starting tag removal failed with error: {:#?}", err);
+        AppError::generic_500()
+    })?;
+
     let result = sqlx::query(UNTAG_MEDIA_ITEM_QUERY)
         .bind(tag_id)
-        .bind(request.kind)
-        .bind(request.external_source)
-        .bind(request.external_id)
+        .bind(kinds)
+        .bind(external_sources)
+        .bind(external_ids)
         .bind(user_id)
-        .execute(pool)
+        .execute(&mut *transaction)
         .await
         .map_err(|err| {
             error!(
@@ -322,12 +346,21 @@ pub async fn untag_media_item(
             AppError::generic_500()
         })?;
 
-    if result.rows_affected() == 0 {
+    if result.rows_affected() != expected_deletions {
+        transaction.rollback().await.map_err(|err| {
+            error!(Category::Db, "Rolling back tag removal failed with error: {:#?}", err);
+            AppError::generic_500()
+        })?;
         return Err(AppError::new(
             StatusCode::NOT_FOUND,
             String::from("Media item does not have this tag."),
         ));
     }
+
+    transaction.commit().await.map_err(|err| {
+        error!(Category::Db, "Committing tag removal failed with error: {:#?}", err);
+        AppError::generic_500()
+    })?;
 
     Ok(())
 }

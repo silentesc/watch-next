@@ -17,7 +17,16 @@ use crate::{
     },
 };
 
-pub async fn get_tmdb_media_item(tmdb: &TmdbApi, kind: &str, external_id: i32) -> Result<MediaItem, AppError> {
+pub async fn get_tmdb_media_item(
+    pool: &PgPool,
+    tmdb: &TmdbApi,
+    kind: &str,
+    external_id: i32,
+) -> Result<MediaItem, AppError> {
+    if let Some(item) = media_items::get_media_item(pool, kind, "tmdb", external_id).await? {
+        return Ok(item);
+    }
+
     let item = match kind {
         "collection" => {
             let details = tmdb
