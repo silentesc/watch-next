@@ -148,13 +148,15 @@ export function TagPage() {
         const key = `${item.kind}:${item.external_source}:${item.external_id}`;
         const isSelected = selectedItemKeys.has(key);
         return (
-            <div className="pointer-events-auto absolute right-1 top-1 p-1">
-                <Checkbox
-                    size={20}
-                    isSelected={isSelected}
-                    onSelect={() => toggleItemSelection(item)}
-                    onDeselect={() => toggleItemSelection(item)}
-                />
+            <div className="pointer-events-auto inset-0 absolute" onClick={() => toggleItemSelection(item)}>
+                <div className="absolute right-2 top-2">
+                    <Checkbox
+                        size={20}
+                        isSelected={isSelected}
+                        onSelect={() => { }}
+                        onDeselect={() => { }}
+                    />
+                </div>
             </div>
         );
     };
