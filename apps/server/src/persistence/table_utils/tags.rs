@@ -264,12 +264,7 @@ pub async fn get_media_items_of_tag(pool: &PgPool, user_id: i64, tag_id: i64) ->
 /**
  * Add a media item to a tag
  */
-pub async fn tag_media_item(
-    pool: &PgPool,
-    user_id: i64,
-    tag_id: i64,
-    media_item: MediaItem,
-) -> Result<(), AppError> {
+pub async fn tag_media_item(pool: &PgPool, user_id: i64, tag_id: i64, media_item: MediaItem) -> Result<(), AppError> {
     let media_item_id = media_items::upsert_media_item(pool, media_item).await?;
 
     let result = sqlx::query(TAG_MEDIA_ITEM_QUERY)

@@ -49,7 +49,7 @@ pub async fn add_media_item_to_list(
         ));
     }
 
-    let media_item = media_items::service::get_tmdb_media_item(&tmdb, &kind, external_id).await?;
+    let media_item = media_items::service::get_tmdb_media_item(tmdb, kind, external_id).await?;
 
     custom_lists::add_media_item_to_list(pool, user_id, list_id, media_item).await
 }
