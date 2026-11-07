@@ -7,9 +7,9 @@ export interface TagMediaItemRequest {
     external_id: number;
 }
 
-export async function tagMediaItem(tag_id: number, item: TagMediaItemRequest): Promise<void> {
+export async function tagMediaItem(tag_id: number, items: TagMediaItemRequest[]): Promise<void> {
     try {
-        await api.post(`/tags/${tag_id}/items`, { items: [item] });
+        await api.post(`/tags/${tag_id}/items`, { items });
     } catch (err) {
         throw new Error(error2userMessage(err));
     }

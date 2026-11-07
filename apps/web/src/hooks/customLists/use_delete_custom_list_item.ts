@@ -7,19 +7,21 @@ import { mediaItemCustomListsQueryKey } from "../mediaItems/use_media_item_custo
 
 interface DeleteCustomListItemVariables {
     listId: number;
-    item: AddCustomListItemRequest;
+    items: AddCustomListItemRequest[];
 }
 
 export function useDeleteCustomListItem() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ listId, item }: DeleteCustomListItemVariables) => deleteCustomListItem(listId, item),
-        onSuccess: (_data, { listId, item }) => {
+        mutationFn: ({ listId, items }: DeleteCustomListItemVariables) => deleteCustomListItem(listId, items),
+        onSuccess: (_data, { listId, items }) => {
             return Promise.all([
                 queryClient.invalidateQueries({ queryKey: customListItemsQueryKey(listId) }),
                 queryClient.invalidateQueries({ queryKey: customListsQueryKey }),
-                queryClient.invalidateQueries({ queryKey: mediaItemCustomListsQueryKey(item.kind, item.external_source, item.external_id) }),
+                ...items.map(item => queryClient.invalidateQueries({
+                    queryKey: mediaItemCustomListsQueryKey(item.kind, item.external_source, item.external_id),
+                })),
             ]);
         },
     });

@@ -327,7 +327,7 @@ pub async fn add_media_items_to_list(
             {
                 return AppError::new(
                     StatusCode::BAD_REQUEST,
-                    String::from("Media item is already in custom list."),
+                    String::from("At least one media item is already in this custom list."),
                 );
             }
 

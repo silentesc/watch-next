@@ -43,9 +43,9 @@ export function CustomListPicker({ item }: CustomListPickerProps) {
         loadingKeys.add(listIdString);
 
         if (isInList) {
-            await deleteCustomListItem.mutateAsync({ listId, item });
+            await deleteCustomListItem.mutateAsync({ listId, items: [item] });
         } else {
-            await addCustomListItem.mutateAsync({ listId, item });
+            await addCustomListItem.mutateAsync({ listId, items: [item] });
         }
 
         loadingKeys.delete(listIdString);

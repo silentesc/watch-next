@@ -294,7 +294,7 @@ pub async fn tag_media_items(
             {
                 return AppError::new(
                     StatusCode::BAD_REQUEST,
-                    String::from("Media item already has this tag."),
+                    String::from("At least one media item already has this tag."),
                 );
             }
 

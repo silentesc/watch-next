@@ -104,13 +104,13 @@ export function TagPicker({ item, mode }: TagPickerProps) {
 
     const tag = async (tagIdString: string) => {
         loadingKeys.add(tagIdString);
-        await tagMediaItem.mutateAsync({ tagId: Number(tagIdString), item });
+        await tagMediaItem.mutateAsync({ tagId: Number(tagIdString), items: [item] });
         loadingKeys.delete(tagIdString);
     };
 
     const untag = async (tagIdString: string) => {
         loadingKeys.add(tagIdString);
-        await untagMediaItem.mutateAsync({ tagId: Number(tagIdString), item });
+        await untagMediaItem.mutateAsync({ tagId: Number(tagIdString), items: [item] });
         loadingKeys.delete(tagIdString);
     };
 
