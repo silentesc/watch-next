@@ -28,7 +28,7 @@ export function HomePage() {
     };
 
     return (
-        <div className="flex flex-col gap-10 pb-10">
+        <div className="flex flex-col gap-10">
             <section className="relative overflow-hidden border border-background-tertiary bg-background-primary px-6 py-10 sm:px-10 sm:py-14">
                 <div className="relative max-w-2xl">
                     <p className="mb-3 font-semibold uppercase tracking-[0.2em] text-foreground-secondary">Watch Next</p>
@@ -42,7 +42,7 @@ export function HomePage() {
             </section>
 
             <section>
-                <Link to="/trending/all/$timeWindow" params={{timeWindow: "day"}} className="my-4 flex gap-1 items-center cursor-pointer w-max">
+                <Link to="/trending/all/$timeWindow" params={{timeWindow: "day"}} className="mb-4 flex gap-1 items-center cursor-pointer w-max">
                     <span className="text-2xl font-bold">Trending today</span>
                     <ArrowCircleRightIcon className="w-7" />
                 </Link>
@@ -57,8 +57,8 @@ export function HomePage() {
                 </div>
             </section>
 
-            <section className="border-background-tertiary pt-8">
-                <Link to="/custom-lists" className="my-4 flex gap-1 items-center cursor-pointer w-max">
+            <section className="border-background-tertiary">
+                <Link to="/custom-lists" className="mb-4 flex gap-1 items-center cursor-pointer w-max">
                     <span className="text-2xl font-bold">Your lists</span>
                     <ArrowCircleRightIcon className="w-7" />
                 </Link>
@@ -92,8 +92,8 @@ export function HomePage() {
                 }
             </section>
 
-            <section className="border-background-tertiary pt-8">
-                <Link to="/tags" className="my-4 flex gap-1 items-center cursor-pointer w-max">
+            <section className="border-background-tertiary">
+                <Link to="/tags" className="mb-4 flex gap-1 items-center cursor-pointer w-max">
                     <span className="text-2xl font-bold">Your tags</span>
                     <ArrowCircleRightIcon className="w-7" />
                 </Link>
