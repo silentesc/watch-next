@@ -280,7 +280,7 @@ export function TagPage() {
             {isBulkRemovalConfirmationOpen ? (
                 <Popup onClose={untagMediaItem.isPending ? undefined : () => setIsBulkRemovalConfirmationOpen(false)} value={
                     <div className="flex flex-col gap-4">
-                        {untagMediaItem.isPending ? <Loading size="small" /> : null}
+                        {untagMediaItem.isPending ? <Loading /> : null}
                         <h2 className="text-2xl font-semibold">Remove selected items?</h2>
                         <p>Remove {selectedItems.length} {selectedItems.length === 1 ? "item" : "items"} from &quot;{tag.name}&quot;?</p>
                         {untagMediaItem.error ? <Error message={untagMediaItem.error.message} /> : null}

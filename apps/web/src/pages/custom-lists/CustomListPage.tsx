@@ -279,7 +279,7 @@ export function CustomListPage() {
             {isBulkRemovalConfirmationOpen ? (
                 <Popup onClose={deleteCustomListItem.isPending ? undefined : () => setIsBulkRemovalConfirmationOpen(false)} value={
                     <div className="flex flex-col gap-4">
-                        {deleteCustomListItem.isPending ? <Loading size="small" /> : null}
+                        {deleteCustomListItem.isPending ? <Loading /> : null}
                         <h2 className="text-2xl font-semibold">Remove selected items?</h2>
                         <p>Remove {selectedItems.length} {selectedItems.length === 1 ? "item" : "items"} from &quot;{customList.name}&quot;?</p>
                         {deleteCustomListItem.error ? <Error message={deleteCustomListItem.error.message} /> : null}
