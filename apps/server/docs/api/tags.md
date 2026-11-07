@@ -89,7 +89,8 @@ Returns the current user's tags.
 ```
 
 - **Success:** `201 Created`
-- **Errors:** `400 Bad Request` if the media item is invalid or the item is already tagged with this tag; `404 Not Found` if the tag is not found for the user or the item does not exist
+- Items already tagged with this tag are skipped; new items in the same batch are still tagged.
+- **Errors:** `400 Bad Request` if the media item is invalid; `404 Not Found` if the tag is not found for the user or the item does not exist
 
 ### Untag items
 

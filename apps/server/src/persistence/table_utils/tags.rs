@@ -60,6 +60,7 @@ const TAG_MEDIA_ITEM_QUERY: &str = r#"
     FROM tags
     CROSS JOIN UNNEST($2::bigint[]) AS requested(media_item_id)
     WHERE tags.id = $1 AND tags.user_id = $3
+    ON CONFLICT (tag_id, media_item_id) DO NOTHING
     "#;
 
 const UNTAG_MEDIA_ITEM_QUERY: &str = r#"
@@ -282,32 +283,16 @@ pub async fn tag_media_items(
 
     let media_item_ids = media_items::upsert_media_items(pool, media_items).await?;
 
-    let result = sqlx::query(TAG_MEDIA_ITEM_QUERY)
+    sqlx::query(TAG_MEDIA_ITEM_QUERY)
         .bind(tag_id)
         .bind(media_item_ids)
         .bind(user_id)
         .execute(pool)
         .await
         .map_err(|err| {
-            if let sqlx::Error::Database(database_error) = &err
-                && database_error.constraint() == Some("tags_items_pkey")
-            {
-                return AppError::new(
-                    StatusCode::BAD_REQUEST,
-                    String::from("At least one media item already has this tag."),
-                );
-            }
-
             error!(Category::Db, "Adding tag to media item failed with error: {:#?}", err);
             AppError::generic_500()
         })?;
-
-    if result.rows_affected() == 0 {
-        return Err(AppError::new(
-            StatusCode::NOT_FOUND,
-            String::from("Tag does not exist."),
-        ));
-    }
 
     Ok(())
 }

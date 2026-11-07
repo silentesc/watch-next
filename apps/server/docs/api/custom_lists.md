@@ -93,7 +93,8 @@ Returns the current user's lists.
 ```
 
 - **Success:** `201 Created`
-- **Errors:** `400 Bad Request` if the media item kind/source/id is invalid or the item is already in the list; `404 Not Found` if the list does not belong to the user or the item does not exist
+- Items already in the list are skipped; new items in the same batch are still added.
+- **Errors:** `400 Bad Request` if the media item kind/source/id is invalid; `404 Not Found` if the list does not belong to the user or the item does not exist
 
 ### Remove items from a custom list
 

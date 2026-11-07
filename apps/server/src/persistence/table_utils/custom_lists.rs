@@ -86,6 +86,7 @@ const ADD_MEDIA_ITEM_TO_LIST_QUERY: &str = r#"
     FROM custom_lists
     CROSS JOIN UNNEST($2::bigint[]) AS requested(media_item_id)
     WHERE custom_lists.id = $1 AND custom_lists.user_id = $3
+    ON CONFLICT (list_id, media_item_id) DO NOTHING
     "#;
 
 const DELETE_MEDIA_ITEM_FROM_LIST_QUERY: &str = r#"
@@ -315,35 +316,19 @@ pub async fn add_media_items_to_list(
 
     let media_item_ids = media_items::upsert_media_items(pool, media_items).await?;
 
-    let result = sqlx::query(ADD_MEDIA_ITEM_TO_LIST_QUERY)
+    sqlx::query(ADD_MEDIA_ITEM_TO_LIST_QUERY)
         .bind(list_id)
         .bind(media_item_ids)
         .bind(user_id)
         .execute(pool)
         .await
         .map_err(|err| {
-            if let sqlx::Error::Database(database_error) = &err
-                && database_error.constraint() == Some("custom_list_items_pkey")
-            {
-                return AppError::new(
-                    StatusCode::BAD_REQUEST,
-                    String::from("At least one media item is already in this custom list."),
-                );
-            }
-
             error!(
                 Category::Db,
                 "Adding media item to custom list failed with error: {:#?}", err
             );
             AppError::generic_500()
         })?;
-
-    if result.rows_affected() == 0 {
-        return Err(AppError::new(
-            StatusCode::NOT_FOUND,
-            String::from("Custom list does not exist."),
-        ));
-    }
 
     Ok(())
 }
