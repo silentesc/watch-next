@@ -42,12 +42,12 @@ pub async fn connect_postgres() -> PgPool {
     pool
 }
 
-pub async fn check_create_tables(pool: &PgPool) {
-    sqlx::raw_sql(include_str!("../persistence/create_tables.sql"))
-        .execute(pool)
+pub async fn run_migrations(pool: &PgPool) {
+    sqlx::migrate!("src/persistence/migrations")
+        .run(pool)
         .await
-        .expect("persistence/create_tables.sql should be executed");
-    debug!(Category::Setup, "Performed table creation check");
+        .expect("Migrations should be executed");
+    debug!(Category::Setup, "Performed db migrations");
 }
 
 fn load_cookie_key() -> Key {

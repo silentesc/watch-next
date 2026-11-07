@@ -18,7 +18,7 @@ async fn main() {
     app::configuration::setup_logging();
 
     let pool = app::configuration::connect_postgres().await;
-    app::configuration::check_create_tables(&pool).await;
+    app::configuration::run_migrations(&pool).await;
 
     workers::db_cleanup::start_background_cleanup(pool.clone());
 
