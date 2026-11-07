@@ -9,7 +9,7 @@ export interface AddCustomListItemRequest {
 
 export async function addCustomListItem(list_id: number, item: AddCustomListItemRequest): Promise<void> {
     try {
-        await api.post(`/custom-lists/${list_id}/items`, item);
+        await api.post(`/custom-lists/${list_id}/items`, { items: [item] });
     } catch (err) {
         throw new Error(error2userMessage(err));
     }

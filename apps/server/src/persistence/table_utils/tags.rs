@@ -54,8 +54,9 @@ const GET_MEDIA_ITEMS_OF_TAG_QUERY: &str = r#"
 
 const TAG_MEDIA_ITEM_QUERY: &str = r#"
     INSERT INTO tags_items (tag_id, media_item_id)
-    SELECT $1, $2
+    SELECT $1, requested.media_item_id
     FROM tags
+    CROSS JOIN UNNEST($2::bigint[]) AS requested(media_item_id)
     WHERE tags.id = $1 AND tags.user_id = $3
     "#;
 
@@ -264,12 +265,23 @@ pub async fn get_media_items_of_tag(pool: &PgPool, user_id: i64, tag_id: i64) ->
 /**
  * Add a media item to a tag
  */
-pub async fn tag_media_item(pool: &PgPool, user_id: i64, tag_id: i64, media_item: MediaItem) -> Result<(), AppError> {
-    let media_item_id = media_items::upsert_media_item(pool, media_item).await?;
+pub async fn tag_media_items(
+    pool: &PgPool,
+    user_id: i64,
+    tag_id: i64,
+    media_items: Vec<MediaItem>,
+) -> Result<(), AppError> {
+    ensure_tag_id_exists(pool, tag_id, user_id).await?;
+
+    if media_items.is_empty() {
+        return Ok(());
+    }
+
+    let media_item_ids = media_items::upsert_media_items(pool, media_items).await?;
 
     let result = sqlx::query(TAG_MEDIA_ITEM_QUERY)
         .bind(tag_id)
-        .bind(media_item_id)
+        .bind(media_item_ids)
         .bind(user_id)
         .execute(pool)
         .await

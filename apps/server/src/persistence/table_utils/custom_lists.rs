@@ -80,8 +80,9 @@ const GET_MEDIA_ITEMS_IN_LIST_QUERY: &str = r#"
 
 const ADD_MEDIA_ITEM_TO_LIST_QUERY: &str = r#"
     INSERT INTO custom_list_items (list_id, media_item_id)
-    SELECT $1, $2
+    SELECT $1, requested.media_item_id
     FROM custom_lists
+    CROSS JOIN UNNEST($2::bigint[]) AS requested(media_item_id)
     WHERE custom_lists.id = $1 AND custom_lists.user_id = $3
     "#;
 
@@ -295,19 +296,25 @@ pub async fn get_media_items_in_list(pool: &PgPool, user_id: i64, list_id: i64) 
 }
 
 /**
- * Add a media item to a custom list
+ * Add media items to a custom list
  */
-pub async fn add_media_item_to_list(
+pub async fn add_media_items_to_list(
     pool: &PgPool,
     user_id: i64,
     list_id: i64,
-    media_item: MediaItem,
+    media_items: Vec<MediaItem>,
 ) -> Result<(), AppError> {
-    let media_item_id = media_items::upsert_media_item(pool, media_item).await?;
+    ensure_custom_list_id_exists(pool, list_id, user_id).await?;
+
+    if media_items.is_empty() {
+        return Ok(());
+    }
+
+    let media_item_ids = media_items::upsert_media_items(pool, media_items).await?;
 
     let result = sqlx::query(ADD_MEDIA_ITEM_TO_LIST_QUERY)
         .bind(list_id)
-        .bind(media_item_id)
+        .bind(media_item_ids)
         .bind(user_id)
         .execute(pool)
         .await

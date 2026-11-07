@@ -94,9 +94,7 @@ pub async fn add_media_item_to_list(
         &app_state.tmdb,
         session.user_id,
         list_id,
-        &payload.kind,
-        &payload.external_source,
-        payload.external_id,
+        payload.items,
     )
     .await
     {

@@ -67,15 +67,24 @@ Returns the current user's tags.
 - **Response:** `MediaItem[]`
 - **Errors:** `404 Not Found` if the tag is not found for the user
 
-### Tag an item
+### Tag items
 
 `POST /tags/:tag_id/items`
 
 ```json
 {
-	"kind": "movie",
-	"external_source": "tmdb",
-	"external_id": 603
+	"items": [
+		{
+			"kind": "movie",
+			"external_source": "tmdb",
+			"external_id": 603
+		},
+		{
+			"kind": "tv_series",
+			"external_source": "tmdb",
+			"external_id": 1399
+		}
+	]
 }
 ```
 
