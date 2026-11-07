@@ -2,9 +2,9 @@ DELETE FROM media_items
 WHERE kind IN ('tv_season', 'tv_episode');
 
 ALTER TABLE media_items
-    DROP CONSTRAINT media_items_kind_check,
-    DROP CONSTRAINT media_items_check,
-    DROP CONSTRAINT media_items_kind_external_source_external_id_parent_id_seas_key;
+    DROP CONSTRAINT IF EXISTS media_items_kind_check,
+    DROP CONSTRAINT IF EXISTS media_items_check,
+    DROP CONSTRAINT IF EXISTS media_items_kind_external_source_external_id_parent_id_seas_key;
 
 ALTER TABLE media_items
     ADD CONSTRAINT media_items_kind_check
@@ -15,6 +15,6 @@ ALTER TABLE media_items
         UNIQUE (kind, external_source, external_id);
 
 ALTER TABLE media_items
-    DROP COLUMN parent_id,
-    DROP COLUMN season_number,
-    DROP COLUMN episode_number;
+    DROP COLUMN IF EXISTS parent_id,
+    DROP COLUMN IF EXISTS season_number,
+    DROP COLUMN IF EXISTS episode_number;
