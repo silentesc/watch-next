@@ -12,6 +12,4 @@ pub struct GetMediaItemTagsRequest {
     pub kind: String,
     pub external_source: String,
     pub external_id: i32,
-    pub season_number: Option<i32>,
-    pub episode_number: Option<i32>,
 }

@@ -41,10 +41,7 @@ Returns all tags the media item is tagged with.
 
 The media item is identified by these query parameters:
 
-`?kind=movie&external_source=tmdb&external_id=603&season_number=1&episode_number=1`
-
-> [!NOTE]
-> `season_number` and `episode_number` are optional
+`?kind=movie&external_source=tmdb&external_id=603`
 
 - **Success:** `200 OK`
 - **Response:** `TagResponse[]`

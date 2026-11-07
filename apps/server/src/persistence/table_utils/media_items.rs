@@ -1,4 +1,3 @@
-use reqwest::StatusCode;
 use sqlx::PgPool;
 
 use crate::{
@@ -6,7 +5,7 @@ use crate::{
     error,
     features::media_items::dto::GetMediaItemTagsRequest,
     logger::enums::category::Category,
-    persistence::models::{CustomList, MediaItem, MediaItemTree, Tag},
+    persistence::models::{CustomList, MediaItem, Tag},
 };
 
 const GET_MEDIA_ITEM_CUSTOM_LISTS: &str = r#"
@@ -62,29 +61,27 @@ const GET_MEDIA_ITEM_TAGS: &str = r#"
         AND mi.kind = $2
         AND mi.external_source = $3
         AND mi.external_id = $4
-        AND mi.season_number IS NOT DISTINCT FROM $5
-        AND mi.episode_number IS NOT DISTINCT FROM $6
     ORDER BY t.created_at, t.id
     "#;
 
-pub async fn get_media_item_by_id(pool: &PgPool, item_id: i64) -> Result<Option<MediaItem>, AppError> {
-    let query = r#"
-        SELECT kind, title, poster_path, release_date, external_source, external_id, parent_id, season_number, episode_number
-        FROM media_items
-        WHERE id = $1
-        "#;
-    sqlx::query_as(query)
-        .bind(item_id)
-        .fetch_optional(pool)
-        .await
-        .map_err(|err| {
-            error!(
-                Category::Db,
-                "Getting custom lists of media item failed with error: {:#?}", err
-            );
-            AppError::generic_500()
-        })
-}
+// pub async fn get_media_item_by_id(pool: &PgPool, item_id: i64) -> Result<Option<MediaItem>, AppError> {
+//     let query = r#"
+//         SELECT kind, title, poster_path, release_date, external_source, external_id
+//         FROM media_items
+//         WHERE id = $1
+//         "#;
+//     sqlx::query_as(query)
+//         .bind(item_id)
+//         .fetch_optional(pool)
+//         .await
+//         .map_err(|err| {
+//             error!(
+//                 Category::Db,
+//                 "Getting custom lists of media item failed with error: {:#?}", err
+//             );
+//             AppError::generic_500()
+//         })
+// }
 
 pub async fn get_media_item_custom_lists(
     pool: &PgPool,
@@ -119,8 +116,6 @@ pub async fn get_media_item_tags(
         .bind(params.kind)
         .bind(params.external_source)
         .bind(params.external_id)
-        .bind(params.season_number)
-        .bind(params.episode_number)
         .fetch_all(pool)
         .await
         .map_err(|err| {
@@ -132,54 +127,26 @@ pub async fn get_media_item_tags(
 /**
  * Create or update a media item and get its id
  */
-pub async fn upsert_media_item(pool: &PgPool, media_item_tree: MediaItemTree) -> Result<i64, AppError> {
-    if !matches!(
-        media_item_tree.kind.as_str(),
-        "collection" | "movie" | "tv_series" | "tv_season" | "tv_episode"
-    ) {
-        return Err(AppError::new(
-            StatusCode::BAD_REQUEST,
-            String::from("Invalid media item kind."),
-        ));
-    }
-
-    if !matches!(media_item_tree.external_source.as_str(), "tmdb") {
-        return Err(AppError::new(
-            StatusCode::BAD_REQUEST,
-            String::from("Invalid media item external source."),
-        ));
-    }
-
-    // Recursively upsert parents before upserting this one
-    let parent_id = if let Some(parent) = media_item_tree.parent {
-        Some(Box::pin(upsert_media_item(pool, *parent)).await?)
-    } else {
-        None
-    };
-
+pub async fn upsert_media_item(pool: &PgPool, media_item: MediaItem) -> Result<i64, AppError> {
     sqlx::query_scalar(
         r#"
         INSERT INTO media_items
-            (kind, title, poster_path, release_date, external_source, external_id, parent_id, season_number, episode_number)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        ON CONFLICT (kind, external_source, external_id, parent_id, season_number, episode_number)
+            (kind, title, poster_path, release_date, external_source, external_id)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (kind, external_source, external_id)
         DO UPDATE SET
             title = EXCLUDED.title,
             poster_path = EXCLUDED.poster_path,
-            release_date = EXCLUDED.release_date,
-            parent_id = EXCLUDED.parent_id
+            release_date = EXCLUDED.release_date
         RETURNING id
         "#,
     )
-    .bind(media_item_tree.kind)
-    .bind(media_item_tree.title)
-    .bind(media_item_tree.poster_path)
-    .bind(media_item_tree.release_date)
-    .bind(media_item_tree.external_source)
-    .bind(media_item_tree.external_id)
-    .bind(parent_id)
-    .bind(media_item_tree.season_number)
-    .bind(media_item_tree.episode_number)
+    .bind(media_item.kind)
+    .bind(media_item.title)
+    .bind(media_item.poster_path)
+    .bind(media_item.release_date)
+    .bind(media_item.external_source)
+    .bind(media_item.external_id)
     .fetch_one(pool)
     .await
     .map_err(|err| {
