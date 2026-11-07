@@ -6,8 +6,6 @@ export interface GetMediaItemTagsRequest {
     kind: string;
     external_source: string;
     external_id: number;
-    season_number?: number;
-    episode_number?: number;
 }
 
 export async function getMediaItemTags(item: GetMediaItemTagsRequest): Promise<Array<Tag>> {
