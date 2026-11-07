@@ -64,9 +64,9 @@ services:
 | Tag | Description |
 | --- | --- |
 | `latest` | Newest stable release, including major upgrades and potentially breaking changes |
-| `v1.0.0` | Exact version pinned, never updates |
-| `v1.0` | Minor version pinned, only updates on bugfixes |
-| `v1` | Major version pinned, always updates until major version changes |
+| `v2.0.0` | Exact version pinned, never updates |
+| `v2.0` | Minor version pinned, only updates on bugfixes |
+| `v2` | Major version pinned, always updates until major version changes |
 
 ### Exposing your instance to the internet
 
