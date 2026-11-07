@@ -91,16 +91,31 @@ Returns the current user's tags.
 - **Success:** `201 Created`
 - **Errors:** `400 Bad Request` if the media item is invalid or the item is already tagged with this tag; `404 Not Found` if the tag is not found for the user or the item does not exist
 
-### Untag an item
+### Untag items
 
 `DELETE /tags/:tag_id/items`
 
-The tag ID is taken from the path. The media item is identified by these query parameters:
+The tag ID is taken from the path. The request body contains the media items to untag:
 
-`?kind=movie&external_source=tmdb&external_id=603`
+```json
+{
+	"items": [
+		{
+			"kind": "movie",
+			"external_source": "tmdb",
+			"external_id": 603
+		},
+		{
+			"kind": "tv_series",
+			"external_source": "tmdb",
+			"external_id": 1399
+		}
+	]
+}
+```
 
-- **Success:** `204 No Content`
-- **Errors:** `404 Not Found` if the tag or media item does not exist or media item is not tagged with that tag
+- **Success:** `204 No Content` when all requested items are untagged
+- **Errors:** `404 Not Found` if the tag does not belong to the user or any item does not have this tag; no items are removed if the batch fails
 
 ## Response models
 

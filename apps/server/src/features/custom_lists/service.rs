@@ -57,9 +57,7 @@ pub async fn delete_media_item_from_list(
     pool: &PgPool,
     user_id: i64,
     list_id: i64,
-    kind: &str,
-    external_source: &str,
-    external_id: i32,
+    items: Vec<MediaItemRequest>,
 ) -> Result<(), AppError> {
-    custom_lists::delete_media_item_from_list(pool, user_id, list_id, kind, external_source, external_id).await
+    custom_lists::delete_media_items_from_list(pool, user_id, list_id, items).await
 }

@@ -1,7 +1,4 @@
-use axum::{
-    Extension, Json,
-    extract::{Path, Query},
-};
+use axum::{Extension, Json, extract::Path};
 use reqwest::StatusCode;
 
 use crate::{
@@ -111,18 +108,9 @@ pub async fn delete_media_item_from_list(
     Extension(app_state): Extension<AppState>,
     Extension(session): Extension<Session>,
     Path(list_id): Path<i64>,
-    Query(params): Query<DeleteMediaItemFromListRequest>,
+    Json(payload): Json<DeleteMediaItemFromListRequest>,
 ) -> Result<StatusCode, AppError> {
-    match service::delete_media_item_from_list(
-        &app_state.pool,
-        session.user_id,
-        list_id,
-        &params.kind,
-        &params.external_source,
-        params.external_id,
-    )
-    .await
-    {
+    match service::delete_media_item_from_list(&app_state.pool, session.user_id, list_id, payload.items).await {
         Ok(_) => Ok(StatusCode::NO_CONTENT),
         Err(err) => Err(err),
     }

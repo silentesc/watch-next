@@ -4,7 +4,7 @@ import type { TagMediaItemRequest } from "./tagMediaItem";
 
 export async function untagMediaItem(tag_id: number, item: TagMediaItemRequest): Promise<void> {
     try {
-        await api.delete(`/tags/${tag_id}/items`, { params: item });
+        await api.delete(`/tags/${tag_id}/items`, { data: { items: [item] } });
     } catch (err) {
         throw new Error(error2userMessage(err));
     }
