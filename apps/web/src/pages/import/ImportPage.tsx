@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Error } from "../../components/ui/Error";
 import { Loading } from "../../components/ui/Loading";
 import { MultiSelectDropdown } from "../../components/ui/MultiSelectDropdown";
@@ -35,6 +35,14 @@ function SearchItem({ searchText, onSelect, onAdded }: SearchItemProps) {
     const searchMulti = useSearchMulti("multi", searchText);
     const [addedItems, setAddedItems] = useState<Set<string>>(new Set());
     const [addingItem, setAddingItem] = useState<string>();
+    const noResultsHandled = useRef(false);
+
+    useEffect(() => {
+        if (searchMulti.data && !searchMulti.data.pages[0].results.some(r => r.media_type !== "person") && !noResultsHandled.current) {
+            noResultsHandled.current = true;
+            onAdded();
+        }
+    }, [searchMulti.data, onAdded]);
 
     if (searchMulti.isLoading) return <Loading />;
     if (searchMulti.error) return <Error message={searchMulti.error.message} />;
