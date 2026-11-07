@@ -3,16 +3,13 @@ export interface CheckboxProps {
     isSelected: boolean;
     onSelect: () => void;
     onDeselect: () => void;
-    ariaLabel?: string;
 }
 
-export function Checkbox({ size = 16, isSelected, onSelect, onDeselect, ariaLabel }: CheckboxProps) {
+export function Checkbox({ size = 16, isSelected, onSelect, onDeselect }: CheckboxProps) {
     return (
         <button
             type="button"
             role="checkbox"
-            aria-checked={isSelected}
-            aria-label={ariaLabel ?? (isSelected ? "Deselect" : "Select")}
             onClick={isSelected ? onDeselect : onSelect}
             className="border-0 p-0 bg-none cursor-pointer leading-0"
         >
