@@ -66,7 +66,7 @@ export function App() {
                             <button className="w-fit p-1 cursor-pointer" onClick={() => setIsNavbarOpen(open => !open)}>
                                 <MenuIcon className="w-5" />
                             </button>
-                            {!isNavbarOpen ? <Link to="/" className="w-fit"><LogoText width={35} height={35} /></Link> : null}
+                            {!isNavbarOpen ? <Link to="/" activeProps={{}} className="w-fit"><LogoText width={35} height={35} /></Link> : null}
                         </header>
                     </>
                 ) : (
