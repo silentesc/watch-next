@@ -11,7 +11,7 @@ export function Navbar() {
     return (
         <nav className="min-h-full flex flex-col gap-6 p-6">
             {/* Logo */}
-            <Link to="/" className="w-fit">
+            <Link to="/" activeProps={{}} className="w-fit">
                 <LogoText width={35} height={35} />
             </Link>
             {/* Discovery Links */}
