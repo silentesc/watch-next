@@ -46,8 +46,10 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
     const [tmdbRatingTo, setTmdbRatingTo] = useState<number | undefined>(filters.tmdbRatingTo);
     const [tmdbVoteCountFrom, setTmdbVoteCountFrom] = useState<number | undefined>(filters.tmdbVoteCountFrom);
     const [tmdbVoteCountTo, setTmdbVoteCountTo] = useState<number | undefined>(filters.tmdbVoteCountTo);
-    const [withGenres, setWithGenres] = useState<Array<string>>(filters.withGenres?.split(",") || []);
-    const [withoutGenres, setWithoutGenres] = useState<Array<string>>(filters.withoutGenres?.split(",") || []);
+    const [withGenres, setWithGenres] = useState<Array<string>>(filters.withGenres?.split(/[|,]/) || []);
+    const [withGenresOr, setWithGenresOr] = useState(filters.withGenres?.includes("|") || false);
+    const [withoutGenres, setWithoutGenres] = useState<Array<string>>(filters.withoutGenres?.split(/[|,]/) || []);
+    const [withoutGenresOr, setWithoutGenresOr] = useState(filters.withoutGenres?.includes("|") || false);
     const [originalLanguage, setOriginalLanguage] = useState<string>(filters.originalLanguage || "*");
 
     const languages = useLanguages();
@@ -76,6 +78,8 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
         setTmdbVoteCountTo(undefined);
         setWithGenres([]);
         setWithoutGenres([]);
+        setWithGenresOr(false);
+        setWithoutGenresOr(false);
         setOriginalLanguage("*");
     }
 
@@ -89,8 +93,8 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
             tmdbRatingTo,
             tmdbVoteCountFrom,
             tmdbVoteCountTo,
-            withGenres: withGenres.join(",") || undefined,
-            withoutGenres: withoutGenres.join(",") || undefined,
+            withGenres: withGenres.join(withGenresOr ? "|" : ",") || undefined,
+            withoutGenres: withoutGenres.join(withoutGenresOr ? "|" : ",") || undefined,
             originalLanguage,
         };
 
@@ -186,7 +190,10 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
                     </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span className="text-2xl font-medium">With Genres</span>
+                    <div className="flex items-center justify-between">
+                        <span className="text-2xl font-medium">With Genres</span>
+                        <Button value={withGenresOr ? "OR" : "AND"} fullWidth={false} onClick={() => setWithGenresOr(prev => !prev)} />
+                    </div>
                     <MultiSelectDropdown
                         placeholder="Genres"
                         selectedKeys={new Set(withGenres)}
@@ -196,7 +203,10 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span className="text-2xl font-medium">Without Genres</span>
+                    <div className="flex items-center justify-between">
+                        <span className="text-2xl font-medium">Without Genres</span>
+                        <Button value={withoutGenresOr ? "OR" : "AND"} fullWidth={false} onClick={() => setWithoutGenresOr(prev => !prev)} />
+                    </div>
                     <MultiSelectDropdown
                         placeholder="Genres"
                         selectedKeys={new Set(withoutGenres)}

@@ -47,9 +47,12 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
     const [tmdbRatingTo, setTmdbRatingTo] = useState<number | undefined>(filters.tmdbRatingTo);
     const [tmdbVoteCountFrom, setTmdbVoteCountFrom] = useState<number | undefined>(filters.tmdbVoteCountFrom);
     const [tmdbVoteCountTo, setTmdbVoteCountTo] = useState<number | undefined>(filters.tmdbVoteCountTo);
-    const [withStatus, setWithStatus] = useState<Array<string>>(filters.withGenres?.split(",") || []);
-    const [withGenres, setWithGenres] = useState<Array<string>>(filters.withGenres?.split(",") || []);
-    const [withoutGenres, setWithoutGenres] = useState<Array<string>>(filters.withoutGenres?.split(",") || []);
+    const [withStatus, setWithStatus] = useState<Array<string>>(filters.withStatus?.split(/[|,]/) || []);
+    const [withStatusOr, setWithStatusOr] = useState(filters.withStatus?.includes("|") || false);
+    const [withGenres, setWithGenres] = useState<Array<string>>(filters.withGenres?.split(/[|,]/) || []);
+    const [withGenresOr, setWithGenresOr] = useState(filters.withGenres?.includes("|") || false);
+    const [withoutGenres, setWithoutGenres] = useState<Array<string>>(filters.withoutGenres?.split(/[|,]/) || []);
+    const [withoutGenresOr, setWithoutGenresOr] = useState(filters.withoutGenres?.includes("|") || false);
     const [originalLanguage, setOriginalLanguage] = useState<string>(filters.originalLanguage || "*");
 
     const languages = useLanguages();
@@ -88,6 +91,9 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
         setWithStatus([]);
         setWithGenres([]);
         setWithoutGenres([]);
+        setWithStatusOr(false);
+        setWithGenresOr(false);
+        setWithoutGenresOr(false);
         setOriginalLanguage("*");
     }
 
@@ -101,9 +107,9 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
             tmdbRatingTo,
             tmdbVoteCountFrom,
             tmdbVoteCountTo,
-            withStatus: withStatus.join(",") || undefined,
-            withGenres: withGenres.join(",") || undefined,
-            withoutGenres: withoutGenres.join(",") || undefined,
+            withStatus: withStatus.join(withStatusOr ? "|" : ",") || undefined,
+            withGenres: withGenres.join(withGenresOr ? "|" : ",") || undefined,
+            withoutGenres: withoutGenres.join(withoutGenresOr ? "|" : ",") || undefined,
             originalLanguage,
         };
 
@@ -199,7 +205,10 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
                     </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span className="text-2xl font-medium">With Status</span>
+                    <div className="flex items-center justify-between">
+                        <span className="text-2xl font-medium">With Status</span>
+                        <Button value={withStatusOr ? "OR" : "AND"} fullWidth={false} onClick={() => setWithStatusOr(prev => !prev)} />
+                    </div>
                     <MultiSelectDropdown
                         placeholder="Statuses"
                         selectedKeys={new Set(withStatus)}
@@ -209,7 +218,10 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span className="text-2xl font-medium">With Genres</span>
+                    <div className="flex items-center justify-between">
+                        <span className="text-2xl font-medium">With Genres</span>
+                        <Button value={withGenresOr ? "OR" : "AND"} fullWidth={false} onClick={() => setWithGenresOr(prev => !prev)} />
+                    </div>
                     <MultiSelectDropdown
                         placeholder="Genres"
                         selectedKeys={new Set(withGenres)}
@@ -219,7 +231,10 @@ export function TvSeriesFilters({ isOpen, filters, onFiltersChange, onClose }: F
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <span className="text-2xl font-medium">Without Genres</span>
+                    <div className="flex items-center justify-between">
+                        <span className="text-2xl font-medium">Without Genres</span>
+                        <Button value={withoutGenresOr ? "OR" : "AND"} fullWidth={false} onClick={() => setWithoutGenresOr(prev => !prev)} />
+                    </div>
                     <MultiSelectDropdown
                         placeholder="Genres"
                         selectedKeys={new Set(withoutGenres)}
