@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::integrations::tmdb::models::search::MultiSearchResult;
+use crate::integrations::tmdb::models::{common::Keyword, search::MultiSearchResult};
 
 #[derive(Serialize, Deserialize)]
 pub struct SearchMultiParams {
@@ -20,6 +20,22 @@ pub struct SearchMultiParams {
 pub struct SearchMultiResponse {
     pub page: i32,
     pub results: Vec<MultiSearchResult>,
+    pub total_pages: i32,
+    pub total_results: i32,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct SearchKeywordParams {
+    pub query: String,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page: Option<u32>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct SearchKeywordResponse {
+    pub page: i32,
+    pub results: Vec<Keyword>,
     pub total_pages: i32,
     pub total_results: i32,
 }

@@ -1,7 +1,7 @@
 use crate::integrations::tmdb::{
     client::TmdbClient,
     errors::TmdbError,
-    resources::search::dto::{SearchMultiParams, SearchMultiResponse},
+    resources::search::dto::{SearchKeywordParams, SearchKeywordResponse, SearchMultiParams, SearchMultiResponse},
 };
 
 pub mod dto;
@@ -17,5 +17,9 @@ impl<'a> SearchApi<'a> {
 
     pub async fn multi(&self, params: SearchMultiParams) -> Result<SearchMultiResponse, TmdbError> {
         self.tmdb_client.get("/search/multi", &params).await
+    }
+
+    pub async fn keyword(&self, params: SearchKeywordParams) -> Result<SearchKeywordResponse, TmdbError> {
+        self.tmdb_client.get("/search/keyword", &params).await
     }
 }
