@@ -1,8 +1,9 @@
 use crate::integrations::tmdb::{
     client::TmdbClient,
     resources::{
-        collections::CollectionsApi, configuration::ConfigurationApi, genres::GenresApi, movies::MoviesApi,
-        people::PeopleApi, search::SearchApi, trending::TrendingApi, tv_seasons::TvSeasonApi, tv_series::TvSeriesApi,
+        collections::CollectionsApi, configuration::ConfigurationApi, genres::GenresApi, keyword::KeywordApi,
+        movies::MoviesApi, people::PeopleApi, search::SearchApi, trending::TrendingApi, tv_seasons::TvSeasonApi,
+        tv_series::TvSeriesApi,
     },
 };
 
@@ -43,6 +44,10 @@ impl TmdbApi {
 
     pub fn genres(&self) -> GenresApi<'_> {
         GenresApi::new(&self.tmdb_client)
+    }
+
+    pub fn keyword(&self) -> KeywordApi<'_> {
+        KeywordApi::new(&self.tmdb_client)
     }
 
     pub fn search(&self) -> SearchApi<'_> {

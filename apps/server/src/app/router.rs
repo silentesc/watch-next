@@ -10,6 +10,7 @@ pub fn setup_router(app_state: AppState) -> Router {
     let protected_routes = Router::new()
         .merge(features::me::routes::router())
         .merge(features::genres::routes::router())
+        .merge(features::keyword::routes::router())
         .merge(features::configuration::routes::router())
         .merge(features::search::routes::router())
         .merge(features::trending::routes::router())
@@ -111,6 +112,7 @@ mod tests {
             "/api/discover/tv",
             "/api/tv/1/season/1",
             "/api/search/collection",
+            "/api/keyword/1701",
         ];
 
         for path in protected_paths {
