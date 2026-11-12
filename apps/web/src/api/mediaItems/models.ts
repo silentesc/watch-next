@@ -6,3 +6,8 @@ export interface MediaItem {
     external_source: string;
     external_id: number;
 }
+
+export interface MediaItemFilterParams {
+    list_ids?: string;
+    tag_ids?: string;
+}
