@@ -3,23 +3,9 @@ use axum::{Extension, Json, extract::Query, http::StatusCode};
 use crate::{
     app::{errors::AppError, state::AppState},
     features::search::service,
-    integrations::tmdb::resources::search::dto::{
-        SearchKeywordParams, SearchKeywordResponse, SearchMultiParams, SearchMultiResponse,
-    },
+    integrations::tmdb::resources::search::dto::{SearchMultiParams, SearchMultiResponse},
     persistence::models::Session,
 };
-
-#[axum::debug_handler]
-pub async fn search_keyword(
-    Extension(app_state): Extension<AppState>,
-    Extension(_): Extension<Session>,
-    Query(params): Query<SearchKeywordParams>,
-) -> Result<(StatusCode, Json<SearchKeywordResponse>), AppError> {
-    Ok((
-        StatusCode::OK,
-        Json(service::search_keyword(app_state.tmdb, params).await?),
-    ))
-}
 
 #[axum::debug_handler]
 pub async fn search_multi(

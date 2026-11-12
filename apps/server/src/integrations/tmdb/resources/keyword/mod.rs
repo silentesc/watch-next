@@ -1,4 +1,9 @@
-use crate::integrations::tmdb::{client::TmdbClient, errors::TmdbError, models::common::Keyword};
+use crate::integrations::tmdb::{
+    client::TmdbClient,
+    errors::TmdbError,
+    models::common::Keyword,
+    resources::search::dto::{SearchKeywordParams, SearchKeywordResponse},
+};
 
 pub struct KeywordApi<'a> {
     tmdb_client: &'a TmdbClient,
@@ -13,5 +18,9 @@ impl<'a> KeywordApi<'a> {
         self.tmdb_client
             .get(format!("/keyword/{keyword_id}").as_str(), &())
             .await
+    }
+
+    pub async fn search(&self, params: SearchKeywordParams) -> Result<SearchKeywordResponse, TmdbError> {
+        self.tmdb_client.get("/search/keyword", &params).await
     }
 }

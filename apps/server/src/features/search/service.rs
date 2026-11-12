@@ -2,13 +2,9 @@ use crate::{
     app::errors::AppError,
     integrations::tmdb::{
         TmdbApi,
-        resources::search::dto::{SearchKeywordParams, SearchKeywordResponse, SearchMultiParams, SearchMultiResponse},
+        resources::search::dto::{SearchMultiParams, SearchMultiResponse},
     },
 };
-
-pub async fn search_keyword(tmdb: TmdbApi, params: SearchKeywordParams) -> Result<SearchKeywordResponse, AppError> {
-    tmdb.search().keyword(params).await.map_err(Into::into)
-}
 
 pub async fn search_multi(tmdb: TmdbApi, params: SearchMultiParams) -> Result<SearchMultiResponse, AppError> {
     let mut response: SearchMultiResponse = tmdb.search().multi(params).await?;
