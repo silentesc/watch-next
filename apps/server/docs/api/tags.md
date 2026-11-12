@@ -61,11 +61,30 @@ Returns the current user's tags.
 
 ### Get items tagged with a specific tag
 
+Get all items
+
 `GET /tags/:tag_id/items`
+
+Filter for items in all lists (AND logic)
+
+`GET /tags/:tag_id/items?list_ids=1,2,4`
+
+Filter for items in any list (OR logic)
+
+`GET /tags/:tag_id/items?list_ids=1|2|4`
+
+Filter by tags using the same comma-for-AND and pipe-for-OR syntax:
+
+`GET /tags/:tag_id/items?tag_ids=1,2`
+
+Both `list_ids` and `tag_ids` can be provided; the item must satisfy both filters.
+The `kind` filter can also be combined with them:
+
+`GET /tags/:tag_id/items?list_ids=1,2&tag_ids=3|4&kind=movie`
 
 - **Success:** `200 OK`
 - **Response:** `MediaItem[]`
-- **Errors:** `404 Not Found` if the tag is not found for the user
+- **Errors:** `400 Bad Request` if either ID filter is invalid or mixes separators; `404 Not Found` if the tag is not found for the user
 
 ### Tag items
 

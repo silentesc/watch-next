@@ -3,7 +3,10 @@ use sqlx::PgPool;
 
 use crate::{
     app::errors::AppError,
-    features::{custom_lists::dto::MediaItemRequest, media_items},
+    features::{
+        custom_lists::dto::{GetListItemsParams, MediaItemRequest},
+        media_items,
+    },
     integrations::tmdb::TmdbApi,
     persistence::{
         models::{CustomList, MediaItem},
@@ -27,8 +30,13 @@ pub async fn delete_custom_list(pool: &PgPool, user_id: i64, list_id: i64) -> Re
     custom_lists::delete_custom_list(pool, user_id, list_id).await
 }
 
-pub async fn get_media_items_in_list(pool: &PgPool, user_id: i64, list_id: i64) -> Result<Vec<MediaItem>, AppError> {
-    custom_lists::get_media_items_in_list(pool, user_id, list_id).await
+pub async fn get_media_items_in_list(
+    pool: &PgPool,
+    user_id: i64,
+    list_id: i64,
+    params: GetListItemsParams,
+) -> Result<Vec<MediaItem>, AppError> {
+    custom_lists::get_media_items_in_list(pool, user_id, list_id, params).await
 }
 
 pub async fn add_media_item_to_list(

@@ -5,7 +5,7 @@ use crate::{
     app::errors::AppError,
     features::{
         media_items,
-        tags::dto::{TagMediaItemRequest, UntagMediaItemRequest},
+        tags::dto::{GetTagItemsParams, TagMediaItemRequest, UntagMediaItemRequest},
     },
     integrations::tmdb::TmdbApi,
     persistence::{
@@ -30,8 +30,13 @@ pub async fn delete_tag(pool: &PgPool, user_id: i64, tag_id: i64) -> Result<(), 
     tags::delete_tag(pool, user_id, tag_id).await
 }
 
-pub async fn get_media_items_of_tag(pool: &PgPool, user_id: i64, tag_id: i64) -> Result<Vec<MediaItem>, AppError> {
-    tags::get_media_items_of_tag(pool, user_id, tag_id).await
+pub async fn get_media_items_of_tag(
+    pool: &PgPool,
+    user_id: i64,
+    tag_id: i64,
+    params: GetTagItemsParams,
+) -> Result<Vec<MediaItem>, AppError> {
+    tags::get_media_items_of_tag(pool, user_id, tag_id, params).await
 }
 
 pub async fn tag_media_item(

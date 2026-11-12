@@ -25,6 +25,13 @@ impl From<Tag> for TagResponse {
 }
 
 #[derive(Deserialize)]
+pub struct GetTagItemsParams {
+    pub list_ids: Option<String>,
+    pub tag_ids: Option<String>,
+    pub kind: Option<String>,
+}
+
+#[derive(Deserialize)]
 pub struct CreateTagRequest {
     pub name: String,
 }
