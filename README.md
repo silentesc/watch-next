@@ -4,11 +4,11 @@ A fast and lightweight watchlist app for your media, with discovery, custom list
 
 ## Features
 
-- Discovery & search of media, including movies, collections and shows.
-- Detailed information about media, pulled from TMDB.
-- Custom lists you can create to store the media where it belongs.
+- Discovery & search of media.
+- Detailed information about media.
+- Custom lists and tags for freely organizing.
 - Mobile friendly design.
-- Built with performance in mind, on both client and server side.
+- Built with performance in mind.
 
 Look at the [Roadmap](#roadmap) below to see upcoming features.
 
@@ -85,7 +85,7 @@ Broad plan of features. No particular order. Might change at any time.
 - [x] User accounts
 - [x] TMDB integration
 - [x] Custom lists for collections/movies/shows
-- [x] Tags for collections/movies/shows/seasons/episodes
+- [x] Tags for collections/movies/shows
 - [ ] Notifications / Reminders
 - [ ] Refresh token so sessions don't expire after 7 days
 - [ ] Admin Dashboard
