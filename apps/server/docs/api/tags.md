@@ -78,9 +78,8 @@ Filter by tags using the same comma-for-AND and pipe-for-OR syntax:
 `GET /tags/:tag_id/items?tag_ids=1,2`
 
 Both `list_ids` and `tag_ids` can be provided; the item must satisfy both filters.
-The `kind` filter can also be combined with them:
 
-`GET /tags/:tag_id/items?list_ids=1,2&tag_ids=3|4&kind=movie`
+`GET /tags/:tag_id/items?list_ids=1,2&tag_ids=3|4`
 
 - **Success:** `200 OK`
 - **Response:** `MediaItem[]`

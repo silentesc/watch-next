@@ -53,7 +53,6 @@ impl From<MediaItem> for MediaItemResponse {
 pub struct GetListItemsParams {
     pub tag_ids: Option<String>,
     pub list_ids: Option<String>,
-    pub kind: Option<String>,
 }
 
 #[derive(Deserialize)]

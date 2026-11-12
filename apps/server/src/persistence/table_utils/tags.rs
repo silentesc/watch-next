@@ -52,18 +52,17 @@ const GET_MEDIA_ITEMS_OF_TAG_QUERY: &str = r#"
         ON tags.id = tags_items.tag_id
     WHERE tags_items.tag_id = $1
         AND tags.user_id = $2
-        AND ($3::text IS NULL OR media_items.kind = $3)
         AND (
-            $4::bigint[] IS NULL
+            $3::bigint[] IS NULL
             OR CASE
-                WHEN $5 THEN ARRAY(
+                WHEN $4 THEN ARRAY(
                     SELECT custom_list_items.list_id
                     FROM custom_list_items
                     INNER JOIN custom_lists
                         ON custom_lists.id = custom_list_items.list_id
                     WHERE custom_list_items.media_item_id = media_items.id
                         AND custom_lists.user_id = $2
-                ) && $4::bigint[]
+                ) && $3::bigint[]
                 ELSE ARRAY(
                     SELECT custom_list_items.list_id
                     FROM custom_list_items
@@ -71,20 +70,20 @@ const GET_MEDIA_ITEMS_OF_TAG_QUERY: &str = r#"
                         ON custom_lists.id = custom_list_items.list_id
                     WHERE custom_list_items.media_item_id = media_items.id
                         AND custom_lists.user_id = $2
-                ) @> $4::bigint[]
+                ) @> $3::bigint[]
             END
         )
         AND (
-            $6::bigint[] IS NULL
+            $5::bigint[] IS NULL
             OR CASE
-                WHEN $7 THEN ARRAY(
+                WHEN $6 THEN ARRAY(
                     SELECT ti_filter.tag_id
                     FROM tags_items AS ti_filter
                     INNER JOIN tags AS tags_filter
                         ON tags_filter.id = ti_filter.tag_id
                     WHERE ti_filter.media_item_id = media_items.id
                         AND tags_filter.user_id = $2
-                ) && $6::bigint[]
+                ) && $5::bigint[]
                 ELSE ARRAY(
                     SELECT ti_filter.tag_id
                     FROM tags_items AS ti_filter
@@ -92,7 +91,7 @@ const GET_MEDIA_ITEMS_OF_TAG_QUERY: &str = r#"
                         ON tags_filter.id = ti_filter.tag_id
                     WHERE ti_filter.media_item_id = media_items.id
                         AND tags_filter.user_id = $2
-                ) @> $6::bigint[]
+                ) @> $5::bigint[]
             END
         )
     ORDER BY tags_items.tagged_at, tags_items.media_item_id
@@ -307,7 +306,6 @@ pub async fn get_media_items_of_tag(
     sqlx::query_as(GET_MEDIA_ITEMS_OF_TAG_QUERY)
         .bind(tag_id)
         .bind(user_id)
-        .bind(params.kind)
         .bind(list_filter.ids)
         .bind(list_filter.match_any)
         .bind(tag_filter.ids)

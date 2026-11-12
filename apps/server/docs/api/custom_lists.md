@@ -82,9 +82,8 @@ Filter by lists using the same comma-for-AND and pipe-for-OR syntax:
 `GET /custom-lists/:list_id/items?list_ids=1,2`
 
 Both `tag_ids` and `list_ids` can be provided; the item must satisfy both filters.
-The `kind` filter can also be combined with them:
 
-`GET /custom-lists/:list_id/items?tag_ids=1,2&list_ids=3|4&kind=movie`
+`GET /custom-lists/:list_id/items?tag_ids=1,2&list_ids=3|4`
 
 - **Success:** `200 OK`
 - **Response:** `MediaItemResponse[]`

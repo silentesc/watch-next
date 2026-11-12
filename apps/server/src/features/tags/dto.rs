@@ -28,7 +28,6 @@ impl From<Tag> for TagResponse {
 pub struct GetTagItemsParams {
     pub list_ids: Option<String>,
     pub tag_ids: Option<String>,
-    pub kind: Option<String>,
 }
 
 #[derive(Deserialize)]

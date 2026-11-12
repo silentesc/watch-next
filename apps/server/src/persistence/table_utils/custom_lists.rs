@@ -79,18 +79,17 @@ const GET_MEDIA_ITEMS_IN_LIST_QUERY: &str = r#"
         ON custom_lists.id = custom_list_items.list_id
     WHERE custom_list_items.list_id = $1
         AND custom_lists.user_id = $2
-        AND ($3::text IS NULL OR media_items.kind = $3)
         AND (
-            $4::bigint[] IS NULL
+            $3::bigint[] IS NULL
             OR CASE
-                WHEN $5 THEN ARRAY(
+                WHEN $4 THEN ARRAY(
                     SELECT tags_items.tag_id
                     FROM tags_items
                     INNER JOIN tags
                         ON tags.id = tags_items.tag_id
                     WHERE tags_items.media_item_id = media_items.id
                         AND tags.user_id = $2
-                ) && $4::bigint[]
+                ) && $3::bigint[]
                 ELSE ARRAY(
                     SELECT tags_items.tag_id
                     FROM tags_items
@@ -98,20 +97,20 @@ const GET_MEDIA_ITEMS_IN_LIST_QUERY: &str = r#"
                         ON tags.id = tags_items.tag_id
                     WHERE tags_items.media_item_id = media_items.id
                         AND tags.user_id = $2
-                ) @> $4::bigint[]
+                ) @> $3::bigint[]
             END
         )
         AND (
-            $6::bigint[] IS NULL
+            $5::bigint[] IS NULL
             OR CASE
-                WHEN $7 THEN ARRAY(
+                WHEN $6 THEN ARRAY(
                     SELECT cli_filter.list_id
                     FROM custom_list_items AS cli_filter
                     INNER JOIN custom_lists AS cl_filter
                         ON cl_filter.id = cli_filter.list_id
                     WHERE cli_filter.media_item_id = media_items.id
                         AND cl_filter.user_id = $2
-                ) && $6::bigint[]
+                ) && $5::bigint[]
                 ELSE ARRAY(
                     SELECT cli_filter.list_id
                     FROM custom_list_items AS cli_filter
@@ -119,7 +118,7 @@ const GET_MEDIA_ITEMS_IN_LIST_QUERY: &str = r#"
                         ON cl_filter.id = cli_filter.list_id
                     WHERE cli_filter.media_item_id = media_items.id
                         AND cl_filter.user_id = $2
-                ) @> $6::bigint[]
+                ) @> $5::bigint[]
             END
         )
     ORDER BY custom_list_items.added_at, custom_list_items.media_item_id
@@ -341,7 +340,6 @@ pub async fn get_media_items_in_list(
     sqlx::query_as(GET_MEDIA_ITEMS_IN_LIST_QUERY)
         .bind(list_id)
         .bind(user_id)
-        .bind(params.kind)
         .bind(tag_filter.ids)
         .bind(tag_filter.match_any)
         .bind(list_filter.ids)
