@@ -7,6 +7,10 @@ import { useLanguages } from "../../../hooks/tmdb/use_languages";
 import { useGenreMovie } from "../../../hooks/tmdb/use_genre_movie";
 import { MultiSelectDropdown } from "../../../components/ui/MultiSelectDropdown";
 import { Dropdown } from "../../../components/ui/Dropdown";
+import { useSearchKeyword } from "../../../hooks/tmdb/use_search_keyword";
+import { useKeywordDetailsList } from "../../../hooks/tmdb/use_keyword_details";
+import { Loading } from "../../../components/ui/Loading";
+import { Error } from "../../../components/ui/Error";
 
 export interface MovieFilters {
     releaseDateFrom: Date | undefined,
@@ -19,6 +23,7 @@ export interface MovieFilters {
     tmdbVoteCountTo: number | undefined,
     withGenres: string | undefined,
     withoutGenres: string | undefined,
+    withKeywords: string | undefined,
     originalLanguage: string | undefined,
 }
 
@@ -50,6 +55,10 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
     const [withGenresOr, setWithGenresOr] = useState(filters.withGenres?.includes("|") || false);
     const [withoutGenres, setWithoutGenres] = useState<Array<string>>(filters.withoutGenres?.split(/[|,]/) || []);
     const [withoutGenresOr, setWithoutGenresOr] = useState(filters.withoutGenres?.includes("|") || false);
+    const [withKeywords, setWithKeywords] = useState<Array<string>>(filters.withKeywords?.split(/[|,]/) || []);
+    const [withKeywordsOr, setWithKeywordsOr] = useState(filters.withKeywords?.includes("|") || false);
+    const [keywordQuery, setKeywordQuery] = useState("");
+    const [debouncedKeywordQuery, setDebouncedKeywordQuery] = useState("");
     const [originalLanguage, setOriginalLanguage] = useState<string>(filters.originalLanguage || "*");
 
     const languages = useLanguages();
@@ -67,6 +76,27 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
         return new Map(genres.data?.genres.map(genre => [genre.id.toString(), genre.name]));
     }, [genres.data]);
 
+    useEffect(() => {
+        const timeout = setTimeout(() => setDebouncedKeywordQuery(keywordQuery), 250);
+        return () => clearTimeout(timeout);
+    }, [keywordQuery]);
+
+    const keywordSearch = useSearchKeyword("keywords", debouncedKeywordQuery.trim());
+    const keywordDetails = useKeywordDetailsList(withKeywords.map(Number));
+    const keywordValues: Map<string, string> = useMemo(() => {
+        const values = new Map<string, string>();
+        for (const keyword of keywordSearch.data?.pages.flatMap(page => page.results) ?? []) {
+            if (keyword.id !== undefined && keyword.name) {
+                values.set(keyword.id.toString(), keyword.name);
+            }
+        }
+        keywordDetails.forEach((detail, index) => {
+            if (detail.data?.name) values.set(withKeywords[index], detail.data.name);
+        });
+        return values;
+    }, [keywordSearch.data, keywordDetails, withKeywords]);
+    const keywordDetailsError = keywordDetails.find(detail => detail.isError)?.error;
+
     const resetFilters = () => {
         setReleaseDateFrom(undefined);
         setReleaseDateTo(undefined);
@@ -78,6 +108,9 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
         setTmdbVoteCountTo(undefined);
         setWithGenres([]);
         setWithoutGenres([]);
+        setWithKeywords([]);
+        setWithKeywordsOr(false);
+        setKeywordQuery("");
         setWithGenresOr(false);
         setWithoutGenresOr(false);
         setOriginalLanguage("*");
@@ -95,6 +128,7 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
             tmdbVoteCountTo,
             withGenres: withGenres.join(withGenresOr ? "|" : ",") || undefined,
             withoutGenres: withoutGenres.join(withoutGenresOr ? "|" : ",") || undefined,
+            withKeywords: withKeywords.join(withKeywordsOr ? "|" : ",") || undefined,
             originalLanguage,
         };
 
@@ -213,6 +247,30 @@ export function MovieFilters({ isOpen, filters, onFiltersChange, onClose }: Filt
                         values={genresValues}
                         onSelect={(key: string) => setWithoutGenres(prev => [...prev, key])}
                         onDeselect={(key: string) => setWithoutGenres(prev => prev.filter(k => k !== key))}
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                        <span className="text-2xl font-medium">With Keywords</span>
+                        <Button value={withKeywordsOr ? "OR" : "AND"} fullWidth={false} onClick={() => setWithKeywordsOr(prev => !prev)} />
+                    </div>
+                    <Input
+                        placeholder="Type to search keywords"
+                        value={keywordQuery}
+                        onChange={event => setKeywordQuery(event.target.value)}
+                    />
+                    {keywordQuery.trim() && keywordSearch.isFetching && <Loading size="small" />}
+                    {keywordSearch.isError && <Error message={keywordSearch.error.message} />}
+                    {keywordDetails.some(detail => detail.isPending) && <Loading size="small" />}
+                    {keywordDetailsError && <Error message={keywordDetailsError.message} />}
+                    <MultiSelectDropdown
+                        placeholder="Keywords"
+                        selectedKeys={new Set(withKeywords)}
+                        values={keywordValues}
+                        closeOnSelect={false}
+                        closeOnOutsideClick={false}
+                        onSelect={(key: string) => setWithKeywords(prev => [...prev, key])}
+                        onDeselect={(key: string) => setWithKeywords(prev => prev.filter(k => k !== key))}
                     />
                 </div>
                 <div className="flex flex-col gap-2">

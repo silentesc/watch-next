@@ -19,6 +19,7 @@ describe("discover filter query parameters", () => {
             tmdbVoteCountTo: 1000,
             withGenres: "28,35",
             withoutGenres: "27",
+            withKeywords: "123,456",
             originalLanguage: "en",
         };
         const queryParams = getMovieSearchFromFilters(filters, "vote_average.desc");
@@ -39,6 +40,7 @@ describe("discover filter query parameters", () => {
             withStatus: "0",
             withGenres: "18",
             withoutGenres: undefined,
+            withKeywords: "456|789",
             originalLanguage: undefined,
         };
         const queryParams = getTvSeriesSearchFromFilters(filters, "popularity.desc");
@@ -58,6 +60,7 @@ describe("discover filter query parameters", () => {
             tmdbVoteCountTo: undefined,
             withGenres: undefined,
             withoutGenres: undefined,
+            withKeywords: undefined,
             originalLanguage: undefined,
         };
         const queryParams = getMovieSearchFromFilters(filters, "popularity.desc");

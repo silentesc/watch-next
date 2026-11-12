@@ -16,6 +16,7 @@ export function useDiscoverTvSeries(discoverTvSeriesRequest: DiscoverTvSeriesReq
             with_status: discoverTvSeriesRequest.with_status,
             with_genres: discoverTvSeriesRequest.with_genres,
             without_genres: discoverTvSeriesRequest.without_genres,
+            with_keywords: discoverTvSeriesRequest.with_keywords,
             with_runtime_gte: discoverTvSeriesRequest.with_runtime_gte,
             with_runtime_lte: discoverTvSeriesRequest.with_runtime_lte,
             with_original_language: discoverTvSeriesRequest.with_original_language,

@@ -10,6 +10,7 @@ export interface DiscoverMovieSearch {
     tmdbVoteCountTo?: string;
     withGenres?: string;
     withoutGenres?: string;
+    withKeywords?: string;
     originalLanguage?: string;
 }
 
@@ -26,6 +27,7 @@ export interface DiscoverTvSearch {
     withStatus?: string;
     withGenres?: string;
     withoutGenres?: string;
+    withKeywords?: string;
     originalLanguage?: string;
 }
 
