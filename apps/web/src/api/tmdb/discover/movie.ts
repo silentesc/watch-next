@@ -13,6 +13,7 @@ export interface DiscoverMovieRequest {
     vote_count_lte?: number;
     with_genres?: string;
     without_genres?: string;
+    with_keywords?: string;
     with_origin_country?: string;
     with_original_language?: string;
     with_runtime_gte?: number;
@@ -38,6 +39,7 @@ export async function discover_movie(
         vote_count_lte = undefined,
         with_genres = undefined,
         without_genres = undefined,
+        with_keywords = undefined,
         with_origin_country = undefined,
         with_original_language = undefined,
         with_runtime_gte = undefined,
@@ -59,6 +61,7 @@ export async function discover_movie(
                     "vote_count.lte": vote_count_lte,
                     "with_genres": with_genres,
                     "without_genres": without_genres,
+                    "with_keywords": with_keywords,
                     "with_origin_country": with_origin_country,
                     "with_original_language": with_original_language,
                     "with_runtime.gte": with_runtime_gte,

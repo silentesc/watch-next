@@ -51,7 +51,7 @@ export function SearchPage() {
             if (tmpCategory !== category || tmpText !== text) {
                 onSearch();
             }
-        }, 500);
+        }, 250);
 
         return () => clearTimeout(timeout);
     }, [tmpText]);

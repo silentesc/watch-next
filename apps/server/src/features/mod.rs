@@ -3,6 +3,7 @@ pub mod collections;
 pub mod configuration;
 pub mod custom_lists;
 pub mod genres;
+pub mod keyword;
 pub mod me;
 pub mod media_items;
 pub mod movies;

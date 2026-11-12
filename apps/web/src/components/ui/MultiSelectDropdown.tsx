@@ -4,7 +4,7 @@ import { Button } from "./Button";
 import { Checkbox } from "./Checkbox";
 import { Loading } from "./Loading";
 
-interface MultiSelectDropdown2Props {
+interface MultiSelectDropdownProps {
     placeholder: string;
     selectedKeys: Set<string>;
     loadingKeys?: Set<string>;
@@ -12,9 +12,10 @@ interface MultiSelectDropdown2Props {
     onSelect: (key: string) => void;
     onDeselect: (key: string) => void;
     closeOnSelect?: boolean;
+    closeOnOutsideClick?: boolean;
 }
 
-export function MultiSelectDropdown({ placeholder, selectedKeys, loadingKeys = new Set(), values, onSelect, onDeselect, closeOnSelect = false }: MultiSelectDropdown2Props) {
+export function MultiSelectDropdown({ placeholder, selectedKeys, loadingKeys = new Set(), values, onSelect, onDeselect, closeOnSelect = false, closeOnOutsideClick = true }: MultiSelectDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -51,10 +52,10 @@ export function MultiSelectDropdown({ placeholder, selectedKeys, loadingKeys = n
 
     // Close dropdown when clicking outside
     const handleClickOutside = useCallback((event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        if (closeOnOutsideClick && dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false);
         }
-    }, []);
+    }, [closeOnOutsideClick]);
 
     useEffect(() => {
         if (!isOpen) return;

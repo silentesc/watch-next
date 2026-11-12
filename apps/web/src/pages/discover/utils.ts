@@ -15,6 +15,7 @@ export function getMovieFiltersFromParams(queryParams: DiscoverMovieSearch) {
         tmdbVoteCountTo: queryParams.tmdbVoteCountTo ? Number(queryParams.tmdbVoteCountTo) : undefined,
         withGenres: queryParams.withGenres || undefined,
         withoutGenres: queryParams.withoutGenres || undefined,
+        withKeywords: queryParams.withKeywords || undefined,
         originalLanguage: queryParams.originalLanguage || undefined,
     } as MovieFilters;
 }
@@ -32,6 +33,7 @@ export function getTvSeriesFiltersFromParams(queryParams: DiscoverTvSearch) {
         withStatus: queryParams.withStatus || undefined,
         withGenres: queryParams.withGenres || undefined,
         withoutGenres: queryParams.withoutGenres || undefined,
+        withKeywords: queryParams.withKeywords || undefined,
         originalLanguage: queryParams.originalLanguage || undefined,
     } as TvSeriesFilters;
 }
@@ -49,6 +51,7 @@ export function getMovieSearchFromFilters(filters: MovieFilters, sortBy: string)
         tmdbVoteCountTo: filters.tmdbVoteCountTo?.toString(),
         withGenres: filters.withGenres,
         withoutGenres: filters.withoutGenres,
+        withKeywords: filters.withKeywords,
         originalLanguage: filters.originalLanguage,
     };
 }
@@ -67,6 +70,7 @@ export function getTvSeriesSearchFromFilters(filters: TvSeriesFilters, sortBy: s
         withStatus: filters.withStatus,
         withGenres: filters.withGenres,
         withoutGenres: filters.withoutGenres,
+        withKeywords: filters.withKeywords,
         originalLanguage: filters.originalLanguage,
     };
 }

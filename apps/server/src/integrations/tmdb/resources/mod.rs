@@ -1,6 +1,7 @@
 pub mod collections;
 pub mod configuration;
 pub mod genres;
+pub mod keyword;
 pub mod movies;
 pub mod people;
 pub mod search;

@@ -37,6 +37,7 @@ export function DiscoverMoviePage() {
         currentFilters.tmdbVoteCountTo,
         currentFilters.withGenres,
         currentFilters.withoutGenres,
+        currentFilters.withKeywords,
         currentFilters.originalLanguage,
     ]);
 
@@ -50,6 +51,7 @@ export function DiscoverMoviePage() {
         vote_count_lte: memoizedFilters.tmdbVoteCountTo,
         with_genres: memoizedFilters.withGenres,
         without_genres: memoizedFilters.withoutGenres,
+        with_keywords: memoizedFilters.withKeywords,
         with_runtime_gte: memoizedFilters.runtimeFrom,
         with_runtime_lte: memoizedFilters.runtimeTo,
         with_original_language: memoizedFilters.originalLanguage,

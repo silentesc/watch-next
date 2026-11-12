@@ -37,6 +37,7 @@ export function DiscoverTvSeriesPage() {
         currentFilters.withStatus,
         currentFilters.withGenres,
         currentFilters.withoutGenres,
+        currentFilters.withKeywords,
         currentFilters.originalLanguage,
     ]);
 
@@ -51,6 +52,7 @@ export function DiscoverTvSeriesPage() {
         with_genres: memoizedFilters.withGenres,
         with_status: memoizedFilters.withStatus,
         without_genres: memoizedFilters.withoutGenres,
+        with_keywords: memoizedFilters.withKeywords,
         with_runtime_gte: memoizedFilters.runtimeFrom,
         with_runtime_lte: memoizedFilters.runtimeTo,
         with_original_language: memoizedFilters.originalLanguage,
