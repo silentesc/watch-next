@@ -17,6 +17,10 @@ async fn main() {
 
     app::configuration::setup_logging();
 
+    const APP_NAME: &str = env!("CARGO_PKG_NAME");
+    const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+    info!(Category::Setup, "Running {} v{}", APP_NAME, APP_VERSION);
+
     let pool = app::configuration::connect_postgres().await;
     app::configuration::run_migrations(&pool).await;
 
