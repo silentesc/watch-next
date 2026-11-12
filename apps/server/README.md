@@ -16,6 +16,7 @@ Necessary TMDB endpoints are implemented and can be used exactly like the origin
 | --- | --- |
 | Genre | <ul><li>[Movie](https://developer.themoviedb.org/reference/genre-movie-list)</li><li>[TV](https://developer.themoviedb.org/reference/genre-tv-list)</li></ul> |
 | Configuration | <ul><li>[Languages](https://developer.themoviedb.org/reference/configuration-languages)</li></ul> |
+| Keywords | <ul><li>[Details](https://developer.themoviedb.org/reference/keyword-details)</li><li>[Search](https://developer.themoviedb.org/reference/search-keyword)</li></ul> |
 | Search | <ul><li>[Multi](https://developer.themoviedb.org/reference/search-multi)</li></ul> |
 | Trending | <ul><li>[All](https://developer.themoviedb.org/reference/trending-all)</li></ul> |
 | Movies | <ul><li>[Details](https://developer.themoviedb.org/reference/movie-details)</li><li>[Keywords](https://developer.themoviedb.org/reference/movie-keywords)</li><li>[Release Dates](https://developer.themoviedb.org/reference/movie-release-dates)</li><li>[Credits](https://developer.themoviedb.org/reference/movie-credits)</li><li>[Videos](https://developer.themoviedb.org/reference/movie-videos)</li><li>[Recommendations](https://developer.themoviedb.org/reference/movie-recommendations)</li><li>[Similar](https://developer.themoviedb.org/reference/movie-similar)</li><li>[Discover](https://developer.themoviedb.org/reference/discover-movie)</li><li>[Trending](https://developer.themoviedb.org/reference/trending-movies)</li><li>[Search](https://developer.themoviedb.org/reference/search-movie)</li></ul> |
