@@ -6,11 +6,11 @@ use sqlx::PgPool;
 use crate::{
     app::errors::AppError,
     error,
-    features::tags::dto::UntagMediaItemRequest,
+    features::tags::dto::{GetTagItemsParams, UntagMediaItemRequest},
     logger::enums::category::Category,
     persistence::{
         models::{MediaItem, Tag},
-        table_utils::media_items,
+        table_utils::{media_items, shared::parse_id_filter},
     },
 };
 
@@ -50,7 +50,50 @@ const GET_MEDIA_ITEMS_OF_TAG_QUERY: &str = r#"
         ON tags_items.media_item_id = media_items.id
     INNER JOIN tags
         ON tags.id = tags_items.tag_id
-    WHERE tags_items.tag_id = $1 AND tags.user_id = $2
+    WHERE tags_items.tag_id = $1
+        AND tags.user_id = $2
+        AND (
+            $3::bigint[] IS NULL
+            OR CASE
+                WHEN $4 THEN ARRAY(
+                    SELECT custom_list_items.list_id
+                    FROM custom_list_items
+                    INNER JOIN custom_lists
+                        ON custom_lists.id = custom_list_items.list_id
+                    WHERE custom_list_items.media_item_id = media_items.id
+                        AND custom_lists.user_id = $2
+                ) && $3::bigint[]
+                ELSE ARRAY(
+                    SELECT custom_list_items.list_id
+                    FROM custom_list_items
+                    INNER JOIN custom_lists
+                        ON custom_lists.id = custom_list_items.list_id
+                    WHERE custom_list_items.media_item_id = media_items.id
+                        AND custom_lists.user_id = $2
+                ) @> $3::bigint[]
+            END
+        )
+        AND (
+            $5::bigint[] IS NULL
+            OR CASE
+                WHEN $6 THEN ARRAY(
+                    SELECT ti_filter.tag_id
+                    FROM tags_items AS ti_filter
+                    INNER JOIN tags AS tags_filter
+                        ON tags_filter.id = ti_filter.tag_id
+                    WHERE ti_filter.media_item_id = media_items.id
+                        AND tags_filter.user_id = $2
+                ) && $5::bigint[]
+                ELSE ARRAY(
+                    SELECT ti_filter.tag_id
+                    FROM tags_items AS ti_filter
+                    INNER JOIN tags AS tags_filter
+                        ON tags_filter.id = ti_filter.tag_id
+                    WHERE ti_filter.media_item_id = media_items.id
+                        AND tags_filter.user_id = $2
+                ) @> $5::bigint[]
+            END
+        )
     ORDER BY tags_items.tagged_at, tags_items.media_item_id
     "#;
 
@@ -249,12 +292,24 @@ pub async fn delete_tag(pool: &PgPool, user_id: i64, tag_id: i64) -> Result<(), 
 /**
  * Get all media items with a tag
  */
-pub async fn get_media_items_of_tag(pool: &PgPool, user_id: i64, tag_id: i64) -> Result<Vec<MediaItem>, AppError> {
+pub async fn get_media_items_of_tag(
+    pool: &PgPool,
+    user_id: i64,
+    tag_id: i64,
+    params: GetTagItemsParams,
+) -> Result<Vec<MediaItem>, AppError> {
     ensure_tag_id_exists(pool, tag_id, user_id).await?;
+
+    let list_filter = parse_id_filter(params.list_ids)?;
+    let tag_filter = parse_id_filter(params.tag_ids)?;
 
     sqlx::query_as(GET_MEDIA_ITEMS_OF_TAG_QUERY)
         .bind(tag_id)
         .bind(user_id)
+        .bind(list_filter.ids)
+        .bind(list_filter.match_any)
+        .bind(tag_filter.ids)
+        .bind(tag_filter.match_any)
         .fetch_all(pool)
         .await
         .map_err(|err| {

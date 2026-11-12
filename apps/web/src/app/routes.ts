@@ -1,6 +1,6 @@
 import { createRootRoute, createRoute, createRouter, lazyRouteComponent } from "@tanstack/react-router";
 import { App } from "./App";
-import { validateStringSearch, type DiscoverMovieSearch, type DiscoverTvSearch, type PersonPageSearch, type SearchPageSearch } from "./search";
+import { validateStringSearch, type DiscoverMovieSearch, type DiscoverTvSearch, type MediaItemFiltersSearch, type PersonPageSearch, type SearchPageSearch } from "./search";
 
 const rootRoute = createRootRoute({ component: App });
 
@@ -9,9 +9,9 @@ const routes = [
     createRoute({ getParentRoute: () => rootRoute, path: "/login", component: lazyRouteComponent(() => import("../pages/auth/LoginPage"), "LoginPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/register", component: lazyRouteComponent(() => import("../pages/auth/RegisterPage"), "RegisterPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/custom-lists", component: lazyRouteComponent(() => import("../pages/custom-lists/CustomListsOverviewPage"), "CustomListsOverviewPage") }),
-    createRoute({ getParentRoute: () => rootRoute, path: "/custom-lists/$id", component: lazyRouteComponent(() => import("../pages/custom-lists/CustomListPage"), "CustomListPage") }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/custom-lists/$id", validateSearch: (search) => validateStringSearch<MediaItemFiltersSearch>(search), component: lazyRouteComponent(() => import("../pages/custom-lists/CustomListPage"), "CustomListPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/tags", component: lazyRouteComponent(() => import("../pages/tags/TagsOverviewPage"), "TagsOverviewPage") }),
-    createRoute({ getParentRoute: () => rootRoute, path: "/tags/$id", component: lazyRouteComponent(() => import("../pages/tags/TagPage"), "TagPage") }),
+    createRoute({ getParentRoute: () => rootRoute, path: "/tags/$id", validateSearch: (search) => validateStringSearch<MediaItemFiltersSearch>(search), component: lazyRouteComponent(() => import("../pages/tags/TagPage"), "TagPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/import", component: lazyRouteComponent(() => import("../pages/import/ImportPage"), "ImportPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/discover", component: lazyRouteComponent(() => import("../pages/discover/DiscoverPage"), "DiscoverPage") }),
     createRoute({ getParentRoute: () => rootRoute, path: "/discover/movie", validateSearch: (search) => validateStringSearch<DiscoverMovieSearch>(search), component: lazyRouteComponent(() => import("../pages/discover/DiscoverMoviePage"), "DiscoverMoviePage") }),

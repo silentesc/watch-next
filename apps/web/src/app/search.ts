@@ -41,6 +41,12 @@ export interface PersonPageSearch {
     sortBy?: string;
 }
 
+export interface MediaItemFiltersSearch {
+    mediaType?: string;
+    listIds?: string;
+    tagIds?: string;
+}
+
 export function validateStringSearch<T extends object>(search: Record<string, unknown>): T {
     return Object.fromEntries(Object.entries(search).filter(([, value]) => typeof value === "string")) as T;
 }

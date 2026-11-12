@@ -65,11 +65,29 @@ Returns the current user's lists.
 
 ### Get items in a custom list
 
+Get all items
+
 `GET /custom-lists/:list_id/items`
+
+Filter for items with all tags (AND logic)
+
+`GET /custom-lists/:list_id/items?tag_ids=1,2,4`
+
+Filter for items with any tag (OR logic)
+
+`GET /custom-lists/:list_id/items?tag_ids=1|2|4`
+
+Filter by lists using the same comma-for-AND and pipe-for-OR syntax:
+
+`GET /custom-lists/:list_id/items?list_ids=1,2`
+
+Both `tag_ids` and `list_ids` can be provided; the item must satisfy both filters.
+
+`GET /custom-lists/:list_id/items?tag_ids=1,2&list_ids=3|4`
 
 - **Success:** `200 OK`
 - **Response:** `MediaItemResponse[]`
-- **Errors:** `404 Not Found` if the list does not belong to the user
+- **Errors:** `400 Bad Request` if either ID filter is invalid or mixes separators; `404 Not Found` if the list does not belong to the user
 
 ### Add items to a custom list
 

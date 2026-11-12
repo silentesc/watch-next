@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
+import type { MediaItemFiltersSearch } from "../../app/search";
 import type { AddCustomListItemRequest } from "../../api/customLists/addCustomListItem";
+import type { MediaItem } from "../../api/mediaItems/models";
 import type { TagMediaItemRequest } from "../../api/tags/tagMediaItem";
 import { Checkbox } from "../../components/ui/Checkbox";
 import { Dropdown } from "../../components/ui/Dropdown";
@@ -23,14 +25,20 @@ import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
 import { Popup } from "../../components/ui/Popup";
 import { PencilIcon, TrashIcon } from "../../components/ui/icons/Icons";
+import { MediaItemFilters } from "../../components/ui/MediaItemFilters";
+
+const getItemKey = (item: MediaItem) => `${item.kind}:${item.external_source}:${item.external_id}`;
 
 export function CustomListPage() {
     const { id } = useParams({ from: "/custom-lists/$id" });
-    const navigate = useNavigate();
+    const queryParams = useSearch({ from: "/custom-lists/$id" });
+
+    const navigate = useNavigate({ from: "/custom-lists/$id" });
     const [isEditing, setIsEditing] = useState(false);
     const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
     const [isBulkRemovalConfirmationOpen, setIsBulkRemovalConfirmationOpen] = useState(false);
     const [name, setName] = useState("");
+    const [titleSearch, setTitleSearch] = useState("");
     const [selectedItemKeys, setSelectedItemKeys] = useState<Set<string>>(new Set());
     const updateCustomList = useUpdateCustomList();
     const deleteCustomList = useDeleteCustomList();
@@ -41,8 +49,14 @@ export function CustomListPage() {
 
     const listId: number | null = id && !isNaN(Number(id)) ? Number(id) : null;
     const customListsQuery = useCustomLists();
-    const customListItemsQuery = useCustomListItems(listId);
+    const currentFilters = queryParams;
+    const customListItemsQuery = useCustomListItems(listId, {
+        list_ids: currentFilters.listIds,
+        tag_ids: currentFilters.tagIds,
+    });
     const customList = customListsQuery.data?.find(list => list.id === listId);
+
+    const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
     if (!listId) {
         return <Error message="No list id specified" />
@@ -59,9 +73,14 @@ export function CustomListPage() {
         return <Error message="No data returned" />
     }
 
-    const mediaItems = customListItemsQuery.data;
+    const kind = currentFilters.mediaType === "tv" ? "tv_series" : currentFilters.mediaType;
+    const searchTerm = titleSearch.trim().toLowerCase();
+    const mediaItems = customListItemsQuery.data.filter(item =>
+        (!kind || kind === "all" || item.kind === kind)
+        && (!searchTerm || item.title?.toLowerCase().includes(searchTerm))
+    );
     const selectedItems = mediaItems.filter(item =>
-        selectedItemKeys.has(`${item.kind}:${item.external_source}:${item.external_id}`)
+        selectedItemKeys.has(getItemKey(item))
     );
     const areAllItemsSelected = mediaItems.length > 0 && selectedItems.length === mediaItems.length;
     const selectedRequests: AddCustomListItemRequest[] = selectedItems.map(item => ({
@@ -103,7 +122,7 @@ export function CustomListPage() {
     };
 
     const toggleItemSelection = (item: typeof mediaItems[number]) => {
-        const key = `${item.kind}:${item.external_source}:${item.external_id}`;
+        const key = getItemKey(item);
         setSelectedItemKeys(current => {
             const next = new Set(current);
             next.has(key) ? next.delete(key) : next.add(key);
@@ -114,7 +133,7 @@ export function CustomListPage() {
     const toggleSelectAll = () => {
         setSelectedItemKeys(areAllItemsSelected
             ? new Set()
-            : new Set(mediaItems.map(item => `${item.kind}:${item.external_source}:${item.external_id}`)));
+            : new Set(mediaItems.map(getItemKey)));
     };
 
     const addSelectedToList = (targetListId: string) => {
@@ -144,7 +163,7 @@ export function CustomListPage() {
 
     const itemCheckbox = (item: typeof mediaItems[number]) => {
         if (!isEditing) return null;
-        const key = `${item.kind}:${item.external_source}:${item.external_id}`;
+        const key = getItemKey(item);
         const isSelected = selectedItemKeys.has(key);
         return (
             <div className="pointer-events-auto inset-0 absolute" onClick={() => toggleItemSelection(item)}>
@@ -168,9 +187,14 @@ export function CustomListPage() {
         deleteCustomList.mutate(listId, { onSuccess: () => navigate({ to: "/custom-lists" }) });
     };
 
+    const onFiltersChange = (filters: MediaItemFiltersSearch) => {
+        navigate({ search: filters });
+        setIsFiltersOpen(false);
+    };
+
     return (
         <>
-            <div className="mb-8 border-b border-background-tertiary p-2 pb-6">
+            <div className="border-b border-background-tertiary p-2 pb-6">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
                         {
@@ -234,36 +258,53 @@ export function CustomListPage() {
                 {addCustomListItem.error ? <Error message={addCustomListItem.error.message} /> : null}
                 {tagMediaItem.error ? <Error message={tagMediaItem.error.message} /> : null}
             </div >
-            {
-                mediaItems.length <= 0 ? (
-                    <p>No items in list</p>
-                ) : (
-                    <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(9rem,2fr))] justify-items-center">
-                        {mediaItems.map(item => {
-                            const key = `${item.kind}${item.external_source}${item.external_id}`;
-                            switch (item.kind) {
-                                case "collection":
-                                    const collection = {
-                                        id: item.external_id, name: item.title, poster_path: item.poster_path,
-                                    } as CollectionOverview;
-                                    return <CollectionCard key={key} collection={collection}>{itemCheckbox(item)}</CollectionCard>
-                                case "movie":
-                                    const movie = {
-                                        id: item.external_id, title: item.title, release_date: item.release_date, poster_path: item.poster_path,
-                                    } as MovieOverview;
-                                    return <MovieCard key={key} movie={movie}>{itemCheckbox(item)}</MovieCard>
-                                case "tv_series":
-                                    const tvSeries = {
-                                        id: item.external_id, name: item.title, first_air_date: item.release_date, poster_path: item.poster_path,
-                                    } as TvSeriesOverview;
-                                    return <TvSeriesCard key={key} tvSeries={tvSeries}>{itemCheckbox(item)}</TvSeriesCard>
-                                default:
-                                    return <Error key={key} message={`Media item has unknown kind: ${item.kind}`} />
-                            }
-                        })}
+
+            <div>
+                <div className="m-2 flex items-center justify-end gap-2">
+                    <div className="w-full max-w-100">
+                        <Input
+                            type="search"
+                            placeholder="Search titles"
+                            value={titleSearch}
+                            onChange={event => setTitleSearch(event.target.value)}
+                        />
                     </div>
-                )
-            }
+                    <Button value="Filters" fullWidth={false} onClick={() => setIsFiltersOpen(true)} />
+                </div>
+                {
+                    mediaItems.length <= 0 ? (
+                        <p>No items found</p>
+                    ) : (
+                        <div className="mt-2 grid gap-5 grid-cols-[repeat(auto-fill,minmax(9rem,2fr))] justify-items-center">
+                            {mediaItems.map(item => {
+                                const key = `${item.kind}${item.external_source}${item.external_id}`;
+                                switch (item.kind) {
+                                    case "collection":
+                                        const collection = {
+                                            id: item.external_id, name: item.title, poster_path: item.poster_path,
+                                        } as CollectionOverview;
+                                        return <CollectionCard key={key} collection={collection}>{itemCheckbox(item)}</CollectionCard>
+                                    case "movie":
+                                        const movie = {
+                                            id: item.external_id, title: item.title, release_date: item.release_date, poster_path: item.poster_path,
+                                        } as MovieOverview;
+                                        return <MovieCard key={key} movie={movie}>{itemCheckbox(item)}</MovieCard>
+                                    case "tv_series":
+                                        const tvSeries = {
+                                            id: item.external_id, name: item.title, first_air_date: item.release_date, poster_path: item.poster_path,
+                                        } as TvSeriesOverview;
+                                        return <TvSeriesCard key={key} tvSeries={tvSeries}>{itemCheckbox(item)}</TvSeriesCard>
+                                    default:
+                                        return <Error key={key} message={`Media item has unknown kind: ${item.kind}`} />
+                                }
+                            })}
+                        </div>
+                    )
+                }
+            </div>
+
+            <MediaItemFilters isOpen={isFiltersOpen} filters={currentFilters} onFiltersChange={onFiltersChange} onClose={() => setIsFiltersOpen(false)} />
+
             {isDeleteConfirmationOpen ? (
                 <Popup onClose={() => setIsDeleteConfirmationOpen(false)} value={
                     <div className="flex flex-col gap-4">

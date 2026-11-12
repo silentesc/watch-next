@@ -1,4 +1,7 @@
-use axum::{Extension, Json, extract::Path};
+use axum::{
+    Extension, Json,
+    extract::{Path, Query},
+};
 use reqwest::StatusCode;
 
 use crate::{
@@ -6,7 +9,7 @@ use crate::{
     features::custom_lists::{
         dto::{
             AddMediaItemToListRequest, CreateCustomListRequest, CreateCustomListResponse, CustomListResponse,
-            DeleteMediaItemFromListRequest, MediaItemResponse, UpdateCustomListRequest,
+            DeleteMediaItemFromListRequest, GetListItemsParams, MediaItemResponse, UpdateCustomListRequest,
         },
         service,
     },
@@ -69,8 +72,9 @@ pub async fn get_media_items_in_list(
     Extension(app_state): Extension<AppState>,
     Extension(session): Extension<Session>,
     Path(list_id): Path<i64>,
+    Query(params): Query<GetListItemsParams>,
 ) -> Result<(StatusCode, Json<Vec<MediaItemResponse>>), AppError> {
-    match service::get_media_items_in_list(&app_state.pool, session.user_id, list_id).await {
+    match service::get_media_items_in_list(&app_state.pool, session.user_id, list_id, params).await {
         Ok(items) => Ok((
             StatusCode::OK,
             Json(items.into_iter().map(MediaItemResponse::from).collect()),

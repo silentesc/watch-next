@@ -6,10 +6,11 @@ use sqlx::PgPool;
 use crate::{
     app::errors::AppError,
     error,
+    features::custom_lists::dto::GetListItemsParams,
     logger::enums::category::Category,
     persistence::{
         models::{CustomList, MediaItem},
-        table_utils::media_items,
+        table_utils::{media_items, shared::parse_id_filter},
     },
 };
 
@@ -76,7 +77,50 @@ const GET_MEDIA_ITEMS_IN_LIST_QUERY: &str = r#"
         ON custom_list_items.media_item_id = media_items.id
     INNER JOIN custom_lists
         ON custom_lists.id = custom_list_items.list_id
-    WHERE custom_list_items.list_id = $1 AND custom_lists.user_id = $2
+    WHERE custom_list_items.list_id = $1
+        AND custom_lists.user_id = $2
+        AND (
+            $3::bigint[] IS NULL
+            OR CASE
+                WHEN $4 THEN ARRAY(
+                    SELECT tags_items.tag_id
+                    FROM tags_items
+                    INNER JOIN tags
+                        ON tags.id = tags_items.tag_id
+                    WHERE tags_items.media_item_id = media_items.id
+                        AND tags.user_id = $2
+                ) && $3::bigint[]
+                ELSE ARRAY(
+                    SELECT tags_items.tag_id
+                    FROM tags_items
+                    INNER JOIN tags
+                        ON tags.id = tags_items.tag_id
+                    WHERE tags_items.media_item_id = media_items.id
+                        AND tags.user_id = $2
+                ) @> $3::bigint[]
+            END
+        )
+        AND (
+            $5::bigint[] IS NULL
+            OR CASE
+                WHEN $6 THEN ARRAY(
+                    SELECT cli_filter.list_id
+                    FROM custom_list_items AS cli_filter
+                    INNER JOIN custom_lists AS cl_filter
+                        ON cl_filter.id = cli_filter.list_id
+                    WHERE cli_filter.media_item_id = media_items.id
+                        AND cl_filter.user_id = $2
+                ) && $5::bigint[]
+                ELSE ARRAY(
+                    SELECT cli_filter.list_id
+                    FROM custom_list_items AS cli_filter
+                    INNER JOIN custom_lists AS cl_filter
+                        ON cl_filter.id = cli_filter.list_id
+                    WHERE cli_filter.media_item_id = media_items.id
+                        AND cl_filter.user_id = $2
+                ) @> $5::bigint[]
+            END
+        )
     ORDER BY custom_list_items.added_at, custom_list_items.media_item_id
     "#;
 
@@ -282,12 +326,24 @@ pub async fn delete_custom_list(pool: &PgPool, user_id: i64, list_id: i64) -> Re
 /**
  * Get all media items in a list
  */
-pub async fn get_media_items_in_list(pool: &PgPool, user_id: i64, list_id: i64) -> Result<Vec<MediaItem>, AppError> {
+pub async fn get_media_items_in_list(
+    pool: &PgPool,
+    user_id: i64,
+    list_id: i64,
+    params: GetListItemsParams,
+) -> Result<Vec<MediaItem>, AppError> {
     ensure_custom_list_id_exists(pool, list_id, user_id).await?;
+
+    let tag_filter = parse_id_filter(params.tag_ids)?;
+    let list_filter = parse_id_filter(params.list_ids)?;
 
     sqlx::query_as(GET_MEDIA_ITEMS_IN_LIST_QUERY)
         .bind(list_id)
         .bind(user_id)
+        .bind(tag_filter.ids)
+        .bind(tag_filter.match_any)
+        .bind(list_filter.ids)
+        .bind(list_filter.match_any)
         .fetch_all(pool)
         .await
         .map_err(|err| {

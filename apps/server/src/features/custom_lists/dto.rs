@@ -49,6 +49,12 @@ impl From<MediaItem> for MediaItemResponse {
     }
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct GetListItemsParams {
+    pub tag_ids: Option<String>,
+    pub list_ids: Option<String>,
+}
+
 #[derive(Deserialize)]
 pub struct CreateCustomListRequest {
     pub name: String,
